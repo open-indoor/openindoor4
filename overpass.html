@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Display map navigation controls</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
+    <script
+        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+    <script
+        src="https://github.com/mapbox-gl-indoor/mapbox-gl-indoor/releases/download/0.0.4-rc1/mapbox-gl-indoor.js"></script>
+    <script src='./dist/osmtogeojson.js'></script>
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
+        type="text/css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script>
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2xlbWVudGlnb25ldCIsImEiOiJjazl2Z2hzcmkwYmF6M21zN3RqcHg5anU4In0.blXhwZzYBGSm6fJe0z0e-Q'
+        var customData;
+        var imap;
+        let lon = getQueryVariable('lon', 2.35877);
+        let lat = getQueryVariable('lat', 48.87694);
+
+        // // mapbox
+        // const map = window.map = new mapboxgl.Map({
+        //     container: "map",
+        //     zoom: 20,
+        //     center: [lon, lat],
+        //     pitch: 60,
+        //     bearing: -60,
+        //     style: 'mapbox://styles/mapbox/streets-v10'
+        // });
+
+        // maptiler
+        // var map = new mapboxgl.Map({
+        //     container: 'map',
+        //     style: 'https://api.maptiler.com/maps/bright/style.json?key=9XtG7dsHV3WJD9nDU4DN',
+        //     center: [lon, lat],
+        //     // pitch: 60,
+        //     bearing: -60,
+        //     zoom: 17,
+        //     attributionControl: false,
+        // });
+
+        // default
+         var map = new mapboxgl.Map({
+                container: 'map',
+                style: '/style/defaultStyle.json',
+                // style: 'https://maputnik.github.io/osm-liberty/style.json',
+                center: [lon, lat],
+                // pitch: 60,
+                bearing: -60,
+                zoom: 17,
+                attributionControl: false,
+            });
+
+        // Create the indoor handler
+        var indoor = new mapboxgl_indoor.Indoor(map);
+
+        // Add geolocate control to the map.
+        var geolocate = new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+            fitBoundsOptions: {
+                maxZoom: 20
+            },
+            trackUserLocation: true,
+            showUserLocation: true,
+            showAccuracyCircle: false
+        })
+        // Add the control to the map.
+        map.addControl(geolocate, 'bottom-right');
+
+        map.addControl(new mapboxgl.FullscreenControl(), 'bottom-right');
+
+        /**
+         * Indoor specific
+         */
+        map.on('load', () => {
+            loadIndoor();
+            map.addControl(geocoder, 'top-right');
+
+            // Add zoom and rotation controls to the map.
+            map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+
+            // Add the specific control
+            map.addControl(new mapboxgl_indoor.IndoorControl(indoor), 'top-right');
+            // geolocate.trigger();
+
+        })
+
+        map.on('dragend', function () {
+            // loadIndoor();
+        });
+
+        // map.on('styleimagemissing', function (e) {
+        //     var id = e.id; // id of the missing image
+        //     console.log('missing: ', id)
+
+        //     // check if this missing icon is one this function can generate
+        //     // var prefix = 'shop-';
+        //     // if (id.indexOf(prefix) !== 0) return;
+
+        //     // extract the color from the id
+        //     var rgb = [0, 0, 0]
+
+        //     var width = 64; // The image will be 64 pixels square
+        //     var bytesPerPixel = 4; // Each pixel is represented by 4 bytes: red, green, blue, and alpha.
+        //     var data = new Uint8Array(width * width * bytesPerPixel);
+
+        //     for (var x = 0; x < width; x++) {
+        //         for (var y = 0; y < width; y++) {
+        //             var offset = (y * width + x) * bytesPerPixel;
+        //             data[offset + 0] = rgb[0]; // red
+        //             data[offset + 1] = rgb[1]; // green
+        //             data[offset + 2] = rgb[2]; // blue
+        //             data[offset + 3] = 255; // alpha
+        //         }
+        //     }
+
+        //     map.addImage(id, { width: width, height: width, data: data });
+        // });
+
+
+
+        let geocoder = new MapboxGeocoder({
+            localGeocoderOnly: true,
+            localGeocoder: forwardGeocoder,
+            zoom: 19,
+            placeholder: 'Enter search e.g. Room',
+            mapboxgl: mapboxgl,
+            marker: true,
+        });
+        geocoder.on("result", (result) => {
+            console.log('result.result.properties:', result.result.properties);
+            indoor.setLevel(parseInt(result.result.properties.level));
+        })
+
+
+        function forwardGeocoder(query) {
+            var matchingFeatures = [];
+
+            for (var i = 0; i < customData.features.length; i++) {
+                var feature = customData.features[i];
+                if (feature.properties.hasOwnProperty('name') &&
+                    feature.properties['name']
+                        .toLowerCase()
+                        .search(query.toLowerCase()) !== -1
+                ) {
+                    feature['place_name'] = feature.properties['name'];
+                    feature['center'] = turf.centroid(feature).geometry.coordinates;
+                    feature['place_type'] = ['park'];
+                    matchingFeatures.push(feature);
+                } else if (feature.properties.hasOwnProperty('name') &&
+                    feature.properties.name
+                        .toLowerCase()
+                        .search(query.toLowerCase()) !== -1
+                ) {
+                    feature['place_name'] = feature.properties.name;
+                    feature['center'] = turf.centroid(feature).geometry.coordinates;
+                    feature['place_type'] = ['park'];
+                    matchingFeatures.push(feature);
+                }
+            }
+            return matchingFeatures;
+        }
+        function loadIndoor() {
+            // Retrieve the geojson from the path and add the map
+            // fetch('https://raw.githubusercontent.com/openindoor-space/openindoor-space.github.io/master/gare-de-l-est.geojson')
+            let bb = map.getBounds();
+            let bbox = `bbox:${bb.getSouth()},${bb.getWest()},${bb.getNorth()},${bb.getEast()}`
+            // let url = `http://www.overpass-api.de/api/interpreter?data=[out:json][timeout:25][${bbox}];(way["indoor"]["indoor"!="yes"];relation["indoor"]["indoor"!="yes"];way["buildingpart"~"room|verticalpassage|corridor"];relation["buildingpart"~"room|verticalpassage|corridor"];node[~"amenity|shop|railway|highway|door|entrance"~"."];way[~"amenity|shop|railway|highway|building:levels"~"."];relation[~"amenity|shop|railway|highway|building:levels"~"."];);out body;>;out skel qt;`
+            // let url = `http://localhost:9080/api/interpreter?data=[out:json][timeout:25][${bbox}];(way["indoor"]["indoor"!="yes"];relation["indoor"]["indoor"!="yes"];way["buildingpart"~"room|verticalpassage|corridor"];relation["buildingpart"~"room|verticalpassage|corridor"];node[~"amenity|shop|railway|highway|door|entrance"~"."];way[~"amenity|shop|railway|highway|building:levels"~"."];relation[~"amenity|shop|railway|highway|building:levels"~"."];);out body;>;out skel qt;`
+            let url = `http://localhost/overpass/api/interpreter?data=[out:json][timeout:25][${bbox}];(way["indoor"]["indoor"!="yes"];relation["indoor"]["indoor"!="yes"];way["buildingpart"~"room|verticalpassage|corridor"];relation["buildingpart"~"room|verticalpassage|corridor"];node[~"amenity|shop|railway|highway|door|entrance"~"."];way[~"amenity|shop|railway|highway|building:levels"~"."];relation[~"amenity|shop|railway|highway|building:levels"~"."];);out body;>;out skel qt;`
+
+            // let url = `overpass/api/interpreter?data=[out:json][timeout:25][${bbox}];(way["indoor"]["indoor"!="yes"];relation["indoor"]["indoor"!="yes"];way["buildingpart"~"room|verticalpassage|corridor"];relation["buildingpart"~"room|verticalpassage|corridor"];node[~"amenity|shop|railway|highway|door|entrance"~"."];way[~"amenity|shop|railway|highway|building:levels"~"."];relation[~"amenity|shop|railway|highway|building:levels"~"."];);out body;>;out skel qt;`
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    let geojson = osmtogeojson(data);
+                    console.log('geojson:', JSON.stringify(geojson, null, 4));
+
+
+                    fetch('/layer/indoorLayers.json')
+                        .then(resLayer => resLayer.json())
+                        .then(indoorLayers => {
+
+                            console.log('indoorLayers:', JSON.stringify(indoorLayers, null, 4));
+                            let indoorMap = mapboxgl_indoor.IndoorMap.fromGeojson(
+                                geojson,
+                                {
+                                    layers: indoorLayers
+                                }
+                            );
+                            imap = indoor.addMap(indoorMap);
+
+                            console.log("indoorMap.layers:", JSON.stringify(indoorMap.layers, null, 4));
+                            customData = geojson;
+
+
+                        });
+
+
+
+
+
+                });
+
+        }
+
+        function getQueryVariable(variable, defaultValue) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            console.log('Query variable %s not found. Use fallback: %f', variable, defaultValue);
+            return defaultValue;
+        }
+
+    </script>
+
+</body>
+
+</html>

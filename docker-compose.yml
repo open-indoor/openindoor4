@@ -1,0 +1,34 @@
+version: "3.6"
+services:
+
+  varnishCache:
+    image: varnish:6.2
+    tmpfs: /var/lib/varnish:exec
+    volumes:
+    - ./varnishCache/default.vcl:/etc/varnish/default.vcl:ro
+    ports:
+    - 9080:80
+
+  fonts:
+    build:
+      context: ./fonts
+    volumes:
+    - ./fonts/Caddyfile:/etc/Caddyfile
+
+  openindoor4:
+    build:
+      context: .
+    # image: openindoor4/openindoor
+    environment:
+      - WEB_SITE=${WEB_SITE}
+      - CADDYFILE=./Caddyfiles/${DOMAIN_NAME}_Cadddyfile
+    volumes:
+    - ./Caddyfiles:/etc/caddy/Caddyfiles
+    - ./overpass.html:/openindoor/index.html
+    - ./openmaptiles.html:/openindoor/openmaptiles.html
+    - ./favicon.ico:/openindoor/favicon.ico
+    - ./layer/indoorLayers.json:/openindoor/layer/indoorLayers.json
+
+    ports:
+    - 80:80
+    - 443:443

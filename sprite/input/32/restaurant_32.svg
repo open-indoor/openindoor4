@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="32"
+   height="32"
+   viewBox="0 0 32.000001 32"
+   version="1.1"
+   id="svg5216"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="restaurant_32.svg">
+  <defs
+     id="defs5210" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.6"
+     inkscape:cx="-27.797451"
+     inkscape:cy="-13.40519"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     scale-x="0.8"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     units="px" />
+  <metadata
+     id="metadata5213">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-81.838892,-94.08138)">
+    <path
+       style="fill:#c77400;stroke-width:2.13935447"
+       d="m 86.072429,95.105891 c -0.534474,0 -1.069668,0.534464 -1.069668,1.60454 v 13.370929 c 0,2.13939 3.743863,2.13939 3.743863,4.27873 l -1.069667,10.6968 h 5.348413 l -1.069671,-10.6968 c 0,-2.13934 3.743868,-2.13934 3.743868,-4.27873 V 96.710431 c 0,-2.13941 -2.139327,-2.13941 -2.139327,0 v 11.231599 c 0,1.2051 -2.139411,1.2051 -2.139411,0 V 96.710431 c 0,-2.13941 -2.139331,-2.13941 -2.139331,0 v 11.231599 c 0,1.12812 -2.139322,1.12812 -2.139322,0 V 96.710431 c 0,-1.06967 -0.534476,-1.60454 -1.069747,-1.60454 z m 18.184521,0 c -2.13933,0 -6.418071,4.278735 -6.418071,10.696819 0,6.41804 4.813521,8.55738 4.813521,8.55738 l -1.06965,10.6968 h 5.3484 l -1.06966,-10.6968 c 0,0 4.81353,-2.13934 4.81353,-8.55738 0,-6.418084 -4.27866,-10.696819 -6.41807,-10.696819 z"
+       id="restaurant"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
