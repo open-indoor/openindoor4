@@ -22,7 +22,7 @@ services:
     environment:
       - WEB_SITE=${WEB_SITE}
       - CADDYFILE=Caddyfile_${DOMAIN_NAME}
-      - OVERPASS_API=${WEB_SITE}/overpass/api
+      - OVERPASS_API=${OVERPASS_API}
     volumes:
     - ./Caddyfiles:/etc/caddy/Caddyfiles
     - ./index_template.html:/openindoor/index_template.html
