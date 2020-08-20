@@ -26,11 +26,12 @@ RUN apk add --update libintl && apk add --virtual build_deps gettext
 COPY --from=osmtogeojson_builder /node_modules/osmtogeojson/osmtogeojson.js /openindoor/dist/osmtogeojson.js
 COPY --from=sprite_builder       /sprite-32/                                /openindoor/sprite/
 COPY                             ./style                                    /openindoor/style/
+COPY                             ./run.sh                                   /openindoor/run.sh
 
 ENV WEB_SITE="https://map.openindoor.io"
-ENV CADDYFILE="/etc/caddy/Caddyfile/localhost_Cadyfile"
+ENV CADDYFILE="/etc/caddy/Caddyfiles/localhost_Caddyfile"
 
-CMD run.sh
+CMD /openindoor/run.sh
 
 EXPOSE 80
 EXPOSE 443

@@ -21,7 +21,7 @@ services:
     # image: openindoor4/openindoor
     environment:
       - WEB_SITE=${WEB_SITE}
-      - CADDYFILE=./Caddyfiles/${DOMAIN_NAME}_Cadddyfile
+      - CADDYFILE=Caddyfile_${DOMAIN_NAME}
     volumes:
     - ./Caddyfiles:/etc/caddy/Caddyfiles
     - ./overpass.html:/openindoor/index.html

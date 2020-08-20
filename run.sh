@@ -1,9 +1,13 @@
 #!/bin/sh
 
+set -x
+
 echo "WEB_SITE: $WEB_SITE"
 echo "CADDYFILE: $CADDYFILE"
 
-cat /style/defaultStyle_template.json | envsubst  > /style/defaultStyle.json
+cat /openindoor/style/defaultStyle_template.json | envsubst  > /openindoor/style/defaultStyle.json
 
-caddy run --watch --config ${CADDYFILE}
+cat /etc/caddy/Caddyfiles/${CADDYFILE}
+
+caddy run --watch --config /etc/caddy/Caddyfiles/${CADDYFILE}
 
