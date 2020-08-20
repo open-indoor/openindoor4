@@ -9,7 +9,7 @@
     route /overpass/* {
     	uri strip_prefix /overpass
 	    reverse_proxy {
-            to http://varnishCache:80
+            to http://www.overpass-api.de:80
         }
     }
 

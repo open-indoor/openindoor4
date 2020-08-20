@@ -24,7 +24,7 @@ services:
       - CADDYFILE=Caddyfile_${DOMAIN_NAME}
     volumes:
     - ./Caddyfiles:/etc/caddy/Caddyfiles
-    - ./overpass.html:/openindoor/index.html
+    - ./index_template.html:/openindoor/index_template.html
     - ./openmaptiles.html:/openindoor/openmaptiles.html
     - ./favicon.ico:/openindoor/favicon.ico
     - ./layer/indoorLayers.json:/openindoor/layer/indoorLayers.json
