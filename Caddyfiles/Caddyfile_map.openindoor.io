@@ -8,9 +8,7 @@ map.openindoor.io {
 
     route /overpass/* {
     	uri strip_prefix /overpass
-	    reverse_proxy {
-            to http://www.overpass-api.de:80
-        }
+        redir http://www.overpass-api.de:80{uri}
     }
 
     route /fonts/* {
