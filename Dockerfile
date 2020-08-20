@@ -30,6 +30,7 @@ COPY                             ./run.sh                                   /ope
 
 ENV WEB_SITE="https://map.openindoor.io"
 ENV CADDYFILE="/etc/caddy/Caddyfiles/localhost_Caddyfile"
+ENV OVERPASS_API="${WEB_SITE}/overpass/api"
 
 CMD /openindoor/run.sh
 
