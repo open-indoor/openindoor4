@@ -1,0 +1,23 @@
+:80 {
+    root * /openindoor
+    file_server
+
+    log {
+    	level DEBUG
+    }
+
+    route /overpass/* {
+    	uri strip_prefix /overpass
+	    reverse_proxy {
+            to http://varnishCache:80
+        }
+    }
+
+    route /fonts/* {
+    	uri strip_prefix /fonts
+	    reverse_proxy {
+            to http://fonts:80
+        }
+    }
+
+}
