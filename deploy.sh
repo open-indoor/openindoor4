@@ -1,5 +1,6 @@
 #!/bin/sh
 ssh kimsufi '
+set -x
 cd ~/Project/openindoor4
 docker-compose stop
 git pull

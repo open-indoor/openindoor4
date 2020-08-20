@@ -1,13 +1,6 @@
 FROM node:10 as fonts
 
-WORKDIR /
-
-ARG commit=master
-
-ADD https://github.com/openmaptiles/fonts/archive/${commit}.tar.gz .
-# COPY ./fonts-${commit}.tar.gz ./${commit}.tar.gz
-RUN tar -zxvf ${commit}.tar.gz
-RUN mv fonts-${commit} fonts
+COPY . /fonts
 WORKDIR /fonts
 
 RUN npm install
