@@ -6,8 +6,12 @@ services:
     tmpfs: /var/lib/varnish:exec
     volumes:
     - ./varnishCache/default.vcl:/etc/varnish/default.vcl:ro
+    - ./varnishCache/run.sh:/run.sh
+    - ./varnishCache/docker-varnish-entrypoint:/usr/local/bin/docker-varnish-entrypoint
     ports:
     - 9080:80
+
+
 
   fonts:
     build:
