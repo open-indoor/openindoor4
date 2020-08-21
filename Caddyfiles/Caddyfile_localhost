@@ -1,4 +1,5 @@
 :80 {
+    encode gzip
     root * /openindoor
     file_server
 
@@ -9,7 +10,7 @@
     route /overpass/* {
     	uri strip_prefix /overpass
 	    reverse_proxy {
-            to http://www.overpass-api.de:80
+            to https://www.overpass-api.de
         }
     }
 
