@@ -6,7 +6,7 @@ map.openindoor.io {
     route /overpass/* {
     	uri strip_prefix /overpass
 	    reverse_proxy {
-            to https://www.overpass-api.de
+            to http://www.overpass-api.de
         }
     }
 
