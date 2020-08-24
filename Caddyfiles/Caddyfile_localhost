@@ -21,8 +21,6 @@
         }
     }
 
-
-
     route /fonts/* {
     	uri strip_prefix /fonts
 	    reverse_proxy {

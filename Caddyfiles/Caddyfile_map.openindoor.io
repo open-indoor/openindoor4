@@ -10,6 +10,13 @@ map.openindoor.io {
         }
     }
 
+    route /rastertiles/* {
+    	uri strip_prefix /rastertiles
+	    reverse_proxy {
+            to http://tileCache:80
+        }
+    }
+    
     route /fonts/* {
     	uri strip_prefix /fonts
 	    reverse_proxy {
