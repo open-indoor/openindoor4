@@ -87,3 +87,52 @@ ogr2ogr -f MBTILES EastStation.mbtiles EastStation.xml -dsco MAXZOOM=22
     tls {
         ca https://acme-staging-v02.api.letsencrypt.org/directory
     }
+
+        "type": "fill-extrusion",
+        "paint": {
+            "fill-extrusion-color": "#A1887F",
+            "fill-extrusion-height": 2.5,
+            "fill-extrusion-base": 0,
+            "fill-extrusion-opacity": 0.5
+        }
+
+
+
+    {
+        "filter": [
+            "filter-==",
+            "indoor",
+            "room"
+        ],
+        "id": "indoor-rooms",
+        "type": "fill",
+        "source": "indoor",
+        "paint": {
+            "fill-color": "#A1887F",
+            "fill-opacity": {
+                "base": 1,
+                "stops": [
+                    [
+                        17,
+                        0
+                    ],
+                    [
+                        18,
+                        1
+                    ]
+                ]
+            }
+        }
+    },
+
+{
+    "version": 8,
+    "name": "osm",
+    "center": [0, 0],
+    "zoom": 0,
+    "sources": {},
+    "sprite": "${WEB_SITE}/sprite/sprite",
+    "glyphs": "fonts/{fontstack}/{range}.pbf",
+    "layers": [{ "id": "background", "type": "background", "paint": { "background-color": "rgba(255,255,255,1)" } }],
+    "id": "osm"
+}

@@ -194,6 +194,34 @@
     },
     {
         "filter": [
+            "filter-==",
+            "indoor",
+            "room"
+        ],
+        "id": "indoor-rooms-extrusion",
+        "source": "indoor",
+        "type": "fill-extrusion",
+        "paint": {
+            "fill-extrusion-color": "#0000FF",
+            "fill-extrusion-height": 2.5,
+            "fill-extrusion-base": 0,
+            "fill-extrusion-opacity": {
+                "base": 1,
+                "stops": [
+                    [
+                        17,
+                        0
+                    ],
+                    [
+                        18,
+                        1
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "filter": [
             "any",
             [
                 "filter-==",
@@ -213,32 +241,6 @@
             "line-color": "#000",
             "line-width": 1,
             "line-opacity": {
-                "base": 1,
-                "stops": [
-                    [
-                        17,
-                        0
-                    ],
-                    [
-                        18,
-                        1
-                    ]
-                ]
-            }
-        }
-    },
-    {
-        "filter": [
-            "filter-==",
-            "indoor",
-            "area"
-        ],
-        "id": "indoor-areas",
-        "type": "fill",
-        "source": "indoor",
-        "paint": {
-            "fill-color": "#D7CCC8",
-            "fill-opacity": {
                 "base": 1,
                 "stops": [
                     [
@@ -2190,6 +2192,22 @@
                     ]
                 ]
             }
+        }
+    },
+    {
+        "filter": [
+            "filter-==",
+            "indoor",
+            "room"
+        ],
+        "id": "indoor-rooms-extrusion",
+        "source": "indoor",
+        "type": "fill-extrusion",
+        "paint": {
+            "fill-extrusion-color": "#0000FF",
+            "fill-extrusion-height": 2.5,
+            "fill-extrusion-base": 0,
+            "fill-extrusion-opacity": 1
         }
     }
 ]

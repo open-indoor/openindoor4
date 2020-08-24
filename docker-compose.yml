@@ -8,10 +8,14 @@ services:
     - ./varnishCache/default.vcl:/etc/varnish/default.vcl:ro
     - ./varnishCache/run.sh:/run.sh
     - ./varnishCache/docker-varnish-entrypoint:/usr/local/bin/docker-varnish-entrypoint
-    ports:
-    - 9080:80
 
-
+  tileCache:
+    image: varnish:6.2
+    tmpfs: /var/lib/varnish:exec
+    volumes:
+    - ./tileCache/default.vcl:/etc/varnish/default.vcl:ro
+    - ./tileCache/run.sh:/run.sh
+    - ./tileCache/docker-varnish-entrypoint:/usr/local/bin/docker-varnish-entrypoint
 
   fonts:
     build:

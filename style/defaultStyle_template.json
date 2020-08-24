@@ -3,9 +3,25 @@
     "name": "osm",
     "center": [0, 0],
     "zoom": 0,
-    "sources": {},
     "sprite": "${WEB_SITE}/sprite/sprite",
     "glyphs": "fonts/{fontstack}/{range}.pbf",
-    "layers": [{ "id": "background", "type": "background", "paint": { "background-color": "rgba(255,255,255,1)" } }],
+    "sources": {
+        "raster-tiles": {
+            "type": "raster",
+            "tiles": [
+                "${WEB_SITE}/rastertiles/{z}/{x}/{y}.png"
+            ],
+            "tileSize": 256
+        }
+    },
+    "layers": [
+        {
+            "id": "simple-tiles",
+            "type": "raster",
+            "source": "raster-tiles",
+            "minzoom": 0,
+            "maxzoom": 19
+        }
+    ],
     "id": "osm"
 }

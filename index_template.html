@@ -38,11 +38,15 @@
 
     <script>
 
-        mapboxgl.accessToken = 'pk.eyJ1IjoiY2xlbWVudGlnb25ldCIsImEiOiJjazl2Z2hzcmkwYmF6M21zN3RqcHg5anU4In0.blXhwZzYBGSm6fJe0z0e-Q'
+        // mapboxgl.accessToken = 'pk.eyJ1IjoiY2xlbWVudGlnb25ldCIsImEiOiJjazl2Z2hzcmkwYmF6M21zN3RqcHg5anU4In0.blXhwZzYBGSm6fJe0z0e-Q'
         var customData;
         var imap;
         let lon = getQueryVariable('lon', 2.35877);
         let lat = getQueryVariable('lat', 48.87694);
+        let bboxStr = getQueryVariable('bbox', "2.35794,48.87613,2.36108,48.87759");
+        let bbox = JSON.parse('[' + bboxStr + ']');
+        let maxBounds = [[bbox[0], bbox[1]], [bbox[2], bbox[3]]]
+        // https://overpass-api.de/api/map?bbox=2.35794,48.87613,2.36108,48.87759
 
         // // mapbox
         // const map = window.map = new mapboxgl.Map({
@@ -66,16 +70,18 @@
         // });
 
         // default
-         var map = new mapboxgl.Map({
-                container: 'map',
-                style: '/style/defaultStyle.json',
-                // style: 'https://maputnik.github.io/osm-liberty/style.json',
-                center: [lon, lat],
-                // pitch: 60,
-                bearing: -60,
-                zoom: 17,
-                attributionControl: false,
-            });
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: '/style/defaultStyle.json',
+            // style: '/style/rasterStyle.json',
+            // style: 'https://maputnik.github.io/osm-liberty/style.json',
+            // center: [lon, lat],
+            // pitch: 60,
+            maxBounds: maxBounds,
+            bearing: -60,
+            zoom: 17,
+            attributionControl: false,
+        });
 
         // Create the indoor handler
         var indoor = new mapboxgl_indoor.Indoor(map);
@@ -189,11 +195,23 @@
             return matchingFeatures;
         }
         function loadIndoor() {
+            console.log("maxBounds:", map.getMaxBounds());
             // Retrieve the geojson from the path and add the map
             // fetch('https://raw.githubusercontent.com/openindoor-space/openindoor-space.github.io/master/gare-de-l-est.geojson')
-            let bb = map.getBounds();
+            let bb = map.getMaxBounds();
             let bbox = `bbox:${bb.getSouth()},${bb.getWest()},${bb.getNorth()},${bb.getEast()}`
-            let url = `${OVERPASS_API}/interpreter?data=[out:json][timeout:25][${bbox}];(way["indoor"]["indoor"!="yes"];relation["indoor"]["indoor"!="yes"];way["buildingpart"~"room|verticalpassage|corridor"];relation["buildingpart"~"room|verticalpassage|corridor"];node[~"amenity|shop|railway|highway|door|entrance"~"."];way[~"amenity|shop|railway|highway|building:levels"~"."];relation[~"amenity|shop|railway|highway|building:levels"~"."];);out body;>;out skel qt;`
+            let url = `${OVERPASS_API}/interpreter?data=`
+                + `[out:json][timeout:25][${bbox}];`
+                + `(`
+                + `way["indoor"]["indoor"!="yes"];`
+                + `relation["indoor"]["indoor"!="yes"];`
+                + `way["buildingpart"~"room|verticalpassage|corridor"];`
+                + `relation["buildingpart"~"room|verticalpassage|corridor"];`
+                + `node[~"amenity|shop|railway|highway|door|entrance"~"."];`
+                + `way[~"amenity|shop|railway|highway|building:levels"~"."];`
+                + `relation[~"amenity|shop|railway|highway|building:levels"~"."];`
+                + `);`
+                + `out body;>;out skel qt;`
             // let url =     `http://localhost:9080/api/interpreter?data=[out:json][timeout:25][${bbox}];(way["indoor"]["indoor"!="yes"];relation["indoor"]["indoor"!="yes"];way["buildingpart"~"room|verticalpassage|corridor"];relation["buildingpart"~"room|verticalpassage|corridor"];node[~"amenity|shop|railway|highway|door|entrance"~"."];way[~"amenity|shop|railway|highway|building:levels"~"."];relation[~"amenity|shop|railway|highway|building:levels"~"."];);out body;>;out skel qt;`
             // let url = `http://localhost/overpass/api/interpreter?data=[out:json][timeout:25][${bbox}];(way["indoor"]["indoor"!="yes"];relation["indoor"]["indoor"!="yes"];way["buildingpart"~"room|verticalpassage|corridor"];relation["buildingpart"~"room|verticalpassage|corridor"];node[~"amenity|shop|railway|highway|door|entrance"~"."];way[~"amenity|shop|railway|highway|building:levels"~"."];relation[~"amenity|shop|railway|highway|building:levels"~"."];);out body;>;out skel qt;`
 
@@ -203,14 +221,14 @@
                 .then(res => res.json())
                 .then(data => {
                     let geojson = osmtogeojson(data);
-                    console.log('geojson:', JSON.stringify(geojson, null, 4));
+                    // console.log('geojson:', JSON.stringify(geojson, null, 4));
 
 
                     fetch('/layer/indoorLayers.json')
                         .then(resLayer => resLayer.json())
                         .then(indoorLayers => {
 
-                            console.log('indoorLayers:', JSON.stringify(indoorLayers, null, 4));
+                            // console.log('indoorLayers:', JSON.stringify(indoorLayers, null, 4));
                             let indoorMap = mapboxgl_indoor.IndoorMap.fromGeojson(
                                 geojson,
                                 {
@@ -219,7 +237,7 @@
                             );
                             imap = indoor.addMap(indoorMap);
 
-                            console.log("indoorMap.layers:", JSON.stringify(indoorMap.layers, null, 4));
+                            // console.log("indoorMap.layers:", JSON.stringify(indoorMap.layers, null, 4));
                             customData = geojson;
 
 
@@ -242,7 +260,8 @@
                     return decodeURIComponent(pair[1]);
                 }
             }
-            console.log('Query variable %s not found. Use fallback: %f', variable, defaultValue);
+            console.log('Query variable %s not found.', variable);
+            console.log('Use fallback: ', defaultValue);
             return defaultValue;
         }
 

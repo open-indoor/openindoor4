@@ -13,12 +13,11 @@ COPY ./sprite/input /input
 RUN mkdir -p /sprite-32
 RUN ./bin/spritezero /sprite-32/sprite /input/32
 
-##############  STYLE BUILDER  ###################
-FROM alpine:3.6 AS style_builder
-ARG WEB_SITE=https://map.openindoor.io
-RUN apk add --update libintl && apk add --virtual build_deps gettext
-COPY ./style /style
-RUN cat /style/defaultStyle_template.json | envsubst  > /style/defaultStyle.json
+# ##############  STYLE BUILDER  ###################
+# FROM alpine:3.6 AS style_builder
+# ARG WEB_SITE=https://map.openindoor.io
+# RUN apk add --update libintl && apk add --virtual build_deps gettext
+# COPY ./style /style
 
 ###########################################################
 FROM caddy:2-alpine
