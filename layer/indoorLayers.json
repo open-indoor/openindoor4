@@ -2193,21 +2193,5 @@
                 ]
             }
         }
-    },
-    {
-        "filter": [
-            "filter-==",
-            "indoor",
-            "room"
-        ],
-        "id": "indoor-rooms-extrusion",
-        "source": "indoor",
-        "type": "fill-extrusion",
-        "paint": {
-            "fill-extrusion-color": "#0000FF",
-            "fill-extrusion-height": 2.5,
-            "fill-extrusion-base": 0,
-            "fill-extrusion-opacity": 1
-        }
     }
 ]

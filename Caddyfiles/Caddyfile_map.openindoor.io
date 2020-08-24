@@ -6,7 +6,7 @@ map.openindoor.io {
     route /overpass/* {
     	uri strip_prefix /overpass
 	    reverse_proxy {
-            to http://varnishCache:80
+            to http://overpassCache:80
         }
     }
 
@@ -16,7 +16,7 @@ map.openindoor.io {
             to http://tileCache:80
         }
     }
-    
+
     route /fonts/* {
     	uri strip_prefix /fonts
 	    reverse_proxy {

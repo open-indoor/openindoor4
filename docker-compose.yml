@@ -1,13 +1,13 @@
 version: "3.6"
 services:
 
-  varnishCache:
+  overpassCache:
     image: varnish:6.2
     tmpfs: /var/lib/varnish:exec
     volumes:
-    - ./varnishCache/default.vcl:/etc/varnish/default.vcl:ro
-    - ./varnishCache/run.sh:/run.sh
-    - ./varnishCache/docker-varnish-entrypoint:/usr/local/bin/docker-varnish-entrypoint
+    - ./overpassCache/default.vcl:/etc/varnish/default.vcl:ro
+    - ./overpassCache/run.sh:/run.sh
+    - ./overpassCache/docker-varnish-entrypoint:/usr/local/bin/docker-varnish-entrypoint
 
   tileCache:
     image: varnish:6.2
