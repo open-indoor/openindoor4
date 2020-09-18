@@ -34,10 +34,26 @@ services:
     volumes:
     - ./Caddyfiles:/etc/caddy/Caddyfiles
     - ./index_template.html:/openindoor/index_template.html
+    - ./test/3buildings.html:/openindoor/3buildings.html
+    - ./test/data/3buildings.geojson:/openindoor/data/3buildings.geojson
+    - ./test/data/3buildings.osm:/openindoor/data/3buildings.osm
+    - ./test/vectortiles.html:/openindoor/vectortiles.html
     - ./openmaptiles.html:/openindoor/openmaptiles.html
     - ./favicon.ico:/openindoor/favicon.ico
+    - ./layer/blankLayers.json:/openindoor/layer/blankLayers.json
     - ./layer/indoorLayers.json:/openindoor/layer/indoorLayers.json
+    - ./layer/equalLayers.json:/openindoor/layer/equalLayers.json
+    - ./layer/buildingLayers.json:/openindoor/layer/buildingLayers.json
+    - ./style/defaultStyle_template.json:/openindoor/style/defaultStyle_template.json
 
     ports:
     - 80:80
     - 443:443
+
+  tileserver:
+    build:
+      context: ./tileserver
+    ports:
+    - 8084:80
+    command: "/usr/src/app/run.sh --verbose -c /mydata/config.json"
+

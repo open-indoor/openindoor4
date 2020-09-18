@@ -1,7 +1,10 @@
 {
     "version": 8,
     "name": "osm",
-    "center": [0, 0],
+    "center": [
+        0,
+        0
+    ],
     "zoom": 0,
     "sprite": "${WEB_SITE}/sprite/sprite",
     "glyphs": "fonts/{fontstack}/{range}.pbf",

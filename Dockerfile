@@ -19,11 +19,21 @@ RUN ./bin/spritezero /sprite-32/sprite /input/32
 # RUN apk add --update libintl && apk add --virtual build_deps gettext
 # COPY ./style /style
 
+################### MAPBOX-GL-INDOOR BUILDER #######
+FROM node:14 AS indoorequal_builder
+WORkDIR /mapbox-gl-indoorequal
+COPY ./mapbox-gl-indoorequal /mapbox-gl-indoorequal
+RUN npm install
+RUN yarn build
+
 ###########################################################
 FROM caddy:2-alpine
 RUN apk add --update libintl && apk add --virtual build_deps gettext
 COPY --from=osmtogeojson_builder /node_modules/osmtogeojson/osmtogeojson.js /openindoor/dist/osmtogeojson.js
 COPY --from=sprite_builder       /sprite-32/                                /openindoor/sprite/
+COPY --from=indoorequal_builder  /mapbox-gl-indoorequal/dist/mapbox-gl-indoorequal.umd.min.js     /openindoor/dist/mapbox-gl-indoorequal.umd.min.js
+COPY --from=indoorequal_builder  /mapbox-gl-indoorequal/dist/mapbox-gl-indoorequal.esm.js         /openindoor/dist/mapbox-gl-indoorequal.esm.js
+COPY --from=indoorequal_builder  /mapbox-gl-indoorequal/./mapbox-gl-indoorequal.css               /openindoor/dist/mapbox-gl-indoorequal.css
 COPY                             ./style                                    /openindoor/style/
 COPY                             ./run.sh                                   /openindoor/run.sh
 

@@ -7,6 +7,12 @@
     	level DEBUG
     }
 
+    route /data/* {
+	    reverse_proxy {
+            to http://tileserver:80
+        }
+    }
+
     route /overpass/* {
     	uri strip_prefix /overpass
 	    reverse_proxy {

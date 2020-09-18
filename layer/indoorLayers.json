@@ -1,38 +1,6 @@
 [
     {
         "filter": [
-            "any",
-            [
-                "has",
-                "building"
-            ],
-            [
-                "has",
-                "building-part"
-            ]
-        ],
-        "id": "buildings-background",
-        "type": "fill",
-        "source": "indoor",
-        "paint": {
-            "fill-color": "#DCD9D6",
-            "fill-opacity": {
-                "base": 1,
-                "stops": [
-                    [
-                        16.5,
-                        0
-                    ],
-                    [
-                        18,
-                        1
-                    ]
-                ]
-            }
-        }
-    },
-    {
-        "filter": [
             "filter-==",
             "indoor",
             "level"
@@ -203,8 +171,60 @@
         "type": "fill-extrusion",
         "paint": {
             "fill-extrusion-color": "#0000FF",
-            "fill-extrusion-height": 2.5,
-            "fill-extrusion-base": 0,
+            "fill-extrusion-height": [
+                "interpolate",
+                [
+                    "linear"
+                ],
+                [
+                    "zoom"
+                ],
+                17,
+                [
+                    "to-number",
+                    [
+                        "get",
+                        "height"
+                    ]
+                ],
+                18,
+                [
+                    "-",
+                    [
+                        "to-number",
+                        [
+                            "get",
+                            "height"
+                        ]
+                    ],
+                    [
+                        "to-number",
+                        [
+                            "get",
+                            "min_height"
+                        ]
+                    ]
+                ]
+            ],
+            "fill-extrusion-base": [
+                "interpolate",
+                [
+                    "linear"
+                ],
+                [
+                    "zoom"
+                ],
+                17,
+                [
+                    "to-number",
+                    [
+                        "get",
+                        "min_height"
+                    ]
+                ],
+                18,
+                0
+            ],
             "fill-extrusion-opacity": {
                 "base": 1,
                 "stops": [
