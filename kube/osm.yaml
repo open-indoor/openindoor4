@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: osm
+  labels:
+    app: osm
+spec:
+  selector:
+    app: osm
+  clusterIP: None
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: osm-pv-claim
+  labels:
+    app: osm
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: osm
+  labels:
+    app: osm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: osm
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: osm
+    spec:
+      containers:
+      - name: osm
+        image: openindoor/osm:1.0.13
+        volumeMounts:
+          - mountPath: /data
+            name: osm-pv-storage
+      volumes:
+      - name: osm-pv-storage
+        persistentVolumeClaim:
+          claimName: osm-pv-claim
