@@ -5,7 +5,7 @@ metadata:
   labels:
     app: osm-caddy
 spec:
-  type: LoadBalancer
+  # type: ClusterIP
   ports:
   - port: 80
     targetPort: 80
@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: osm-caddy   
-        image: openindoor/osm-caddy:1.0.3
+        image: openindoor/osm-caddy:1.0.5
         ports:
         - containerPort: 80
         volumeMounts:

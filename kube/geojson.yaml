@@ -5,10 +5,10 @@ metadata:
   labels:
     app: geojson
 spec:
-  type: LoadBalancer
+  # type: LoadBalancer
   ports:
-  - port: 8082
-    targetPort: 8082
+  - port: 80
+    targetPort: 80
     protocol: TCP
     name: http
   selector:
@@ -34,4 +34,4 @@ spec:
     spec:
       containers:
       - name: geojson
-        image: openindoor/geojson:1.0.0
+        image: openindoor/geojson:1.0.8
