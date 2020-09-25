@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app: openindoor
+images:
+  - name: openindoor/osm-storage
+    newTag: 1.0.21
+  - name: openindoor/osm-api
+    newTag: 1.0.29
+  - name: openindoor/geojson-api
+    newTag: 1.0.14
+  - name: openindoor/mbtiles-api
+    newTag: 1.0.1
+  - name: openindoor/mbtiles-cache
+    newTag: 1.0.1
+  - name: openindoor/front-api
+    newTag: 1.0.57
+resources:
+- osm-api.yaml
+- geojson-api.yaml
+- front-api.yaml

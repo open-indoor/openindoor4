@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  domainName: api-gke.openindoor.io
+  domainNames: "api-gke.openindoor.io"
+  # certificateAuthority: https://acme-staging-v02.api.letsencrypt.org/directory
+  certificateAuthority: https://acme-v02.api.letsencrypt.org/directory
+  storageClassName: standard
+kind: ConfigMap
+metadata:
+  name: openindoor-cm

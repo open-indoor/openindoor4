@@ -1,37 +1,36 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: geojson
-  labels:
-    app: geojson
+  name: geojson-api
 spec:
-  # type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 80
+  - name: http
+    port: 80
     protocol: TCP
-    name: http
+    targetPort: 80
   selector:
-    app: geojson
+    run: geojson-api
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: geojson
   labels:
-    app: geojson
+    run: geojson-api
+  name: geojson-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: geojson
+      run: geojson-api
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: geojson
+        run: geojson-api
     spec:
       containers:
-      - name: geojson
-        image: openindoor/geojson:1.0.8
+      - image: openindoor/geojson-api:0.0.0
+        name: geojson-api
+        ports:
+        - containerPort: 80

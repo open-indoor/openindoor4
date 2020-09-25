@@ -1,6 +1,0 @@
-commonLabels:
-  app: openindoor
-resources:
-- osm-pv-volume.yaml
-- osm.yaml
-- osm-caddy.yaml
