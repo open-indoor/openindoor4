@@ -5,6 +5,7 @@ geojsonFile="/tmp/${id}.geojson"
 CksumFile="/tmp/${id}.cksum"
 # cksumFile="/tmp/${id}.cksum"
 # mbtileFile="/tmp/${id}.mbtiles"
+mbtileFileTmp="/tmp/${id}_$(uuidgen).mbtiles"
 geojsonApiUrl="https://${DOMAIN_NAME}/geojson"
 osmApiUrl="https://${DOMAIN_NAME}/osm"
 
@@ -28,6 +29,9 @@ if [ "$?" -eq "0" ] && [ "${codeLastCksum}" -lt "400" ] && [ -f "${mbtileFile}" 
   exit 0
 fi
 
+######################
+# STEP 2 : generate  #
+######################
 code=$(curl \
     -k \
     -L \
@@ -43,12 +47,13 @@ if [ "$?" -ne "0" ] && [ "${code}" -ge "400" ]; then
     && exit 0
 fi
 
-if ogr2ogr -f MBTILES ${mbtileFile} \
+if ogr2ogr -f MBTILES ${mbtileFileTmp} \
   "$geojsonFile" \
   -dsco MAXZOOM=20 \
   -nln "osm-indoor" \
   > /dev/null 2>&1 ; then
-  echo "Content-type: application/octet-stream" \
+  mv ${mbtileFileTmp} ${mbtileFile} \
+  && echo "Content-type: application/octet-stream" \
   && echo "" \
   && echo $(cat "${mbtileFile}") \
   && exit 0

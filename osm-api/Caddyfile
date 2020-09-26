@@ -1,0 +1,13 @@
+:80 {
+    root * /data
+    file_server browse
+
+    rewrite /osm/cksum/* /osm/{file}.cksum
+    
+    rewrite /osm/* {uri}.osm
+
+    log {
+    	level DEBUG
+        output stdout
+    }
+}
