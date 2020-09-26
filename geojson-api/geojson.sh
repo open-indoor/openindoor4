@@ -3,14 +3,14 @@
 id="$(basename $PATH_INFO)"
 osmFile="/tmp/${id}.osm"
 # osmApiUrl="https://api.openindoor.io/osm"
-osmApiUrl="http://osm-api/osm"
+osmApiUrl="https://${DOMAIN_NAME}/osm"
 code=$(curl \
     -k \
     -L \
     -o "${osmFile}" \
     -s \
     -w "%{http_code}" \
-    "${osmApiUrl}/${id}.osm")
+    "${osmApiUrl}/${id}")
 
 if [ "${code}" -ge "400" ]; then
     echo "HTTP/1.1 404 Not Found"

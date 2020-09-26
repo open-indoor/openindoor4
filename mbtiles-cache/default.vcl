@@ -11,5 +11,5 @@ sub vcl_recv {
 }
 
 sub vcl_backend_response {
-    set beresp.ttl = 60;
+    set beresp.ttl = 120;
 }

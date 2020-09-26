@@ -13,6 +13,8 @@
     reverse_proxy /mbtiles* :8999 {
         transport fastcgi {
             split mbtiles
+            env API mbtiles-api
+            env DOMAIN_NAME ${DOMAIN_NAME}
         }
     }
 }

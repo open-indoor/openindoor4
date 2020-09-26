@@ -30,7 +30,13 @@ spec:
         run: geojson-api
     spec:
       containers:
-      - image: openindoor/geojson-api:0.0.0
+      - env:
+        - name: DOMAIN_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: domainName
+        image: openindoor/geojson-api:0.0.0
         name: geojson-api
         ports:
         - containerPort: 80

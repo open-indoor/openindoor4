@@ -13,7 +13,8 @@
     reverse_proxy /geojson* :8999 {
         transport fastcgi {
             split geojson
-            env aaa bbb
+            env API geojson-api
+            env DOMAIN_NAME ${DOMAIN_NAME}
         }
     }
 }
