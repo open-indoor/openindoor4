@@ -6,15 +6,15 @@ images:
   - name: openindoor/osm-storage
     newTag: 1.0.21
   - name: openindoor/osm-api
-    newTag: 1.0.33
+    newTag: 1.0.34
   - name: openindoor/geojson-api
-    newTag: 1.0.21
+    newTag: 1.0.31
   - name: openindoor/mbtiles-api
-    newTag: 1.0.4
+    newTag: 1.0.28
   - name: openindoor/mbtiles-cache
     newTag: 1.0.1
   - name: openindoor/front-api
-    newTag: 1.0.63
+    newTag: 1.0.64
 resources:
 - osm-api.yaml
 - geojson-api.yaml

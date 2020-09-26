@@ -1,11 +1,9 @@
 #!/bin/bash
 
-set -x
-
 id="$(basename $PATH_INFO)"
 geojsonFile="/tmp/${id}.geojson"
-lastCksumFile="/tmp/${id}.cksum.last"
-cksumFile="/tmp/${id}.cksum"
+CksumFile="/tmp/${id}.cksum"
+# cksumFile="/tmp/${id}.cksum"
 # mbtileFile="/tmp/${id}.mbtiles"
 geojsonApiUrl="https://${DOMAIN_NAME}/geojson"
 osmApiUrl="https://${DOMAIN_NAME}/osm"
@@ -16,13 +14,13 @@ osmApiUrl="https://${DOMAIN_NAME}/osm"
 codeLastCksum=$(curl \
   -k \
   -L \
-  -o "${lastCksumFile}" \
+  -o "${CksumFile}" \
   -s \
   -w "%{http_code}" \
   "${osmApiUrl}/cksum/${id}")
 
-lastCksum=$(cat "${lastCksumFile}")
-mbtileFile="/tmp/${id}_${lastCksum}.mbtiles"
+cksum=$(cat "${CksumFile}")
+mbtileFile="/tmp/${id}_${cksum}.mbtiles"
 if [ "$?" -eq "0" ] && [ "${codeLastCksum}" -lt "400" ] && [ -f "${mbtileFile}" ]; then
   echo "Content-type: application/octet-stream"
   echo ""
@@ -45,18 +43,19 @@ if [ "$?" -ne "0" ] && [ "${code}" -ge "400" ]; then
     && exit 0
 fi
 
-ogr2ogr -f MBTILES ${mbtileFile} \
+if ogr2ogr -f MBTILES ${mbtileFile} \
   "$geojsonFile" \
   -dsco MAXZOOM=20 \
   -nln "osm-indoor" \
-  >/dev/null 2>&1 \
-  || \
+  > /dev/null 2>&1 ; then
+  echo "Content-type: application/octet-stream" \
+  && echo "" \
+  && echo $(cat "${mbtileFile}") \
+  && exit 0
+else
   echo "HTTP/1.1 400 Bad Request" \
   && echo "Content-type: application/octet-stream" \
   && echo "" \
   && exit 0
+fi
 
-echo "Content-type: application/octet-stream"
-echo ""
-echo $(cat "${mbtileFile}")
-exit 0

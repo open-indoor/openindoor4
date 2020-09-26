@@ -26,11 +26,10 @@ RUN chmod +x /geojson/geojson-api.sh
 WORKDIR /geojson
 
 ENV SCRIPT_FILENAME /geojson/geojson
-ENV DOMAIN_NAME api.openindoor.io
 
-ENTRYPOINT ["/geojson/geojson-api.sh"]
+CMD bash -c "/geojson/geojson-api.sh"
 
-
+# CMD bash -c "(caddy run --watch --config /etc/caddy/Caddyfile & fcgiwrap -f -s tcp:127.0.0.1:8999)"
 # CMD bash -c "(fcgiwrap -f -s tcp:127.0.0.1:8999)"
 
 EXPOSE 80

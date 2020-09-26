@@ -1,7 +1,7 @@
 ################ geojson to mbtiles #####################
 FROM caddy:2-alpine
 
-RUN apk add --update \
+RUN apk add --update-cache \
     gdal \
     gdal-tools \
     curl \
@@ -10,7 +10,8 @@ RUN apk add --update \
     fcgiwrap \
     grep \
     vim \
-    gettext
+    gettext \
+    && rm -rf /var/cache/apk/*
 
 COPY ./Caddyfile /etc/caddy/Caddyfile
 
@@ -26,8 +27,7 @@ WORKDIR /mbtiles
 ENV SCRIPT_FILENAME /mbtiles/mbtiles
 ENV DOMAIN_NAME api.openindoor.io
 
-CMD /mbtiles/mbtiles-api.sh
-# CMD bash -c "(fcgiwrap -f -s tcp:127.0.0.1:8999)"
+CMD ["/mbtiles/mbtiles-api.sh"]
 
 EXPOSE 80
 EXPOSE 8999

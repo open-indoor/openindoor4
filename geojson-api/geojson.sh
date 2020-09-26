@@ -2,7 +2,6 @@
 
 id="$(basename $PATH_INFO)"
 osmFile="/tmp/${id}.osm"
-# osmApiUrl="https://api.openindoor.io/osm"
 osmApiUrl="https://${DOMAIN_NAME}/osm"
 code=$(curl \
     -k \

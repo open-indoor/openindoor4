@@ -1,6 +1,9 @@
 :80 {
 
-    log
+    log {
+        level DEBUG
+        format json
+    }
 
     handle_errors {
         @404 {
