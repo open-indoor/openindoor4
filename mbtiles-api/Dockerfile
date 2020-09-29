@@ -11,6 +11,8 @@ RUN apk add --update-cache \
     grep \
     vim \
     gettext \
+    util-linux \
+    file \
     && rm -rf /var/cache/apk/*
 
 COPY ./Caddyfile /etc/caddy/Caddyfile
@@ -21,6 +23,9 @@ RUN chmod +x /mbtiles/mbtiles
 
 COPY ./mbtiles-api.sh /mbtiles/mbtiles-api.sh
 RUN chmod +x /mbtiles/mbtiles-api.sh
+
+COPY ./actions.sh /usr/bin/actions.sh
+RUN chmod + /usr/bin/actions.sh
 
 WORKDIR /mbtiles
 

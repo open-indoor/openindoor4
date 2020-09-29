@@ -10,11 +10,21 @@
         respond @404 "File not found."
     }
 
-    reverse_proxy /mbtiles* :8999 {
-        transport fastcgi {
-            split mbtiles
-            env API mbtiles-api
-            env DOMAIN_NAME ${DOMAIN_NAME}
-        }
-    }
+#    reverse_proxy /mbtiles* :8999 {
+#        transport fastcgi {
+#            split mbtiles
+#            env API mbtiles-api
+#            env DOMAIN_NAME ${DOMAIN_NAME}
+#        }
+#    }
+
+	handle /mbtiles* {
+		reverse_proxy unix//var/run/fcgiwrap.socket {
+			transport fastcgi {
+    		    env SCRIPT_FILENAME /mbtiles-country/mbtiles-country
+                env DOMAIN_NAME ${DOMAIN_NAME}
+		        split ""
+			}
+		}
+	}
 }
