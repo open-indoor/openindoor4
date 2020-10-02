@@ -3,8 +3,12 @@
     file_server browse
 
     rewrite /osm/cksum/* /osm/{file}.cksum
-    
+
     rewrite /osm/* {uri}.osm
+
+    rewrite /bboxes /bboxes.json
+
+    rewrite /bboxes/* /osm/bboxes_{file}.json
 
     log {
     	level DEBUG

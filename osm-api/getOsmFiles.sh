@@ -1,6 +1,7 @@
 #!/bin/bash
 
-osmUpdate () { 
+osmUpdate () {
+  uuid="$(uuidgen)"
   BBOXES="/data/bboxes.lst"
   BBOXES_JSON="/data/bboxes.json_tmp"
   BBOXES_JSON_FINAL="/data/bboxes.json"
@@ -46,9 +47,9 @@ EOF
   mkdir -p /data/osm
   while read bbox
   do
-    filename=$(echo "$bbox" | cut -d':' -f1 | tr -d '"')
-    osmfile="/data/osm/${filename}.osm"
-    osmcksum="/data/osm/${filename}.cksum"
+    id=$(echo "$bbox" | cut -d':' -f1 | tr -d '"')
+    osmfile="/data/osm/${id}.osm"
+    osmcksum="/data/osm/${id}.cksum"
     update=$(echo "$bbox" | cut -d':' -f9)
     country=$(echo "$bbox" | cut -d':' -f2 | tr -d '"')
     town=$(echo "$bbox" | cut -d':' -f3 | tr -d '"')
@@ -57,16 +58,16 @@ EOF
     lat1=$(echo "$bbox" | cut -d':' -f6)
     lon2=$(echo "$bbox" | cut -d':' -f7)
     lat2=$(echo "$bbox" | cut -d':' -f8)
-    if [ ! -f "${osmfile}" ] || ! grep -q '<osm version=' "/data/osm/${filename}.osm" || [ "x${update}" = "x1m" ] ; then
+    if [ ! -f "${osmfile}" ] || ! grep -q '<osm version=' "/data/osm/${id}.osm" || [ "x${update}" = "x1m" ] ; then
       url="https://map.openindoor.io?bbox=""$lon1"",""$lat1"",""$lon2"",""$lat2"
       overpass="https://overpass-api.de/api/map?bbox=""$lon1"",""$lat1"",""$lon2"",""$lat2"
       echo $overpass
-      rm -rf "/tmp/${filename}.osm"
-      curl $overpass > "/tmp/${filename}.osm"
-      if grep -q '<osm version=' "/tmp/${filename}.osm" ; then
-        # sed 's/generator=\"Overpass API .*\"/generator=\"Overpass API\"/g' /tmp/${filename}.osm > /tmp/${filename}_ref.osm
-        # sed -i 's/osm_base=\".*\"/osm_base=\"\"/g' /tmp/${filename}_ref.osm
-        mv -f "/tmp/${filename}.osm" "${osmfile}"
+      rm -rf "/tmp/${id}.osm"
+      curl $overpass > "/tmp/${id}.osm"
+      if grep -q '<osm version=' "/tmp/${id}.osm" ; then
+        # sed 's/generator=\"Overpass API .*\"/generator=\"Overpass API\"/g' /tmp/${id}.osm > /tmp/${id}_ref.osm
+        # sed -i 's/osm_base=\".*\"/osm_base=\"\"/g' /tmp/${id}_ref.osm
+        mv -f "/tmp/${id}.osm" "${osmfile}"
         echo "downloaded"
       fi
     else
@@ -75,25 +76,40 @@ EOF
 
     if [ -f "${osmfile}" ] \
     && grep -q '<osm version=' "${osmfile}"; then
-      sed 's/generator=\"Overpass API .*\"/generator=\"Overpass API\"/g' "${osmfile}" > /tmp/${filename}_ref.osm
-      sed -i 's/osm_base=\".*\"/osm_base=\"\"/g' /tmp/${filename}_ref.osm
-      echo -n $(cksum "/tmp/${filename}_ref.osm" | cut -d " " -f1) > "$osmcksum"
-      echo -n '{' >> $BBOXES_JSON
-      echo -n   '"id":"'"${filename}"'",' >> $BBOXES_JSON
-      echo -n   '"update":"'${update}'",' >> $BBOXES_JSON
-      echo -n   '"country":"'${country}'",' >> $BBOXES_JSON
-      echo -n   '"town":"'${town}'",' >> $BBOXES_JSON
-      echo -n   '"place":"'${place}'",' >> $BBOXES_JSON
-      echo -n   '"bbox":[' >> $BBOXES_JSON
-      echo -n     "${lon1}, ${lat1}, ${lon2}, ${lat2}" >> $BBOXES_JSON
-      echo -n   ']' >> $BBOXES_JSON 
-      echo -n "}," >> $BBOXES_JSON
+      # Manage checksum
+      osmRef="/tmp/${id}_ref.osm"
+      sed 's/generator=\"Overpass API .*\"/generator=\"Overpass API\"/g' "${osmfile}" > "${osmRef}"
+      sed -i 's/osm_base=\".*\"/osm_base=\"\"/g' "${osmRef}"
+      cksum=$(cksum "${osmRef}" | cut -d " " -f1)
+      echo -n ${cksum} > "$osmcksum"
+      rm -rf "${osmRef}"
+      # Manage country set
+      bboxesCountryFile="/tmp/bboxes_${uuid}_${country}.json"
+      if [ ! -f "${bboxesCountryFile}" ]; then
+        echo -n '[' > ${bboxesCountryFile}
+      else
+        sed -i 's/\]$/,/' ${bboxesCountryFile}
+      fi
+      bboxJson=\
+'{'\
+'"id":"'"${id}"'",'\
+'"cksum":"'"${cksum}"'",'\
+'"update":"'${update}'",'\
+'"country":"'${country}'",'\
+'"town":"'${town}'",'\
+'"place":"'${place}'",'\
+'"bbox":['"${lon1}"', '"${lat1}"', '"${lon2}"', '"${lat2}"']'\
+'}'
+      echo -n "${bboxJson}," >> $BBOXES_JSON
+      echo -n "${bboxJson}]" >> ${bboxesCountryFile}
     fi
-
   done <<< "$bboxes"
   sed -i 's/,$//' $BBOXES_JSON
   echo "]" >> $BBOXES_JSON
   mv "${BBOXES_JSON}" "${BBOXES_JSON_FINAL}"
+  for f in $(cd /tmp; find . -name "bboxes_${uuid}_*.json"); do
+    mv /tmp/$f /data/osm/$(echo $f | sed "s/\(bboxes\)_.*\(_.*\.json\)/\1\2/g" | tr '[:upper:]' '[:lower:]')
+  done
 }
 
 echo "osmUpdate"

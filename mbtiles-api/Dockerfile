@@ -25,7 +25,7 @@ COPY ./mbtiles-api.sh /mbtiles/mbtiles-api.sh
 RUN chmod +x /mbtiles/mbtiles-api.sh
 
 COPY ./actions.sh /usr/bin/actions.sh
-RUN chmod + /usr/bin/actions.sh
+RUN chmod +x /usr/bin/actions.sh
 
 WORKDIR /mbtiles
 
@@ -35,4 +35,3 @@ ENV DOMAIN_NAME api.openindoor.io
 CMD ["/mbtiles/mbtiles-api.sh"]
 
 EXPOSE 80
-EXPOSE 8999

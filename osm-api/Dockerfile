@@ -1,11 +1,13 @@
 FROM caddy:2-alpine
 
-RUN apk add --no-cache \
+RUN apk add --update-cache \
     bash \
     wget \
     procps \
     curl \
-    vim
+    vim \
+    util-linux \
+    && rm -rf /var/cache/apk/*
 
 COPY ./Caddyfile /etc/caddy/Caddyfile
 

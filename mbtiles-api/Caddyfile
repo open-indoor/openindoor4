@@ -21,7 +21,7 @@
 	handle /mbtiles* {
 		reverse_proxy unix//var/run/fcgiwrap.socket {
 			transport fastcgi {
-    		    env SCRIPT_FILENAME /mbtiles-country/mbtiles-country
+    		    env SCRIPT_FILENAME /mbtiles/mbtiles
                 env DOMAIN_NAME ${DOMAIN_NAME}
 		        split ""
 			}

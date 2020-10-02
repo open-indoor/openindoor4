@@ -1,7 +1,7 @@
 ################ OSM TO GEOJSON #####################
 FROM caddy:2-alpine
 
-RUN apk add --update \
+RUN apk add --update-cache \
     nodejs \
     npm \
     jq \
@@ -11,7 +11,10 @@ RUN apk add --update \
     fcgiwrap \
     grep \
     vim \
-    gettext
+    gettext \
+    util-linux \
+    && rm -rf /var/cache/apk/*
+    
 RUN npm install -g osmtogeojson
 
 COPY ./Caddyfile /etc/caddy/Caddyfile
