@@ -4,23 +4,21 @@ commonLabels:
   app: openindoor
 images:
   - name: openindoor/osm-api
-    # newName: fofgjdxp.gra7.container-registry.ovh.net/openindoor/osm-api
     newTag: 1.0.46
   - name: openindoor/geojson-api
-    # newName: fofgjdxp.gra7.container-registry.ovh.net/openindoor/geojson-api
     newTag: 1.0.33
   - name: openindoor/mbtiles-api
-    # newName: fofgjdxp.gra7.container-registry.ovh.net/openindoor/mbtiles-api
     newTag: 1.0.48
   - name: openindoor/mbtiles-country-api
-    # newName: fofgjdxp.gra7.container-registry.ovh.net/openindoor/mbtiles-country-api
-    newTag: 1.0.23
+    newTag: 1.0.24
+  - name: openindoor/tileserver-api
+    newTag: 1.0.15
   - name: openindoor/front-api
-    # newName: fofgjdxp.gra7.container-registry.ovh.net/openindoor/front-api
-    newTag: 1.0.75
+    newTag: 1.0.80
 resources:
 - osm-api.yaml
 - geojson-api.yaml
 - mbtiles-api.yaml
 - mbtiles-country-api.yaml
+- tileserver-api.yaml
 - front-api.yaml

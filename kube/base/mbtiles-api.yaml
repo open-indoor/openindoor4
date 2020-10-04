@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mbtiles-api
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: mbtiles-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: mbtiles-api
+  name: mbtiles-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: mbtiles-api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: mbtiles-api
+    spec:
+      containers:
+      - env:
+        - name: DOMAIN_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: domainName
+        image: openindoor/mbtiles-api:0.0.0
+        name: mbtiles-api
+        ports:
+        - containerPort: 80

@@ -1,0 +1,18 @@
+:80 {
+
+    log
+
+    handle /tileserver/cmd/info {
+		reverse_proxy unix//var/run/fcgiwrap.socket {
+			transport fastcgi {
+    		    env SCRIPT_FILENAME /tileserver/tileserver
+                env DOMAIN_NAME ${DOMAIN_NAME}
+		        split ""
+			}
+		}
+    }
+
+    handle /tileserver/* {
+    	reverse_proxy localhost:8080
+    }
+}
