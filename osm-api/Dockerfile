@@ -7,6 +7,7 @@ RUN apk add --update-cache \
     curl \
     vim \
     util-linux \
+    jq \
     && rm -rf /var/cache/apk/*
 
 COPY ./Caddyfile /etc/caddy/Caddyfile

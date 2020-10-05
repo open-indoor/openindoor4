@@ -12,7 +12,8 @@
 		}
     }
 
-    handle /tileserver/* {
+    handle /tileserver* {
+        uri strip_prefix /tileserver
     	reverse_proxy localhost:8080
     }
 }

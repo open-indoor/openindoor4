@@ -8,7 +8,9 @@
 
     rewrite /bboxes /bboxes.json
 
-    rewrite /bboxes/* /osm/bboxes_{file}.json
+    rewrite /bboxes/countries /bboxes_countries.json
+
+    rewrite /bboxes/country/* /osm/bboxes_{file}.json
 
     log {
     	level DEBUG

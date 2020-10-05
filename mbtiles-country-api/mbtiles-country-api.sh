@@ -1,9 +1,10 @@
 #!/bin/bash
 
 echo "DOMAIN_NAME=${DOMAIN_NAME}" > /mbtiles-country/mbtiles-country.src
-
-crontab -l | { cat; echo "* * * * * /usr/bin/flock /var/tmp/actions.lock /usr/bin/actions.sh > /dev/stdout 2> /dev/stderr"; } | crontab -
+crontab -l | { cat; echo "* * * * * /usr/bin/tic"; } | crontab -
 echo "Start cron task" && crontab -l && /usr/sbin/crond -l 8
+
+cat /usr/bin/tic
 cat /usr/bin/actions.sh
 
 cat /etc/caddy/Caddyfile | envsubst > /tmp/Caddyfile

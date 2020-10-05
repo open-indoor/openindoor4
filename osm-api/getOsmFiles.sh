@@ -1,10 +1,14 @@
 #!/bin/bash
 
+# /usr/bin/flock /var/tmp/getOsmFiles.lock /usr/bin/getOsmFiles.sh 
+
 osmUpdate () {
   uuid="$(uuidgen)"
   BBOXES="/data/bboxes.lst"
   BBOXES_JSON="/data/bboxes.json_tmp"
   BBOXES_JSON_FINAL="/data/bboxes.json"
+  BBOXES_COUNTRIES="/data/bboxes_countries.json"
+  bboxesCountries='[]'
 
   if [ -f "$BBOXES" ]; then
     bboxes=$(cat $BBOXES)
@@ -84,12 +88,14 @@ EOF
       echo -n ${cksum} > "$osmcksum"
       rm -rf "${osmRef}"
       # Manage country set
-      bboxesCountryFile="/tmp/bboxes_${uuid}_${country}.json"
+      echo "$(echo $xxx | sed 's/ /_/')"
+      bboxesCountryFile="/tmp/bboxes_${uuid}_$(echo ${country} | sed 's/ /_/').json"
       if [ ! -f "${bboxesCountryFile}" ]; then
-        echo -n '[' > ${bboxesCountryFile}
+        echo -n '[' > "${bboxesCountryFile}"
       else
-        sed -i 's/\]$/,/' ${bboxesCountryFile}
+        sed -i 's/\]$/,/' "${bboxesCountryFile}"
       fi
+      bboxesCountries=$(echo -n "$bboxesCountries" | jq -c '. + [{"country":"'"${country}"'"}] | unique')
       bboxJson=\
 '{'\
 '"id":"'"${id}"'",'\
@@ -100,8 +106,8 @@ EOF
 '"place":"'${place}'",'\
 '"bbox":['"${lon1}"', '"${lat1}"', '"${lon2}"', '"${lat2}"']'\
 '}'
-      echo -n "${bboxJson}," >> $BBOXES_JSON
-      echo -n "${bboxJson}]" >> ${bboxesCountryFile}
+      echo -n "${bboxJson}," >> "$BBOXES_JSON"
+      echo -n "${bboxJson}]" >> "${bboxesCountryFile}"
     fi
   done <<< "$bboxes"
   sed -i 's/,$//' $BBOXES_JSON
@@ -110,6 +116,7 @@ EOF
   for f in $(cd /tmp; find . -name "bboxes_${uuid}_*.json"); do
     mv /tmp/$f /data/osm/$(echo $f | sed "s/\(bboxes\)_.*\(_.*\.json\)/\1\2/g" | tr '[:upper:]' '[:lower:]')
   done
+  echo -n "${bboxesCountries}" > "${BBOXES_COUNTRIES}"
 }
 
 echo "osmUpdate"

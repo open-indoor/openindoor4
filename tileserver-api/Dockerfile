@@ -29,6 +29,7 @@ RUN apt-get -qq update \
     python \
     unzip \
     util-linux \
+    uuid-runtime \
     vim \
     wget \
     xvfb \
@@ -69,9 +70,10 @@ RUN mkdir -p /tileserver
 COPY ./tileserver.sh /tileserver/tileserver
 RUN chmod +x /tileserver/tileserver
 
-RUN mkdir -p /tileserver
 COPY ./tileserver-api.sh /tileserver/tileserver-api.sh
 RUN chmod +x /tileserver/tileserver-api.sh
+
+COPY ./config.json /tileserver/config.json
 
 COPY ./actions.sh /usr/bin/actions.sh
 RUN chmod +x /usr/bin/actions.sh

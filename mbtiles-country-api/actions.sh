@@ -38,7 +38,7 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
       rm -rf ${countryBboxesFile}
   fi
   if ls /tmp/mbtiles/${country}_*.mbtiles 1> /dev/null 2>&1; then
-    cksum=$(ls /tmp/mbtiles/${country}_*.mbtiles |  sed "s/.*_//" | sed "s/.mbtiles//" | cksum | sed "s/\s\d*$//"))
+    cksum=$(ls /tmp/mbtiles/${country}_*.mbtiles |  sed "s/.*_//" | sed "s/.mbtiles//" | cksum | sed "s/\s\d*$//")
     mkdir -p /tmp/mbtiles-country
     tile-join \
       -n ${country} \

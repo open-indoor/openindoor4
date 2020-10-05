@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # PATH_INFO=/mbtiles/country/data/france DOMAIN_NAME=api-ovh.openindoor.io /mbtiles-country/mbtiles-country
-# PATH_INFO=/mbtiles/country/list DOMAIN_NAME=api-ovh.openindoor.io /mbtiles-country/mbtiles-country
+# PATH_INFO=/mbtiles/country/status/france DOMAIN_NAME=api-ovh.openindoor.io /mbtiles-country/mbtiles-country
 
 country="$(basename $PATH_INFO)"
 actionDirname="$(dirname $PATH_INFO)"
@@ -19,7 +19,7 @@ code=$(curl \
     -o "${BBOXES}" \
     -s \
     -w "%{http_code}" \
-    "${bboxesApiUrl}/${country}")
+    "${bboxesApiUrl}/country/${country}")
 
 if [ "${code}" -ge "400" ]; then
     echo "HTTP/1.1 404 Not Found"
@@ -68,11 +68,11 @@ case  $action  in
     # https://api.openindoor.io/mbtiles/country/status/france
   status)
     if [ -f "${mbtilesCountryFile}" ]; then
-      reply='{"id":"'${id}'", "status": "ready", "url": "'${mbtilesCountryApiUrl}/data/${country}'"}'
+      reply='{"country":"'${country}'", "status": "ready", "url": "'${mbtilesCountryApiUrl}/data/${country}'"}'
     elif [ -f "/tmp/mbtilesCountryPipe/${country}.json" ]; then
-      reply='{"id":"'${id}'", "status": "in progress"}'
+      reply='{"country":"'${country}'", "status": "in progress"}'
     else
-      reply='{"id":"'${id}'", "status": "not found"}'
+      reply='{"country":"'${country}'", "status": "not found"}'
     fi
     echo "Content-type: application/json"
     echo ""
@@ -86,6 +86,7 @@ case  $action  in
     echo "Content-type: application/json"
     echo ""
     echo "${reply}"
+    nohup /usr/bin/tic
     exit 0
     ;;
   *)              

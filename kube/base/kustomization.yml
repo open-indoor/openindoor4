@@ -4,17 +4,17 @@ commonLabels:
   app: openindoor
 images:
   - name: openindoor/osm-api
-    newTag: 1.0.46
+    newTag: 1.0.50
   - name: openindoor/geojson-api
     newTag: 1.0.33
   - name: openindoor/mbtiles-api
     newTag: 1.0.48
   - name: openindoor/mbtiles-country-api
-    newTag: 1.0.24
+    newTag: 1.0.31
   - name: openindoor/tileserver-api
-    newTag: 1.0.15
+    newTag: 1.0.28
   - name: openindoor/front-api
-    newTag: 1.0.80
+    newTag: 1.0.82
 resources:
 - osm-api.yaml
 - geojson-api.yaml

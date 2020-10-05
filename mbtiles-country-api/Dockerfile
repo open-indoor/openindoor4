@@ -1,20 +1,21 @@
 FROM caddy:2-alpine
 
 RUN apk add --update-cache \
-    curl \
     bash \
-    net-tools \
-    fcgiwrap \
-    grep \
-    vim \
-    gettext \
-    util-linux \
-    file \
-    jq \
     build-base \
-    sqlite-dev \
-    zlib-dev \
     ca-certificates \
+    coreutils \
+    curl \
+    fcgiwrap \
+    file \
+    gettext \
+    grep \
+    jq \
+    net-tools \
+    sqlite-dev \
+    util-linux \
+    vim \
+    zlib-dev \
     && rm -rf /var/cache/apk/*
 
 # Install tippecanoe
@@ -43,10 +44,12 @@ RUN chmod +x /mbtiles-country/mbtiles-country-api.sh
 
 COPY ./actions.sh /usr/bin/actions.sh
 RUN chmod +x /usr/bin/actions.sh
+COPY ./tic.sh /usr/bin/tic
+RUN chmod +x /usr/bin/tic
 
 WORKDIR /mbtiles-country
 
-ENV SCRIPT_FILENAME /mbtiles-country/mbtiles-country
+# ENV SCRIPT_FILENAME /mbtiles-country/mbtiles-country
 ENV DOMAIN_NAME api.openindoor.io
 
 CMD ["/mbtiles-country/mbtiles-country-api.sh"]

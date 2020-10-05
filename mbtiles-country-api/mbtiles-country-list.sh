@@ -8,7 +8,8 @@ for mbtilesCountryFile in $(find /tmp/mbtiles-country -name "*.mbtiles"); do
   list="${list}\"country\":"
   list="${list}\"$(basename ${mbtilesCountryFile%.*})\","
   cksumFile="${mbtilesCountryFile%.*}.cksum"
-  list="${list}\"cksum\":$(cat ${cksumFile})"
+  list="${list}\"cksum\":$(cat ${cksumFile}),"
+  list="${list}\"status\":\"ready\""
   list="${list}},"
 done
 list=$(echo -n "$list" | sed 's/,$//')
