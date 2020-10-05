@@ -1,4 +1,4 @@
-${DOMAIN_NAMES} {
+${APP_DOMAIN_NAMES} {
 
     root * /data/www
     file_server browse

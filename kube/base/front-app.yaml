@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    run: front-app
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: front-app-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: front-app
+  name: front-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: front-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: front-app
+    spec:
+      containers:
+      - env:
+        - name: APP_DOMAIN_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: appDomainName
+        - name: APP_DOMAIN_NAMES
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: appDomainNames
+        - name: CERTIFICATE_AUTHORITY
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: certificateAuthority
+        image: openindoor/front-app:0.0.0
+        name: front-app
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+          - mountPath: /data
+            name: front-app-storage
+      volumes:
+      - name: front-app-storage
+        persistentVolumeClaim:
+          claimName: front-app-pvc
