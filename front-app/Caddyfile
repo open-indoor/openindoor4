@@ -1,0 +1,14 @@
+${DOMAIN_NAMES} {
+
+    root * /data/www
+    file_server browse
+
+    tls contact@openindoor.io {
+        ca ${CERTIFICATE_AUTHORITY}
+    }
+
+    log {
+        level DEBUG
+    }
+
+}
