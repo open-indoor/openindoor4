@@ -6,7 +6,7 @@ images:
   - name: openindoor/osm-api
     newTag: 1.0.50
   - name: openindoor/geojson-api
-    newTag: 1.0.33
+    newTag: 1.0.35
   - name: openindoor/mbtiles-api
     newTag: 1.0.48
   - name: openindoor/mbtiles-country-api
@@ -17,14 +17,16 @@ images:
     newTag: 1.0.82
   - name: openindoor/rastertiles-app
     newTag: 1.0.1
+  - name: openindoor/fonts-app
+    newTag: 1.0.0
   - name: openindoor/mapbox-gl-indoorequal
-    newTag: 1.0.6
+    newTag: 1.0.11
   - name: openindoor/sprite-app
     newTag: 1.0.2
   - name: openindoor/map-app
-    newTag: 1.0.32
+    newTag: 1.0.39
   - name: openindoor/front-app
-    newTag: 1.0.7
+    newTag: 1.0.8
 resources:
 - osm-api.yaml
 - geojson-api.yaml
@@ -33,6 +35,7 @@ resources:
 - tileserver-api.yaml
 - front-api.yaml
 - rastertiles-app.yaml
+- fonts-app.yaml
 - mapbox-gl-indoorequal.yaml
 - sprite-app.yaml
 - map-app.yaml
