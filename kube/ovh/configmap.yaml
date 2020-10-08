@@ -2,7 +2,7 @@ apiVersion: v1
 data:
   domainName: api.openindoor.io
   domainNames: "api.openindoor.io api-ovh.openindoor.io"
-  appDomainName: app-ovh.openindoor.io
+  appDomainName: app.openindoor.io
   appDomainNames: "app-ovh.openindoor.io app.openindoor.io"
   certificateAuthority: https://acme-v02.api.letsencrypt.org/directory
   certificateAuthorityStaging: https://acme-staging-v02.api.letsencrypt.org/directory

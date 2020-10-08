@@ -11,4 +11,28 @@ ${APP_DOMAIN_NAMES} {
         level DEBUG
     }
 
+    handle /mapbox-gl-indoorequal/dist/* {
+        uri strip_prefix /mapbox-gl-indoorequal/dist
+    	reverse_proxy http://mapbox-gl-indoorequal:80
+    }
+
+    handle /sprite/* {
+        uri strip_prefix /sprite
+    	reverse_proxy http://sprite-app:80
+    }
+
+    handle /rastertiles/* {
+        uri strip_prefix /rastertiles
+    	reverse_proxy http://rastertiles-app:80
+    }
+
+    handle /fonts/* {
+    	reverse_proxy http://fonts-app:80
+    }
+
+    handle * {
+    	reverse_proxy http://map-app:80
+    }
+
+
 }
