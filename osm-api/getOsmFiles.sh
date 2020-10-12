@@ -1,6 +1,10 @@
 #!/bin/bash
 
-# /usr/bin/flock /var/tmp/getOsmFiles.lock /usr/bin/getOsmFiles.sh 
+# /usr/bin/flock /var/tmp/getOsmFiles.lock /usr/bin/getOsmFiles.sh
+# FranceParisGareDeLEst:"France":"Paris":"Gare de l\'Est":2.244:48.7741:2.252:48.7773:1m
+# curl 'https://www.openstreetmap.org/api/0.6/map?bbox=2.35879,48.87601,2.36034,48.87759'
+# wget 'https://www.openstreetmap.org/api/0.6/map?bbox=2.35787,48.87617,2.3614,48.87758'
+
 
 osmUpdate () {
   uuid="$(uuidgen)"
@@ -36,7 +40,7 @@ FranceParisParisGareDuNord:"France":"Paris":"Gare du Nord":2.35373:48.87754:2.35
 FranceParisGareDeLyon:"France":"Paris":"Gare de Lyon":2.37233:48.83915:2.37697:48.84492:0
 FranceParisBibliothequeFrancoisMitterrandTrainStation:"France":"Paris":"Bibliothèque François Mitterrand / train station":2.37653:48.82853:2.37875:48.82950:0
 FranceParisECEParis:"France":"Paris":"ECE-Paris":2.28625:48.85066:2.28751:48.85307:0
-FranceParisGareDeLEst:"France":"Paris":"Gare de l\'Est":2.244:48.7741:2.252:48.7773:1m
+FranceParisGareDeLEst:"France":"Paris":"Gare de l\'Est":2.35787:48.87617:2.3614:48.87758:1m
 FrancePuyDeDomeClermontFerrandCentreJaude:"France":"Puy-de-Dôme Clermont Ferrand":"Centre Jaude":3.07970:45.77415:3.08377:45.77587:0
 FranceRhoneLyonGareDeLaPartDieu:"France":"Rhone / Lyon":"Gare de la Part-Dieu":4.85936:45.75947:4.86156:45.76161:0
 FranceRhoneLyonHallePaulBocuse:"France":"Rhone / Lyon":"Halle Paul Bocuse":4.85016:45.76189:4.85134:45.76384:0

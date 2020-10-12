@@ -9,7 +9,6 @@ mkdir -p /tmp/geojson
 mkdir -p /tmp/mbtiles
 for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
   cksum=$(cat ${idFile})
-  rm -rf ${idFile}
   filename="$(basename ${idFile})"
   id="${filename%.*}"
   geojsonApiUrl="https://${DOMAIN_NAME}/geojson"
@@ -25,6 +24,7 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
   && ogr2ogr -f MBTILES ${mbtilesFile} \
     "${geojsonFile}" \
     -dsco MAXZOOM=20 \
-    -nln "osm-indoor" \
-  && mv "${mbtilesFileTmp}" "${mbtilesFile}"
+    -nln "osm-indoor"
+  # && mv "${mbtilesFileTmp}" "${mbtilesFile}"
+  rm -rf ${idFile}
 done

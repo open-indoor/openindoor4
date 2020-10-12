@@ -20,11 +20,24 @@ fi
 
 echo "Content-type: application/json"
 echo ""
-echo $(osmtogeojson -m "${osmFile}")
-# echo '{"type": "FeatureCollection","features":'
-# echo $(osmtogeojson -m "${osmFile}" | jq -c '.features | map(select(.properties | has("level")) | select(.properties.level | test(";.*;"; "ix") | not))')
-# echo '}'
+# echo $(osmtogeojson -m "${osmFile}")
+echo -n '{"type": "FeatureCollection","features":'
+echo -n $(\
+osmtogeojson -m "${osmFile}" \
+| jq -c \
+'  .features | '\
+'  map('\
+'    select('\
+'      select(.properties | has("level")) | select(.properties.level | test(";.*;"; "ix") | not) '\
+'      or '\
+'      select(.properties | has("level") | not) '\
+'    )'\
+'  )'\
+)
+echo '}'
 exit 0
+
+
 
 # cat FranceParisParisGareDuNord.geojson | jq '. | select(.features[].properties.level == "0")' | less
 # cat FranceParisParisGareDuNord.geojson | jq '. | select ( any(.features[]; .properties.level == "0") )' |less
@@ -37,3 +50,14 @@ exit 0
 # cat FranceParisParisGareDuNord.geojson | jq '.features | map(select(.properties | has("level")) | select(.properties.level | contains(";")))' |less
 # cat FranceParisParisGareDuNord.geojson | jq '.features | map(select(.properties | has("level")) | select(.properties.level | contains(";") | not))' |less
 # cat FranceParisParisGareDuNord.geojson | jq '.features | map(select(.properties | has("level")) | select(.properties.level | test(";.*;"; "ix") | not))' |less
+# cat FranceParisGareDeLEst.geojson \
+# | jq '.features '\
+# '| map('\
+# 'select('\
+# 'select(.properties | has("level")) '\
+# '| select(.properties.level | test(";.*;"; "ix") | not) '\
+# 'or '\
+# ' select(.properties | has("level") | not) '\
+# ')'\
+# ')' \
+# |less

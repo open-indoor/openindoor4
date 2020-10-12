@@ -16,6 +16,8 @@ mbtilesCountryApiUrl="https://${DOMAIN_NAME}/mbtiles/country"
 # Get countries
 countries=$(curl -k -L  "${mbtilesCountryApiUrl}/list")
 
+if [ "X${countries}" = "X[]" ]; then exit 0; fi
+
 # If data locally missing or data not update from remote, check if can be remotely retrieve
 while read i; do
   country=$(echo $i | jq -r -c '.country')
