@@ -2,7 +2,7 @@
 
 # Test
 # PATH_INFO=/mbtiles/trigger/FranceParisGareDeLEst DOMAIN_NAME=api-ovh.openindoor.io /mbtiles/mbtiles
-
+# ogr2ogr -f MBTILES FranceParisGareDeLEst.mbtiles FranceParisGareDeLEst_filtered.geojson -dsco MAXZOOM=20 -nln osm-indoor
 
 id="$(basename $PATH_INFO)"
 cksumFile="/tmp/${id}.cksum"

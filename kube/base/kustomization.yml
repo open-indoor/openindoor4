@@ -19,14 +19,16 @@ images:
     newTag: 1.0.2
   - name: openindoor/fonts-app
     newTag: 1.0.0
-  - name: openindoor/mapbox-gl-indoorequal
-    newTag: 1.0.16
+  - name: openindoor/style-app
+    newTag: 1.0.15
+  - name: openindoor/mapbox-gl-openindoor
+    newTag: 1.0.7
   - name: openindoor/sprite-app
-    newTag: 1.0.2
+    newTag: 1.0.3
   - name: openindoor/map-app
-    newTag: 1.0.49
+    newTag: 1.0.54
   - name: openindoor/front-app
-    newTag: 1.0.8
+    newTag: 1.0.11
 resources:
 - osm-api.yaml
 - geojson-api.yaml
@@ -36,7 +38,8 @@ resources:
 - front-api.yaml
 - rastertiles-app.yaml
 - fonts-app.yaml
-- mapbox-gl-indoorequal.yaml
+- style-app.yaml
+- mapbox-gl-openindoor.yaml
 - sprite-app.yaml
 - map-app.yaml
 - front-app.yaml

@@ -1,6 +1,7 @@
 apiVersion: v1
 data:
   domainName: api-gke.openindoor.io
+  apiDomainName: api-gke.openindoor.io
   domainNames: "api-gke.openindoor.io"
   appDomainName: app-gke.openindoor.io
   appDomainNames: "app-gke.openindoor.io"

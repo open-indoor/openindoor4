@@ -12,9 +12,11 @@ RUN apk add --update-cache \
     grep \
     jq \
     net-tools \
+    procps \
     sqlite-dev \
     util-linux \
     vim \
+    wget \
     zlib-dev \
     && rm -rf /var/cache/apk/*
 
@@ -51,6 +53,7 @@ WORKDIR /mbtiles-country
 
 # ENV SCRIPT_FILENAME /mbtiles-country/mbtiles-country
 ENV DOMAIN_NAME api.openindoor.io
+ENV APÏ_DOMAIN_NAME api.openindoor.io
 
 CMD ["/mbtiles-country/mbtiles-country-api.sh"]
 

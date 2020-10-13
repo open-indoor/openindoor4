@@ -1,0 +1,52 @@
+[
+    {
+        "filter": [
+            "any",
+            [
+                "has",
+                "building:part"
+            ]
+        ],
+        "minzoom": 15,
+        "id": "building-part-extrusion",
+        "source-layer": "osm-indoor",
+        "source": "building",
+        "type": "fill-extrusion",
+        "paint": {
+            "fill-extrusion-color": "#FFFFFF",
+            "fill-extrusion-height": [
+                "interpolate",
+                [
+                    "linear"
+                ],
+                [
+                    "zoom"
+                ],
+                17,
+                30,
+                18,
+                0
+            ],
+            "fill-extrusion-base": [
+                "interpolate",
+                [
+                    "linear"
+                ],
+                [
+                    "zoom"
+                ],
+                17,
+                [
+                    "to-number",
+                    [
+                        "get",
+                        "min_height"
+                    ]
+                ],
+                18,
+                0
+            ],
+            "fill-extrusion-opacity": 0.5
+        }
+    }
+]
