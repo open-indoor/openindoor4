@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+varnishd -f /etc/varnish/default.vcl -a http=:80,HTTP -s malloc,$VARNISH_SIZE
+
+/usr/bin/varnishncsa \
+  -b -c \
+  -F '%{Host}i %h %l %u %t \"%r\" %s %b \"%{Referer}i\" \"%{User-agent}i\" \"%{Varnish:hitmiss}x\"'
