@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fonts-app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: fonts-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: fonts-app
+  name: fonts-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: fonts-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: fonts-app
+    spec:
+      containers:
+      - env:
+        - name: APP_DOMAIN_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: appDomainName
+        image: openindoor/fonts-app:0.0.0
+        name: fonts-app
+        ports:
+        - containerPort: 80

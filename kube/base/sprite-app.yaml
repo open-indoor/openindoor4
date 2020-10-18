@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sprite-app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: sprite-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: sprite-app
+  name: sprite-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: sprite-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: sprite-app
+    spec:
+      containers:
+      - env:
+        - name: APP_DOMAIN_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: appDomainName
+        image: openindoor/sprite-app:0.0.0
+        name: sprite-app
+        ports:
+        - containerPort: 80

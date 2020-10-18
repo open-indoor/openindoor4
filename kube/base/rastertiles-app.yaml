@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rastertiles-app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: rastertiles-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: rastertiles-app
+  name: rastertiles-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: rastertiles-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: rastertiles-app
+    spec:
+      containers:
+      - env:
+        - name: APP_DOMAIN_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: appDomainName
+        image: openindoor/rastertiles-app:0.0.0
+        name: rastertiles-app
+        ports:
+        - containerPort: 80
