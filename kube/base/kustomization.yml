@@ -20,13 +20,13 @@ images:
   - name: openindoor/fonts-app
     newTag: 1.0.0
   - name: openindoor/style-app
-    newTag: 1.0.15
+    newTag: 1.0.52
   - name: openindoor/mapbox-gl-openindoor
-    newTag: 1.0.7
+    newTag: 1.0.9
   - name: openindoor/sprite-app
-    newTag: 1.0.3
+    newTag: 1.0.22
   - name: openindoor/map-app
-    newTag: 1.0.54
+    newTag: 1.0.62
   - name: openindoor/front-app
     newTag: 1.0.11
 resources:

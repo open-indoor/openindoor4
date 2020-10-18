@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6"
-     inkscape:cx="-27.797451"
-     inkscape:cy="-13.40519"
+     inkscape:cx="-41.388785"
+     inkscape:cy="44.999293"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -41,7 +41,16 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     units="px" />
+     units="px"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-midpoints="true" />
   <metadata
      id="metadata5213">
     <rdf:RDF>
@@ -50,7 +59,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -61,7 +70,7 @@
      transform="translate(-81.838892,-94.08138)">
     <g
        id="g4784"
-       transform="matrix(0.50559841,0,0,0.50559841,81.659541,93.903761)">
+       transform="matrix(0.53090216,0,0,0.53090216,80.773019,93.015507)">
       <path
          id="path4674"
          d="m 52.4,5.1 c 7.9,-0.8 15.2,8 3.4,14 -7.9,4 -15.1,9.2 -21.3,15.3 L 17.5,17.5 C 24.9,10.3 36,6.8 52.4,5.1"
