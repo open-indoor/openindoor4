@@ -1,0 +1,14 @@
+{
+    "id": "${roomId}",
+    "source-layer": "osm-indoor",
+    "source": "building",
+    "type": "fill-extrusion",
+    "minzoom": $INDOOR_MIN_ZOOM,
+    "filter": $symbolFilter,
+    "paint": {
+        "fill-extrusion-color": "${roomColor}",
+        "fill-extrusion-height": 3,
+        "fill-extrusion-base": 0,
+        "fill-extrusion-opacity": 0.5
+    }
+}

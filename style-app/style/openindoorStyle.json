@@ -24,14 +24,15 @@
     "building":
     {
       "type": "vector",
-      "url": "https://${API_DOMAIN_NAME}/tileserver/data/${country}.json"
-
+      "url": "https://${API_DOMAIN_NAME}/tileserver/data/${country}.json",
+      "minzoom": $BUILDING_MIN_ZOOM,
+      "maxzoom": $BUILDING_MAX_ZOOM
     },
     "indoor":
     {
       "type": "vector",
-      "url": "https://${API_DOMAIN_NAME}/tileserver/data/${country}.json"
-
+      "url": "https://${API_DOMAIN_NAME}/tileserver/data/${country}.json",
+      "minzoom": $INDOOR_MIN_ZOOM
     }
   },
   "layers": [
@@ -39,7 +40,7 @@
       "id": "background",
       "type": "background",
       "paint": {
-        "background-color": "#1d1f20"
+        "background-color": "#8f6c6c"
       }
     },
     {
@@ -48,8 +49,6 @@
       "source": "raster-tiles",
       "minzoom": 0,
       "maxzoom": 19
-    },
-    "buildingLayers",
-    "indoorLayers"
+    }
   ]
 }

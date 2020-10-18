@@ -4,21 +4,16 @@
     "source-layer": "osm-indoor",
     "source": "building",
     "type": "fill-extrusion",
-    "minzoom": $BUILDING_MIN_ZOOM,
-    "maxzoom": $BUILDING_MAX_ZOOM,
+    "minzoom": $SHAPE_MIN_ZOOM,
     "filter": [
       "any",
       [
         "has",
         "building:part"
-      ],
-      [
-        "has",
-        "building"
       ]
     ],
     "paint": {
-      "fill-extrusion-color": "#000000",
+      "fill-extrusion-color": "#FFFFFF",
       "fill-extrusion-height": [
         "interpolate",
         [
@@ -27,7 +22,7 @@
         [
           "zoom"
         ],
-        $BUILDING_TALL_ZOOM,
+        17,
         [
 					"case",
 					[
@@ -43,7 +38,7 @@
 					],
 					30
 				],
-        $BUILDING_FLAT_ZOOM,
+        18,
         0
       ],
       "fill-extrusion-base": [
@@ -54,7 +49,7 @@
         [
           "zoom"
         ],
-        $BUILDING_TALL_ZOOM,
+        17,
         [
 					"case",
 					[
@@ -70,7 +65,7 @@
 					],
 					0
 				],
-        $BUILDING_FLAT_ZOOM,
+        18,
         0
       ],
       "fill-extrusion-opacity": 0.5
