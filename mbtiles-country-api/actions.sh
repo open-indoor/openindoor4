@@ -19,17 +19,17 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
     mbtilesFile=/tmp/mbtiles/${country}_${id}_${cksum}.mbtiles
     if ! [ -f "${mbtilesFile}" ]; then
       complete=false
-      status=$(curl -k -L "${mbtilesApiUrl}/status/${id}" | jq -r -c ".status")
+      status=$(curl -k -L "${mbtilesApiUrl}/${country}/status/${id}" | jq -r -c ".status")
       if [ "${status}" != "ready" ]; then
       # mbtiles not ready => Trigger mbtiles build
-        curl -k -L "${mbtilesApiUrl}/trigger/${id}"
+        curl -k -L "${mbtilesApiUrl}/${country}/trigger/${id}"
         continue
       else
       # mbtiles ready => Download mbtiles
         mbtilesFileTmp=/tmp/${country}_${id}_${uuid}.mbtiles
         curl -k -L \
           -o "${mbtilesFileTmp}" \
-          "${mbtilesApiUrl}/data/${id}" \
+          "${mbtilesApiUrl}/${country}/data/${id}" \
         && mv "${mbtilesFileTmp}" "${mbtilesFile}"
       fi
     fi
@@ -37,6 +37,11 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
   if [ "X${complete}" = "Xtrue" ]; then
       rm -rf ${countryBboxesFile}
   fi
+  # bboxes
+    # curl -k -L \
+    #   -o "/tmp/${country}_bboxes.mbtiles" \
+    #   "${mbtilesApiUrl}/data/bboxes/${country}" \
+    # && mv "${mbtilesApiUrl}/data/bboxes" "/tmp/mbtiles/${country}_bboxes.mbtiles"
   if ls /tmp/mbtiles/${country}_*.mbtiles 1> /dev/null 2>&1; then
     cksum=$(ls /tmp/mbtiles/${country}_*.mbtiles |  sed "s/.*_//" | sed "s/.mbtiles//" | cksum | sed "s/\s\d*$//")
     mkdir -p /tmp/mbtiles-country
@@ -48,5 +53,5 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
       /tmp/${country}_${uuid}.mbtiles \
       /tmp/mbtiles-country/${country}.mbtiles \
     && echo -n "$cksum" > /tmp/mbtiles-country/${country}.cksum
-  fi
+  fi  
 done

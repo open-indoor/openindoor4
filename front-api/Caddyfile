@@ -17,6 +17,12 @@ ${DOMAIN_NAMES} {
         }
     }
 
+    route /places/* {
+        reverse_proxy {
+            to http://places-api:80
+        }
+    }
+
     route /bboxes* {
         reverse_proxy {
             to http://osm-api:80

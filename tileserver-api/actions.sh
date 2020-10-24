@@ -14,7 +14,7 @@ mbtilesCountryApiUrl="https://${DOMAIN_NAME}/mbtiles/country"
 ################################
 
 # Get countries
-countries=$(curl -k -L  "${mbtilesCountryApiUrl}/list")
+countries=$(curl -k -L  "${mbtilesCountryApiUrl}/world/list")
 
 if [ "X${countries}" = "X[]" ]; then exit 0; fi
 
@@ -40,7 +40,7 @@ while read i; do
     > "/tmp/config_${uuid}.json"
   curl -k -L \
     -o "${countryFileTmp}" \
-    "${mbtilesCountryApiUrl}/data/${country}" \
+    "${mbtilesCountryApiUrl}/${country}/data" \
   && mv -f "${countryFileTmp}" "${countryFile}" \
   && mv -f "/tmp/config_${uuid}.json" /tileserver/config.json \
   && kill -SIGHUP ${tileServerPID}

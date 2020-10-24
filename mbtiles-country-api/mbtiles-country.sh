@@ -3,9 +3,21 @@
 # PATH_INFO=/mbtiles/country/data/france DOMAIN_NAME=api-ovh.openindoor.io /mbtiles-country/mbtiles-country
 # PATH_INFO=/mbtiles/country/status/france DOMAIN_NAME=api-ovh.openindoor.io /mbtiles-country/mbtiles-country
 
-country="$(basename $PATH_INFO)"
-actionDirname="$(dirname $PATH_INFO)"
-action="$(basename ${actionDirname})"
+
+# country/list
+# country/status/france
+# country/trigger/france
+# country/data/france
+
+# world/list
+# france/status
+# france/trigger
+# france/data
+
+country="$(echo ${PATH_INFO} | cut -d'/' -f1)"
+action="$(echo ${PATH_INFO} | cut -d'/' -f2)"
+format="$(echo ${PATH_INFO} | cut -d'/' -f3)"
+
 uuid=$(uuidgen)
 # bboxesApiUrl="http://osm-api/bboxes"
 bboxesApiUrl="https://${DOMAIN_NAME}/bboxes"
@@ -28,7 +40,7 @@ if [ "${code}" -ge "400" ]; then
     exit 0
 fi
 
-case  $action  in
+case $action in
   list)
 #   [{"country":"france","cksum":xxx},{"country":"brasil","cksum":yyy}]
     list="["

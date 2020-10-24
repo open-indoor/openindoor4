@@ -1,7 +1,16 @@
 #!/bin/sh
 set -e
 
-varnishd -f /etc/varnish/default.vcl -a http=:80,HTTP -s malloc,$VARNISH_SIZE
+# -t 2419200 = 4 weeks TTL
+
+varnishd \
+  -f /etc/varnish/default.vcl \
+  -a http=:80,HTTP \
+  -s malloc,$VARNISH_SIZE \
+  -t 2419200 \
+  -p default_ttl=2419200
+     
+varnishadm param.set default_ttl 2419200.000
 
 /usr/bin/varnishncsa \
   -b -c \

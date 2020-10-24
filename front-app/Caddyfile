@@ -16,6 +16,11 @@ ${APP_DOMAIN_NAMES} {
     	reverse_proxy http://mapbox-gl-openindoor:80
     }
 
+    handle /mapbox-gl-js/dist/* {
+        uri strip_prefix /mapbox-gl-js/dist
+    	reverse_proxy http://mapbox-gl-js:80
+    }
+
     handle /sprite/* {
         uri strip_prefix /sprite
     	reverse_proxy http://sprite-app:80

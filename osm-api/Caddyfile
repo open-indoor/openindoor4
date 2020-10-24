@@ -10,6 +10,8 @@
 
     rewrite /bboxes/countries /bboxes_countries.json
 
+    rewrite /bboxes/country/pins/* /osm/pins_{file}.geojson
+
     rewrite /bboxes/country/* /osm/bboxes_{file}.json
 
     log {
@@ -17,3 +19,4 @@
         output stdout
     }
 }
+

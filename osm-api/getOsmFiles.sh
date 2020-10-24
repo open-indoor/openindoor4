@@ -5,6 +5,7 @@
 # curl 'https://www.openstreetmap.org/api/0.6/map?bbox=2.35879,48.87601,2.36034,48.87759'
 # wget 'https://www.openstreetmap.org/api/0.6/map?bbox=2.35787,48.87617,2.3614,48.87758'
 
+set -x
 
 osmUpdate () {
   uuid="$(uuidgen)"
@@ -18,6 +19,7 @@ osmUpdate () {
     bboxes=$(cat $BBOXES)
   else
     mkdir -p /data
+    mkdir -p /data/bboxes
     read -r -d '' bboxes <<'EOF'
 ArgentinaBuenosAiresFineArtsNationalMuseum:"Argentina":"Buenos Aires":"Fine Arts National Museum":-58.39337:-34.58422:-58.39207:-34.58333:0
 ArgentinaBuenosAiresNationalGeographicInstitute:"Argentina":"Buenos Aires":"National Geographic Institute":-58.44010:-34.57372:-58.43915:-34.57028:0
@@ -47,6 +49,7 @@ FranceRhoneLyonHallePaulBocuse:"France":"Rhone / Lyon":"Halle Paul Bocuse":4.850
 FranceSeineEtMarneMaincyChateauDeVauxLeVicomte:"France":"Seine-et-Marne / Maincy":"Château de Vaux-le-Vicomte":2.71362:48.56451:2.71466:48.56722:0
 FranceValDeMarneThiaisCentrecommercialBelleEpine:"France":"Val-de-Marne / Thiais":"Centre commercial Belle Épine":2.36905:48.75566:2.37395:48.75793:0
 FranceYvelinesVelizyVillacoublayCentreCommercialVelizy2:"France":"Yvelines / Vélizy-Villacoublay":"Centre commercial Vélizy 2":2.21856:48.77735:2.22209:48.78526:0
+FranceParisBeaubourg:"France":"Paris":"Beaubourg":2.3517:48.85819:2.35335:48.86253:1m
 EOF
     echo "$bboxes" > $BBOXES
   fi
@@ -123,5 +126,72 @@ EOF
   echo -n "${bboxesCountries}" > "${BBOXES_COUNTRIES}"
 }
 
+# bboxesIndex() {
+#   BBOXES_INDEX="/tmp/bboxes.html"
+#   BBOXES_INDEX_FINAL="/data/bboxes.html"
+#   echo -e '<!DOCTYPE html>
+# <html>
+# <body>' > "${BBOXES_INDEX}"
+#   while read i; do
+#     export placeId="$(echo $i | jq -r -c '.id')"
+#     export placeBbox="$(echo $i | jq -r -c '.bbox')"
+#     # echo 'scale=6;(20.3434+5.546364)/2' | bc
+#     export longitude=$(echo 'scale=6;('"$(echo ${placeBbox} | jq .[0])""+""$(echo ${placeBbox} | jq .[2])"')/2' | bc)
+#     export latitude=$(echo 'scale=6;('"$(echo ${placeBbox} | jq .[1])""+""$(echo ${placeBbox} | jq .[3])"')/2' | bc)
+#     echo '<a href="https://app.openindoor.io/#map=18/'${longitude}'/'${latitude}'/0/60/0">'${placeId}'</a><br/>' >> "${BBOXES_INDEX}"
+#   done <<< $(cat /data/bboxes.json | jq -c '.[]')
+#   echo -e '</body>
+# </html>' >> "${BBOXES_INDEX}"
+#   mv "${BBOXES_INDEX}" "${BBOXES_INDEX_FINAL}"
+# }
+
+# pinsGeojson() {
+#   while read i; do
+#     export country="$(echo $i | jq -r -c '.country' | tr '[:upper:]' '[:lower:]' | sed 's/ /_/g')"
+#     export BBOXES_GEOJSON_TMP="/tmp/pins_${country}.geojson"
+#     export BBOXES_GEOJSON="/data/osm/pins_${country}.geojson"
+#     if [ ! -f "${BBOXES_GEOJSON_TMP}" ]; then
+#       cat << 'EOF' > "${BBOXES_GEOJSON_TMP}"
+# {
+#   "type": "geojson",
+#   "data": {
+#     "type": "FeatureCollection",
+#     "features": []
+#   }
+# }
+# EOF
+#     fi
+#     export point=\
+# '{
+#   "type": "Feature",
+#   "geometry": {
+#     "type": "Point",
+#     "coordinates": [
+#     ]
+#   },
+#   "properties": {
+#     "title": "",
+#     "country": ""
+#   }
+# }'
+#     export placeId="$(echo $i | jq -r -c '.id')"
+#     export placeBbox="$(echo $i | jq -r -c '.bbox')"
+#     export longitude=$(echo 'scale=6;('"$(echo ${placeBbox} | jq .[0])""+""$(echo ${placeBbox} | jq .[2])"')/2' | bc)
+#     export latitude=$(echo 'scale=6;('"$(echo ${placeBbox} | jq .[1])""+""$(echo ${placeBbox} | jq .[3])"')/2' | bc)
+#     # echo "${BBOXES_GEOJSON_TMP}" | jq ''
+#     export point=$(echo "${point}" \
+#     | jq '.geometry.coordinates += ['${longitude}', '${latitude}']' \
+#     | jq '.properties.title = "'${placeId}'"' | jq -c . \
+#     | jq '.properties.country = "'${country}'"' | jq -c .)
+#     cat "${BBOXES_GEOJSON_TMP}" | jq '.data.features += ['"${point}"']' > "${BBOXES_GEOJSON_TMP}_"
+#     mv -f "${BBOXES_GEOJSON_TMP}_" "${BBOXES_GEOJSON_TMP}"
+#   done <<< $(cat /data/bboxes.json | jq -c '.[]')
+#   cd /tmp; for f in $(find . -name "pins_*.geojson"); do
+#     mv -f "${f}" "/data/osm/${f}"
+#   done
+# }
+
 echo "osmUpdate"
 osmUpdate
+# bboxesIndex
+# pinsGeojson

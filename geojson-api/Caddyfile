@@ -13,7 +13,7 @@
         respond @404 "File not found."
     }
 
-    reverse_proxy /geojson* :8999 {
+    reverse_proxy /geojson/* :8999 {
         transport fastcgi {
             split geojson
             env API geojson-api

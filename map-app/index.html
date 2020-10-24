@@ -6,39 +6,18 @@
   <title>OpenIndoor</title>
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   <script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
-  <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+  <!-- <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
+  <script src="https://${APP_DOMAIN_NAME}/mapbox-gl-js/dist/mapbox-gl.js"></script>
+  <link href="https://${APP_DOMAIN_NAME}/mapbox-gl-js/dist/mapbox-gl.css" rel="stylesheet" />
   <script src="https://${APP_DOMAIN_NAME}/mapbox-gl-openindoor/dist/mapbox-gl-openindoor.umd.min.js"></script>
   <link href="https://${APP_DOMAIN_NAME}/mapbox-gl-openindoor/dist/mapbox-gl-openindoor.css" rel="stylesheet" />
   <script
     src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
-  <link rel="stylesheet"
+    <link rel="stylesheet"
     href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
     type="text/css" />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-
-    #map {
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
-    }
-
-    .mapboxgl-ctrl-group>button {
-      width: 42px;
-      height: 42px;
-    }
-
-    a.mapboxgl-ctrl-logo.mapboxgl-compact {
-      width: 32px;
-      height: 32px;
-    }
-  </style>
+    <link rel="stylesheet" href="style.css" type="text/css" />
 
 </head>
 

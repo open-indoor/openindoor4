@@ -19,3 +19,5 @@ RUN apt-get -qq update \
 
 COPY default.vcl    /etc/varnish/
 COPY run.sh         /run.sh
+
+ENV VARNISH_TTL=2419200

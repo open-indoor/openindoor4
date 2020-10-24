@@ -21,24 +21,26 @@ cat ./indoor/indoorLayers.json | envsubst > /tmp/indoorLayers.json \
 && mv -f /tmp/indoorLayers.json ./indoor/indoorLayers.json
 
 
-#########
-# rooms #
-#########
+##################
+# indoor - rooms #
+##################
 while read i; do
-  export roomlId="$(echo $i | jq -r -c '.id')"
+  export roomId="$(echo $i | jq -r -c '.id')"
   export roomColor="$(echo $i | jq -r -c '.color')"
   export roomFilter="$(echo $i | jq -r -c '.filter')"
+  export roomHeight="$(echo $i | jq -r -c '.height')"
   cat ./indoor/room.json | envsubst > /tmp/room.json
   jq '.[. | length] |= . + '"$(cat /tmp/room.json)" ./indoor/indoorLayers.json > /tmp/indoorLayers.json \
     && mv -f /tmp/indoorLayers.json ./indoor/indoorLayers.json
 done <<< $(echo '[
-    {"id": "indoor-room-extrusion",    "color": "#ebbc00",   "filter": [ "all", [ "==", [ "get", "indoor" ], "room" ]]},
-    {"id": "indoor-area-extrusion",    "color": "#ff0000",   "filter": [ "all", [ "==", [ "get", "indoor" ], "area" ]]}
+    {"id": "indoor-room-extrusion",    "color": "#ebbc00",   "height": 3, "filter": [ "all", [ "==", [ "get", "indoor" ], "room" ]]}
 ]' | jq -c '.[]')
 
-###########
-# symbols #
-###########
+    # {"id": "indoor-area-extrusion",    "color": "#ff0000",   "height": 0, "filter": [ "all", [ "==", [ "get", "indoor" ], "area" ]]}
+
+####################
+# indoor - symbols #
+####################
 while read i; do
   export symbolId="$(echo $i | jq -r -c '.id')"
   export symbolImage="$(echo $i | jq -r -c '.image')"
@@ -50,6 +52,7 @@ done <<< $(echo '[
     {"id": "poi-indoor-shop",             "image": "shop_64",           "filter": [ "any", [ "has", "shop" ]]},
     {"id": "poi-indoor-fast-food",        "image": "fast_food_64",      "filter": [ "all", [ "==", ["get", "amenity"], "fast_food" ]]},
     {"id": "poi-indoor-toilets",          "image": "toilet_64",         "filter": [ "all", [ "==", ["get", "amenity"], "toilets" ]]},
+    {"id": "poi-indoor-shop-coffee",      "image": "cafe_64",           "filter": [ "all", [ "==", ["get", "amenity"], "cafe" ]]},
     {"id": "poi-indoor-shop-cosmetics",   "image": "perfumery_64",      "filter": [ "any", [ "==", ["get", "shop"], "cosmetics" ]]},
     {"id": "poi-indoor-shop-clothes",     "image": "clothing_store_64", "filter": [ "any", [ "==", ["get", "shop"], "clothes" ]]},
     {"id": "poi-indoor-shop-electronics", "image": "electronics_64",    "filter": [ "any", [ "==", ["get", "shop"], "electronics" ]]},
@@ -59,25 +62,40 @@ done <<< $(echo '[
     {"id": "poi-indoor-shop-fnac",        "image": "fnac_64",           "filter": [ "any", [ "==", ["get", "name"], "Fnac" ]]}
 ]' | jq -c '.[]')
 
-
-
+#########
+# shape #
+#########
 cat ./shape/shapeLayers.json | envsubst > /tmp/shapeLayers.json \
 && mv -f /tmp/shapeLayers.json ./shape/shapeLayers.json
 
+############
+# buimding #
+############
 cat ./building/buildingLayers.json | envsubst > /tmp/buildingLayers.json \
 && mv -f /tmp/buildingLayers.json ./building/buildingLayers.json
 
-cat ./openindoorStyle.json | envsubst '${INDOOR_MIN_ZOOM} ${BUILDING_MIN_ZOOM} ${BUILDING_MAX_ZOOM}' > /tmp/openindoorStyle.json \
-&& mv -f /tmp/openindoorStyle.json ./openindoorStyle.json
+#############
+# Merge all #
+#############
+sed -i 's/${country}/_COUNTRY_/g' ./openindoorStyle.json
+cat ./openindoorStyle.json | envsubst > /tmp/openindoorStyle.json
+sed 's/_COUNTRY_/${country}/g' /tmp/openindoorStyle.json > ./openindoorStyle.json
 
-while read i; do \
-    jq '.layers[.layers | length] |= . + '"$i" ./openindoorStyle.json > /tmp/openindoorStyle.json \
-    && mv -f /tmp/openindoorStyle.json ./openindoorStyle.json; \
-done <<<$(cat ./building/buildingLayers.json | jq -c '.[]')
+# indoor
 while read i; do \
     jq '.layers[.layers | length] |= . + '"$i" ./openindoorStyle.json > /tmp/openindoorStyle.json \
     && mv -f /tmp/openindoorStyle.json ./openindoorStyle.json; \
 done <<<$(cat ./indoor/indoorLayers.json | jq -c '.[]')
+# shape
+while read i; do \
+    jq '.layers[.layers | length] |= . + '"$i" ./openindoorStyle.json > /tmp/openindoorStyle.json \
+    && mv -f /tmp/openindoorStyle.json ./openindoorStyle.json; \
+done <<<$(cat ./shape/shapeLayers.json | jq -c '.[]')
+# building
+while read i; do \
+    jq '.layers[.layers | length] |= . + '"$i" ./openindoorStyle.json > /tmp/openindoorStyle.json \
+    && mv -f /tmp/openindoorStyle.json ./openindoorStyle.json; \
+done <<<$(cat ./building/buildingLayers.json | jq -c '.[]')
 
 /usr/bin/tic
 

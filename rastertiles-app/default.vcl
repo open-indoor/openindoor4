@@ -19,6 +19,10 @@ sub vcl_init {
     bar.add_backend(server3);
 }
 
+sub vcl_backend_response {
+    set beresp.ttl = 4w;
+}
+
 sub vcl_recv {
     # send all traffic to the bar director:
     set req.backend_hint = bar.backend();

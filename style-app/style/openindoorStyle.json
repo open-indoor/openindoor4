@@ -28,6 +28,13 @@
       "minzoom": $BUILDING_MIN_ZOOM,
       "maxzoom": $BUILDING_MAX_ZOOM
     },
+    "shape":
+    {
+      "type": "vector",
+      "url": "https://${API_DOMAIN_NAME}/tileserver/data/${country}.json",
+      "minzoom": $SHAPE_MIN_ZOOM,
+      "maxzoom": $SHAPE_MAX_ZOOM
+    },
     "indoor":
     {
       "type": "vector",

@@ -21,10 +21,22 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
   curl -k -L \
     -o "${geojsonFile}" \
     "${geojsonApiUrl}/${id}" \
-  && ogr2ogr -f MBTILES ${mbtilesFile} \
+  && ogr2ogr -f MBTILES "${mbtilesFile}" \
     "${geojsonFile}" \
     -dsco MAXZOOM=20 \
     -nln "osm-indoor"
   # && mv "${mbtilesFileTmp}" "${mbtilesFile}"
   rm -rf ${idFile}
 done
+
+# curl -k -L \
+#   -o "/tmp/pins.geojson" \
+#   "https://${DOMAIN_NAME}/pins.mbtiles" \
+# && ogr2ogr -f MBTILES "/tmp/mbtiles/pins.mbtiles" \
+#   "/tmp/pins.geojson" \
+#   -dsco MAXZOOM=20 \
+#   -nln "osm-indoor"
+
+# https://api.openindoor.io/bboxes/country/pins/france
+
+# echo -n "${cksum}" > /tmp/mbtilesPipe/pins_france.cksum

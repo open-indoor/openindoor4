@@ -23,6 +23,19 @@
 			transport fastcgi {
     		    env SCRIPT_FILENAME /mbtiles/mbtiles
                 env DOMAIN_NAME ${DOMAIN_NAME}
+                env ACTION place
+		        split ""
+			}
+		}
+	}
+
+
+	handle /mbtiles/pins/* {
+		reverse_proxy unix//var/run/fcgiwrap.socket {
+			transport fastcgi {
+    		    env SCRIPT_FILENAME /mbtiles/mbtiles
+                env DOMAIN_NAME ${DOMAIN_NAME}
+                env ACTION pins
 		        split ""
 			}
 		}
