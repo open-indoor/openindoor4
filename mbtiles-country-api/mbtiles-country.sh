@@ -1,28 +1,25 @@
 #!/bin/bash
 
-# PATH_INFO=/mbtiles/country/data/france DOMAIN_NAME=api-ovh.openindoor.io /mbtiles-country/mbtiles-country
-# PATH_INFO=/mbtiles/country/status/france DOMAIN_NAME=api-ovh.openindoor.io /mbtiles-country/mbtiles-country
-
-
-# country/list
-# country/status/france
-# country/trigger/france
-# country/data/france
+# PATH_INFO=status/france API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
+# PATH_INFO=trigger/france API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
+# PATH_INFO=data/france API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
+# PATH_INFO=list/world API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
 
 # world/list
 # france/status
 # france/trigger
 # france/data
 
-country="$(echo ${PATH_INFO} | cut -d'/' -f1)"
-action="$(echo ${PATH_INFO} | cut -d'/' -f2)"
+action="$(echo ${PATH_INFO} | cut -d'/' -f1)"
+country="$(echo ${PATH_INFO} | cut -d'/' -f2)"
 format="$(echo ${PATH_INFO} | cut -d'/' -f3)"
 
+mkdir -p /tmp/mbtiles-country
+
 uuid=$(uuidgen)
-# bboxesApiUrl="http://osm-api/bboxes"
-bboxesApiUrl="https://${DOMAIN_NAME}/bboxes"
-mbtilesApiUrl="https://${DOMAIN_NAME}/mbtiles"
-mbtilesCountryApiUrl="https://${DOMAIN_NAME}/mbtiles"
+placesApiUrl="https://${API_DOMAIN_NAME}/places"
+mbtilesApiUrl="https://${API_DOMAIN_NAME}/mbtiles"
+mbtilesCountryApiUrl="https://${API_DOMAIN_NAME}/mbtiles-country"
 BBOXES="/tmp/bboxes_${country}.json"
 mbtilesCountryFile=/tmp/mbtiles-country/${country}.mbtiles
 code=$(curl \
@@ -31,7 +28,7 @@ code=$(curl \
     -o "${BBOXES}" \
     -s \
     -w "%{http_code}" \
-    "${bboxesApiUrl}/country/${country}")
+    "${placesApiUrl}/bboxes/${country}")
 
 if [ "${code}" -ge "400" ]; then
     echo "HTTP/1.1 404 Not Found"
@@ -92,14 +89,25 @@ case $action in
     exit 0
     ;;
   trigger)
+    case ${country} in
+      world)
+        countries=$(curl -k -L "${placesApiUrl}/countries/world")
+        ;;
+      *)
+        countries='[{"country":"'${country}'"}]'
+        ;;
+    esac
     mkdir -p /tmp/mbtilesCountryPipe
-    cat "${BBOXES}" > /tmp/mbtilesCountryPipe/${country}.json
-    reply='{"api":"mbtiles-country", "country":"'${country}'", "status": "trigger received"}'
+    while read i; do
+      myCountry="$(echo $i | jq -r -c '.country | ascii_downcase | gsub("\\s+";"_")')"
+      curl -k -L "${placesApiUrl}/bboxes/${myCountry}" > /tmp/mbtilesCountryPipe/${myCountry}.json
+    done <<< $(echo "${countries}" | jq -c '.[]')
     echo "Content-type: application/json"
     echo ""
-    echo "${reply}"
-    nohup /usr/bin/tic
+    echo '{"api":"mbtiles-country", "countries": '${countries}', "status": "trigger received"}'
+    (nohup /usr/bin/tic &) > /dev/null
     exit 0
     ;;
-  *)              
+  *)
+    ;;          
 esac 

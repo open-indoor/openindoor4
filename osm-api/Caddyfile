@@ -2,18 +2,6 @@
     root * /data
     file_server browse
 
-    rewrite /osm/cksum/* /osm/{file}.cksum
-
-    rewrite /osm/* {uri}.osm
-
-    rewrite /bboxes /bboxes.json
-
-    rewrite /bboxes/countries /bboxes_countries.json
-
-    rewrite /bboxes/country/pins/* /osm/pins_{file}.geojson
-
-    rewrite /bboxes/country/* /osm/bboxes_{file}.json
-
     log {
     	level DEBUG
         output stdout

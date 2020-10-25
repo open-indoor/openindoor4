@@ -6,28 +6,31 @@ source /tileserver/tileserver.src
 
 uuid=$(uuidgen)
 mkdir -p /tmp/mbtiles-country
-bboxesApiUrl="https://${DOMAIN_NAME}/bboxes"
-mbtilesCountryApiUrl="https://${DOMAIN_NAME}/mbtiles/country"
+# placesApiUrl="https://${DOMAIN_NAME}/places"
+mbtilesCountryApiUrl="https://${DOMAIN_NAME}/mbtiles-country"
 
 ################################
 # Get mbtiles and publish them #
 ################################
 
 # Get countries
-countries=$(curl -k -L  "${mbtilesCountryApiUrl}/world/list")
+countries=$(curl -k -L  "${mbtilesCountryApiUrl}/list/world")
 
-if [ "X${countries}" = "X[]" ]; then exit 0; fi
+countryChecker=$(echo $countries | tr -d " \t\n\r" | sed -r 's/\s+//g')
+
+if [ "X${countryChecker}" = "X[]" ]; then exit 0; fi
 
 # If data locally missing or data not update from remote, check if can be remotely retrieve
 while read i; do
   country=$(echo $i | jq -r -c '.country')
+  if [ -z "${country}" ]; then continue; fi
   cksum=$(echo $i | jq -r -c '.cksum')
   status=$(echo $i | jq -r -c '.status')
   countryFile="/data/${country}_${cksum}.mbiles"
   if [ -f "${countryFile}" ]; then
     continue
   fi
-  countryFileTmp="/tmp/mbtiles-country/${country}_${checksum}_${uuid}.mbiles"
+  countryFileTmp="/tmp/mbtiles-country/${country}_${checksum}_${uuid}.mbtiles"
   mkdir -p /tmp/mbtiles-country
   tileServerPID=$(ps x | grep "node /usr/src/app/" | grep -v "grep" | awk '{print $1}')
 # "data": {
@@ -40,7 +43,7 @@ while read i; do
     > "/tmp/config_${uuid}.json"
   curl -k -L \
     -o "${countryFileTmp}" \
-    "${mbtilesCountryApiUrl}/${country}/data" \
+    "${mbtilesCountryApiUrl}/data/${country}" \
   && mv -f "${countryFileTmp}" "${countryFile}" \
   && mv -f "/tmp/config_${uuid}.json" /tileserver/config.json \
   && kill -SIGHUP ${tileServerPID}

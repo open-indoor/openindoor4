@@ -31,11 +31,11 @@ spec:
     spec:
       containers:
       - env:
-        - name: DOMAIN_NAME
+        - name: API_DOMAIN_NAME
           valueFrom:
             configMapKeyRef:
               name: openindoor-cm
-              key: domainName
+              key: apiDomainName
         image: openindoor/geojson-api:0.0.0
         name: geojson-api
         ports:

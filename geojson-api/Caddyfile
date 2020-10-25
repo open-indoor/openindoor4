@@ -13,11 +13,14 @@
         respond @404 "File not found."
     }
 
-    reverse_proxy /geojson/* :8999 {
-        transport fastcgi {
-            split geojson
-            env API geojson-api
-            env DOMAIN_NAME ${DOMAIN_NAME}
-        }
+    handle /geojson/* {
+		reverse_proxy unix//var/run/fcgiwrap.socket {
+			transport fastcgi {
+		        split "/geojson/"
+                env API geojson-api
+                env API_DOMAIN_NAME ${API_DOMAIN_NAME}
+			}
+		}
     }
+
 }

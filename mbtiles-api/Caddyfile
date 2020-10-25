@@ -18,26 +18,14 @@
 #        }
 #    }
 
-	handle /mbtiles* {
+	handle /mbtiles/* {
 		reverse_proxy unix//var/run/fcgiwrap.socket {
 			transport fastcgi {
     		    env SCRIPT_FILENAME /mbtiles/mbtiles
-                env DOMAIN_NAME ${DOMAIN_NAME}
-                env ACTION place
-		        split ""
+                env API_DOMAIN_NAME ${API_DOMAIN_NAME}
+		        split "/mbtiles/"
 			}
 		}
 	}
 
-
-	handle /mbtiles/pins/* {
-		reverse_proxy unix//var/run/fcgiwrap.socket {
-			transport fastcgi {
-    		    env SCRIPT_FILENAME /mbtiles/mbtiles
-                env DOMAIN_NAME ${DOMAIN_NAME}
-                env ACTION pins
-		        split ""
-			}
-		}
-	}
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "DOMAIN_NAME=${DOMAIN_NAME}" > /mbtiles/mbtiles.src
+echo "API_DOMAIN_NAME=${API_DOMAIN_NAME}" > /mbtiles/mbtiles.src
 
 crontab -l | { cat; echo "* * * * * /usr/bin/flock /var/tmp/actions.lock /usr/bin/actions.sh > /dev/stdout 2> /dev/stderr"; } | crontab -
 echo "Start cron task" && crontab -l && /usr/sbin/crond -l 8

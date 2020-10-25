@@ -6,7 +6,7 @@ source /mbtiles-country/mbtiles-country.src
 
 uuid=$(uuidgen)
 mkdir -p /tmp/mbtiles
-mbtilesApiUrl="https://${DOMAIN_NAME}/mbtiles"
+mbtilesApiUrl="https://${API_DOMAIN_NAME}/mbtiles"
 for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
   bboxes=$(cat ${countryBboxesFile})
   filename="$(basename ${countryBboxesFile})"
@@ -19,18 +19,24 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
     mbtilesFile=/tmp/mbtiles/${country}_${id}_${cksum}.mbtiles
     if ! [ -f "${mbtilesFile}" ]; then
       complete=false
-      status=$(curl -k -L "${mbtilesApiUrl}/${country}/status/${id}" | jq -r -c ".status")
+      status=$(curl -k -L "${mbtilesApiUrl}/status/${country}/${id}" | jq -r -c ".status")
       if [ "${status}" != "ready" ]; then
       # mbtiles not ready => Trigger mbtiles build
-        curl -k -L "${mbtilesApiUrl}/${country}/trigger/${id}"
+        triggerCode=$(curl -k -L \
+          -s -w "%{http_code}" \
+          "${mbtilesApiUrl}/trigger/${country}/${id}")
         continue
       else
       # mbtiles ready => Download mbtiles
+      # or continue if not available
         mbtilesFileTmp=/tmp/${country}_${id}_${uuid}.mbtiles
-        curl -k -L \
+        (curl -k -L \
           -o "${mbtilesFileTmp}" \
-          "${mbtilesApiUrl}/${country}/data/${id}" \
-        && mv "${mbtilesFileTmp}" "${mbtilesFile}"
+          "${mbtilesApiUrl}/data/${country}/${id}" \
+          && mv -f "${mbtilesFileTmp}" "${mbtilesFile}") \
+        || \
+          (echo "Not available: ${country}/${id}" \
+          && continue)
       fi
     fi
   done <<<$(echo "${bboxes}" | jq -c '.[]')

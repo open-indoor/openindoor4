@@ -41,7 +41,7 @@ ${DOMAIN_NAMES} {
         }
     }
 
-    route /mbtiles/country/* {
+    route /mbtiles-country/* {
 	    reverse_proxy {
             to http://mbtiles-country-api:80
         }

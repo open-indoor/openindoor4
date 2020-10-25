@@ -13,10 +13,12 @@ RUN apk add --update-cache \
 COPY ./Caddyfile /etc/caddy/Caddyfile
 
 WORKDIR /usr/bin
-COPY ./getOsmFiles.sh /usr/bin/getOsmFiles.sh
-RUN chmod +x /usr/bin/getOsmFiles.sh
+COPY ./osm.sh /usr/bin/osm.sh
+RUN chmod +x /usr/bin/osm.sh
 COPY ./osm-api.sh /usr/bin/osm-api.sh
 RUN chmod +x /usr/bin/osm-api.sh
+
+COPY ./bboxes.json /tmp/bboxes_default.json
 
 CMD /usr/bin/osm-api.sh
 

@@ -22,8 +22,8 @@ RUN apk add --update-cache \
 
 # Install tippecanoe
 ARG tippecanoeBranch=1.36.0
-ADD https://github.com/mapbox/tippecanoe/archive/${tippecanoeBranch}.tar.gz /usr/local/src/tippecanoe-${tippecanoeBranch}.tar.gz
-# copy ./tippecanoe-${tippecanoeBranch}.tar.gz /usr/local/src/tippecanoe-${tippecanoeBranch}.tar.gz
+# ADD https://github.com/mapbox/tippecanoe/archive/${tippecanoeBranch}.tar.gz /usr/local/src/tippecanoe-${tippecanoeBranch}.tar.gz
+copy ./tippecanoe-${tippecanoeBranch}.tar.gz /usr/local/src/tippecanoe-${tippecanoeBranch}.tar.gz
 WORKDIR /usr/local/src/
 RUN tar xvfz tippecanoe-${tippecanoeBranch}.tar.gz
 WORKDIR /usr/local/src/tippecanoe-${tippecanoeBranch}
@@ -35,26 +35,18 @@ RUN make \
 COPY ./Caddyfile /etc/caddy/Caddyfile
 
 RUN mkdir -p /mbtiles-country
-COPY ./mbtiles-country.sh /mbtiles-country/mbtiles-country
-RUN chmod +x /mbtiles-country/mbtiles-country
-COPY ./mbtiles-country-list.sh /mbtiles-country/mbtiles-country-list
-RUN chmod +x /mbtiles-country/mbtiles-country-list
-
-
-COPY ./mbtiles-country-api.sh /mbtiles-country/mbtiles-country-api.sh
-RUN chmod +x /mbtiles-country/mbtiles-country-api.sh
-
-COPY ./actions.sh /usr/bin/actions.sh
-RUN chmod +x /usr/bin/actions.sh
-COPY ./tic.sh /usr/bin/tic
-RUN chmod +x /usr/bin/tic
 
 WORKDIR /mbtiles-country
 
 # ENV SCRIPT_FILENAME /mbtiles-country/mbtiles-country
-ENV DOMAIN_NAME api.openindoor.io
 ENV APÏ_DOMAIN_NAME api.openindoor.io
 
 CMD ["/mbtiles-country/mbtiles-country-api.sh"]
 
 EXPOSE 80
+
+COPY ./mbtiles-country-api.sh /mbtiles-country/mbtiles-country-api.sh
+RUN chmod +x /mbtiles-country/mbtiles-country-api.sh
+COPY ./mbtiles-country.sh /mbtiles-country/mbtiles-country
+COPY ./actions.sh /usr/bin/actions.sh
+COPY ./tic.sh /usr/bin/tic

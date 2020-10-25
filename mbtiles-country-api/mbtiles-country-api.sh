@@ -1,6 +1,11 @@
 #!/bin/bash
 
-echo "DOMAIN_NAME=${DOMAIN_NAME}" > /mbtiles-country/mbtiles-country.src
+echo "API_DOMAIN_NAME=${API_DOMAIN_NAME}" > /mbtiles-country/mbtiles-country.src
+
+chmod +x /mbtiles-country/mbtiles-country
+chmod +x /usr/bin/actions.sh
+chmod +x /usr/bin/tic
+
 crontab -l | { cat; echo "* * * * * /usr/bin/tic"; } | crontab -
 echo "Start cron task" && crontab -l && /usr/sbin/crond -l 8
 

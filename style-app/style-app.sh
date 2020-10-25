@@ -3,6 +3,9 @@
 set -x
 set -e
 
+chmod +x /usr/bin/tic
+chmod +x /usr/bin/actions.sh
+
 cat << EOF > /style/style.src
 API_DOMAIN_NAME="${API_DOMAIN_NAME}"
 APP_DOMAIN_NAME="${APP_DOMAIN_NAME}"
@@ -69,7 +72,7 @@ cat ./shape/shapeLayers.json | envsubst > /tmp/shapeLayers.json \
 && mv -f /tmp/shapeLayers.json ./shape/shapeLayers.json
 
 ############
-# buimding #
+# building #
 ############
 cat ./building/buildingLayers.json | envsubst > /tmp/buildingLayers.json \
 && mv -f /tmp/buildingLayers.json ./building/buildingLayers.json

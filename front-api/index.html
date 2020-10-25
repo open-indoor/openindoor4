@@ -16,36 +16,35 @@
 <body>
     This page: <a href="https://${DOMAIN_NAME}">https://${DOMAIN_NAME}</a><br/>
     <br/>
-    BBOXES:<br/>
-    Web bounding box list: <a href="https://${DOMAIN_NAME}/bboxes.html">https://${DOMAIN_NAME}/bboxes.html</a><br/>
-    Bounding box list: <a href="https://${DOMAIN_NAME}/bboxes">https://${DOMAIN_NAME}/bboxes</a><br/>
-    Country list: <a href="https://${DOMAIN_NAME}/bboxes/countries">https://${DOMAIN_NAME}/bboxes/countries</a><br/>
-    Bounding box list by country: <a href="https://${DOMAIN_NAME}/bboxes/country/france">https://${DOMAIN_NAME}/bboxes/country/france</a><br/>
-    Geojson pin points by country: <a href="https://${DOMAIN_NAME}/bboxes/country/pins/france">https://${DOMAIN_NAME}/bboxes/country/pins/france</a><br/>
+    PLACES: api / action / country / format<br/>
+    Web bounding box list: <a href="https://${DOMAIN_NAME}/places/bboxes/world/html">https://${DOMAIN_NAME}/places/bboxes/world/html</a><br/>
+    Country list: <a href="https://${DOMAIN_NAME}/places/countries/">https://${DOMAIN_NAME}/places/countries/</a><br/>
+    Country checksum: <a href="https://${DOMAIN_NAME}/places/checksum/france">https://${DOMAIN_NAME}/places/checksum/france</a><br/>
+    Bounding box list: <a href="https://${DOMAIN_NAME}/places/bboxes/world">https://${DOMAIN_NAME}/places/bboxes/world</a><br/>
+    Bounding box list by country: <a href="https://${DOMAIN_NAME}/places/bboxes/france">https://${DOMAIN_NAME}/places/bboxes/france</a><br/>
+    Geojson pin points by country: <a href="https://${DOMAIN_NAME}/places/pins/france">https://${DOMAIN_NAME}/places/pins/france</a><br/>
     <br/>
-    PLACES:<br/>
-    Web bounding box list: <a href="https://${DOMAIN_NAME}/places/world/bboxes/html">https://${DOMAIN_NAME}/places/world/bboxes/html</a><br/>
-    Country bboxes list: <a href="https://${DOMAIN_NAME}/places/world/countries">https://${DOMAIN_NAME}/places/world/countries</a><br/>
-    Bounding box list by country: <a href="https://${DOMAIN_NAME}/places/france/bboxes">https://${DOMAIN_NAME}/places/france/bboxes</a><br/>
-    Geojson pin points by country: <a href="https://${DOMAIN_NAME}/places/france/pins">https://${DOMAIN_NAME}/places/france/pins</a><br/>
+    OSM: api / country / id<br/>
+    Data in osm format: <a href="https://${DOMAIN_NAME}/osm/france/FranceParisGareDeLEst.osm">https://${DOMAIN_NAME}/osm/france/FranceParisGareDeLEst.osm</a><br/>
+    Cksum: <a href="https://${DOMAIN_NAME}/osm/france/FranceParisGareDeLEst.cksum">https://${DOMAIN_NAME}/osm/france/FranceParisGareDeLEst.cksum</a><br/>
+    Full bounding box list: <a href="https://${DOMAIN_NAME}/osm/bboxes.json">https://${DOMAIN_NAME}/osm/bboxes.json</a><br/>
     <br/>
-    OSM:<br/>
-    Data in osm format: <a href="https://${DOMAIN_NAME}/osm/FranceParisGareDeLEst">https://${DOMAIN_NAME}/osm/FranceParisGareDeLEst</a><br/>
+    GEOJSON: api / action / country / id<br/>
+    Data in geojson format: <a href="https://${DOMAIN_NAME}/geojson/data/france/FranceParisGareDeLEst">https://${DOMAIN_NAME}/geojson/data/france/FranceParisGareDeLEst</a><br/>
     <br/>
-    GEOJSON:<br/>
-    Data in geojson format: <a href="https://${DOMAIN_NAME}/geojson/FranceParisGareDeLEst">https://${DOMAIN_NAME}/geojson/FranceParisGareDeLEst</a><br/>
+    MBTILES: api / action / country <br/>
+    Get mbtiles file status: <a href="https://${DOMAIN_NAME}/mbtiles/status/france/FranceParisGareDeLEst">https://${DOMAIN_NAME}/mbtiles/status/france/FranceParisGareDeLEst</a><br/>
+    Trigger mbtiles download: <a href="https://${DOMAIN_NAME}/mbtiles/trigger/france/FranceParisGareDeLEst">https://${DOMAIN_NAME}/mbtiles/trigger/france/FranceParisGareDeLEst</a><br/>
+    Data in mbtiles format: <a href="https://${DOMAIN_NAME}/mbtiles/data/france/FranceParisGareDeLEst">https://${DOMAIN_NAME}/mbtiles/data/france/FranceParisGareDeLEst</a><br/>
+    Pins in mbtiles format by country: <a href="https://${DOMAIN_NAME}/mbtiles/pins/france">https://${DOMAIN_NAME}/mbtiles/pins/france</a><br/>
     <br/>
-    MBTILES:<br/>
-    Get mbtiles file status: <a href="https://${DOMAIN_NAME}/mbtiles/france/status/FranceParisGareDeLEst">https://${DOMAIN_NAME}/mbtiles/france/status/FranceParisGareDeLEst</a><br/>
-    Trigger mbtiles download: <a href="https://${DOMAIN_NAME}/mbtiles/france/trigger/FranceParisGareDeLEst">https://${DOMAIN_NAME}/mbtiles/france/trigger/FranceParisGareDeLEst</a><br/>
-    Data in mbtiles format: <a href="https://${DOMAIN_NAME}/mbtiles/france/data/FranceParisGareDeLEst">https://${DOMAIN_NAME}/mbtiles/france/data/FranceParisGareDeLEst</a><br/>
-    Pins in mbtiles format by country: <a href="https://${DOMAIN_NAME}/mbtiles/france/pins">https://${DOMAIN_NAME}/mbtiles/france/pins</a><br/>
-    <br/>
-    MBTILES by Country:<br/>
-    List of available mbtiles data by country: <a href="https://${DOMAIN_NAME}/mbtiles/world/list">https://${DOMAIN_NAME}/mbtiles/world/list</a><br/>
-    Get mbtiles mix file status country: <a href="https://${DOMAIN_NAME}/mbtiles/france/status">https://${DOMAIN_NAME}/mbtiles/france/status</a><br/>
-    Trigger mbtiles mix download: <a href="https://${DOMAIN_NAME}/mbtiles/france/trigger">https://${DOMAIN_NAME}/mbtiles/france/trigger</a><br/>
-    Mix of mbtiles data by country: <a href="https://${DOMAIN_NAME}/mbtiles/france/data">https://${DOMAIN_NAME}/mbtiles/france/data</a><br/>
+    MBTILES by Country: api / action / country <br/>
+    List of available mbtiles data by country: <a href="https://${DOMAIN_NAME}/mbtiles-country/list/world">https://${DOMAIN_NAME}/mbtiles-country/list/world</a><br/>
+    Get mbtiles mix file status country: <a href="https://${DOMAIN_NAME}/mbtiles-country/status/france">https://${DOMAIN_NAME}/mbtiles-country/status/france</a><br/>
+    Trigger france mbtiles download: <a href="https://${DOMAIN_NAME}/mbtiles-country/trigger/france">https://${DOMAIN_NAME}/mbtiles-country/trigger/france</a><br/>
+    Trigger argentina mbtiles download: <a href="https://${DOMAIN_NAME}/mbtiles-country/trigger/argentina">https://${DOMAIN_NAME}/mbtiles-country/trigger/argentina</a><br/>
+    Trigger world mbtiles download: <a href="https://${DOMAIN_NAME}/mbtiles-country/trigger/world">https://${DOMAIN_NAME}/mbtiles-country/trigger/world</a><br/>
+    Mix of mbtiles data by country: <a href="https://${DOMAIN_NAME}/mbtiles-country/data/france">https://${DOMAIN_NAME}/mbtiles-country/data/france</a><br/>
     <br/>
     MVT:<br/>
     Mapbox Vector Tiles server info command: <a href="https://${DOMAIN_NAME}/tileserver/cmd/info">https://${DOMAIN_NAME}/tileserver/cmd/info</a><br/>

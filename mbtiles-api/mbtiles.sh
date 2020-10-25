@@ -1,30 +1,58 @@
 #!/bin/bash
 
-# Test
-# PATH_INFO=/mbtiles/trigger/FranceParisGareDeLEst DOMAIN_NAME=api-ovh.openindoor.io /mbtiles/mbtiles
-# ogr2ogr -f MBTILES FranceParisGareDeLEst.mbtiles FranceParisGareDeLEst_filtered.geojson -dsco MAXZOOM=20 -nln osm-indoor
+# PATH_INFO=status/france/FranceParisGareDeLEst DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
+# PATH_INFO=trigger/france/FranceParisGareDeLEst DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
+# PATH_INFO=pins/france DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
 
-# /mbtiles/france/status/FranceParisGareDeLEst
-# /mbtiles/france/trigger/FranceParisGareDeLEst
-# /mbtiles/france/data/FranceParisGareDeLEst
-# /mbtiles/france/pins
+# /mbtiles/status/france/FranceParisGareDeLEst
+# /mbtiles/trigger/france/FranceParisGareDeLEst
+# /mbtiles/data/france/FranceParisGareDeLEst
+# /mbtiles/pins/france
 
-country="$(echo ${PATH_INFO} | cut -d'/' -f1)"
-action="$(echo ${PATH_INFO} | cut -d'/' -f2)"
+action="$(echo ${PATH_INFO} | cut -d'/' -f1)"
+country="$(echo ${PATH_INFO} | cut -d'/' -f2)"
 id="$(echo ${PATH_INFO} | cut -d'/' -f3)"
+
+uuid=$(uuidgen)
+placesApiUrl="https://${DOMAIN_NAME}/places"
 
 case ${action} in
   pins)
-    echo "Content-type: text/plain"
+    # get geojson
+    geojsonFile="/tmp/${country}_${uuid}.geojson"
+    cksum=$(curl -k -L "${placesApiUrl}/checksum/${country}")
+    mbtilesFile="/tmp/mbtiles/${country}/pins_${cksum}.mbtiles"
+    mkdir -p "$(dirname ${mbtilesFile})"
+    codePins=$(curl -k -L \
+      -s -w "%{http_code}" \
+      -o "${geojsonFile}" "${placesApiUrl}/pins/${country}")
+    if [ "$?" -ne "0" ] && [ "${codePins}" -ge "400" ]; then
+        echo "HTTP/1.1 404 Not Found" \
+        && echo "Content-type: text/plain" \
+        && echo "" \
+        && exit 0
+    fi
+    
+    ogr2ogr -f MBTILES "${mbtilesFile}" \
+      "${geojsonFile}" \
+      -dsco MAXZOOM=20 \
+      -nln "osm-indoor-pins"
+
+    contentLength=$(wc -c < ${mbtilesFile})
+    echo "Content-type: application/octet-stream"
+    echo "Content-Length: $contentLength"
+    echo "Content-Transfer-Encoding: binary"
+    echo 'Content-Disposition: attachment; filename="'"pins_${country}_${cksum}.mbtiles"'"'
     echo ""
-    echo ${country}
-    echo ${action}
+    cat "${mbtilesFile}"
+
+    rm -rf "${mbtilesFile}"
+    rm -rf "${geojsonFile}"
     exit 0
     ;;
   *)              
 esac 
 
-id="$(basename $PATH_INFO)"
 cksumFile="/tmp/${id}.cksum"
 mbtilesApiUrl="https://${DOMAIN_NAME}/mbtiles"
 osmApiUrl="https://${DOMAIN_NAME}/osm"
@@ -34,7 +62,7 @@ codeLastCksum=$(curl \
   -o "${cksumFile}" \
   -s \
   -w "%{http_code}" \
-  "${osmApiUrl}/cksum/${id}")
+  "${osmApiUrl}/${country}/${id}.cksum")
 if [ "$?" -ne "0" ] && [ "${codeLastCksum}" -ge "400" ]; then
     echo "HTTP/1.1 404 Not Found" \
     && echo "Content-type: text/plain" \
@@ -42,7 +70,8 @@ if [ "$?" -ne "0" ] && [ "${codeLastCksum}" -ge "400" ]; then
     && exit 0
 fi
 cksum=$(cat "${cksumFile}")
-mbtilesFile="/tmp/mbtiles/${id}_${cksum}.mbtiles"
+mkdir -p "/tmp/mbtiles/${country}"
+mbtilesFile="/tmp/mbtiles/${country}/${id}_${cksum}.mbtiles"
 
 case $action in
   data)
@@ -64,7 +93,9 @@ case $action in
     ;;
   status)
     if [ -f "${mbtilesFile}" ]; then
-      reply='{"id":"'${id}'", "status": "ready", "url": "'${mbtilesApiUrl}/data/${id}'"}'
+      reply='{"id":"'${id}'", "status": "ready", "url": "'${mbtilesApiUrl}/data/${country}/${id}'"}'
+    elif [ -f "/tmp/mbtilesPipe/${country}_${id}.cksum" ]; then
+      reply='{"id":"'${id}'", "status": "in progress"}'
     else
       reply='{"id":"'${id}'", "status": "not found"}'
     fi
@@ -75,8 +106,8 @@ case $action in
     ;;
   trigger)
     mkdir -p /tmp/mbtilesPipe
-    echo -n "${cksum}" > /tmp/mbtilesPipe/${id}.cksum
-    reply='{"api":"mbtiles", "id":"'${id}'", "status": "trigger received"}'
+    echo -n "${cksum}" > /tmp/mbtilesPipe/${country}_${id}.cksum
+    reply='{"api":"mbtiles", "country":"'${country}'", "id":"'${id}'", "status": "trigger received"}'
     echo "Content-type: application/json"
     echo ""
     echo "${reply}"

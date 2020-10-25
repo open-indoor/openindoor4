@@ -1,15 +1,19 @@
 #!/bin/bash
 
-id="$(basename $PATH_INFO)"
+# API_DOMAIN_NAME="api.openindoor.io" PATH_INFO="data/france/FranceParisGareDeLEst" /geojson/geojson
+# API_DOMAIN_NAME="api.openindoor.io" PATH_INFO="data/costa_rica/CostaRicaSanJoseStarbucks" /geojson/geojson
+
+
+action="$(echo ${PATH_INFO} | cut -d'/' -f1)"
+country="$(echo ${PATH_INFO} | cut -d'/' -f2)"
+id="$(echo ${PATH_INFO} | cut -d'/' -f3)"
+
 osmFile="/tmp/${id}.osm"
-osmApiUrl="https://${DOMAIN_NAME}/osm"
-code=$(curl \
-    -k \
-    -L \
+osmApiUrl="https://${API_DOMAIN_NAME}/osm"
+code=$(curl -k -L \
     -o "${osmFile}" \
-    -s \
-    -w "%{http_code}" \
-    "${osmApiUrl}/${id}")
+    -s -w "%{http_code}" \
+    "${osmApiUrl}/${country}/${id}.osm")
 
 if [ "${code}" -ge "400" ]; then
     echo "HTTP/1.1 404 Not Found"
@@ -20,7 +24,6 @@ fi
 
 echo "Content-type: application/json"
 echo ""
-# echo $(osmtogeojson -m "${osmFile}")
 echo -n '{"type": "FeatureCollection","features":'
 echo -n $(\
 osmtogeojson -m "${osmFile}" \
@@ -36,28 +39,3 @@ osmtogeojson -m "${osmFile}" \
 )
 echo '}'
 exit 0
-
-
-
-# cat FranceParisParisGareDuNord.geojson | jq '. | select(.features[].properties.level == "0")' | less
-# cat FranceParisParisGareDuNord.geojson | jq '. | select ( any(.features[]; .properties.level == "0") )' |less
-# cat FranceParisParisGareDuNord.geojson | jq '. | select(.features[].properties.level|contains("0")?)' |less
-# cat FranceParisParisGareDuNord.geojson | jq '. | select(.features[]| select(.properties.level|contains(";")?))' |less
-# cat FranceParisParisGareDuNord.geojson | jq '. | select(.features[]| select(.properties | has("level")))' |less
-# cat FranceParisParisGareDuNord.geojson | jq '. | select(.features[].properties | has("level"))' |less
-# cat FranceParisParisGareDuNord.geojson | jq '.features[] | select(.properties | has("level"))' |less
-# cat FranceParisParisGareDuNord.geojson | jq '.features[] | select(.properties | has("level")) | select(.properties.level | contains(";"))' |less
-# cat FranceParisParisGareDuNord.geojson | jq '.features | map(select(.properties | has("level")) | select(.properties.level | contains(";")))' |less
-# cat FranceParisParisGareDuNord.geojson | jq '.features | map(select(.properties | has("level")) | select(.properties.level | contains(";") | not))' |less
-# cat FranceParisParisGareDuNord.geojson | jq '.features | map(select(.properties | has("level")) | select(.properties.level | test(";.*;"; "ix") | not))' |less
-# cat FranceParisGareDeLEst.geojson \
-# | jq '.features '\
-# '| map('\
-# 'select('\
-# 'select(.properties | has("level")) '\
-# '| select(.properties.level | test(";.*;"; "ix") | not) '\
-# 'or '\
-# ' select(.properties | has("level") | not) '\
-# ')'\
-# ')' \
-# |less
