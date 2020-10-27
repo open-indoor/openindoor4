@@ -1,5 +1,8 @@
-${DOMAIN_NAMES} {
+${API_DOMAIN_NAME} {
 
+    header Access-Control-Allow-Origin "${APP_DOMAIN_NAME}"
+
+#Access to fetch at 'https://api.openindoor.io/places/pins/france/pins.json' from origin 'https://app.openindoor.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
     root * /data/www
     file_server browse
 
@@ -18,6 +21,9 @@ ${DOMAIN_NAMES} {
     }
 
     route /places/* {
+     	header Access-Control-Allow-Origin *
+    	header Access-Control-Request-Method GET
+
         reverse_proxy {
             to http://places-api:80
         }

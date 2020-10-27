@@ -17,9 +17,10 @@ WORKDIR /map-app
 
 COPY ./Caddyfile /etc/caddy/Caddyfile
 RUN mkdir -p /map-app/www
-COPY ./index.html /map-app/www/index.html
+COPY ./www/ /map-app/www/
 COPY ./style.css /map-app/www/style.css
-COPY ./favicon.ico /map-app/www/favicon.ico
+COPY ./img/favicon.ico /map-app/www/favicon.ico
+COPY ./img/custom_marker.png /map-app/www/custom_marker.png
 # COPY ./style /map-app/www/style
 
 COPY ./map-app.sh /usr/bin/map-app.sh

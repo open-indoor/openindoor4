@@ -17,7 +17,13 @@ RUN apt-get -qq update \
     wget \
   && apt-get clean
 
+ENV APÏ_DOMAIN_NAME api.openindoor.io
+ENV APP_DOMAIN_NAME app.openindoor.io
+
 COPY default.vcl    /etc/varnish/
 COPY run.sh         /run.sh
+RUN chmod +x        /run.sh
+
+# CMD /run.sh
 
 ENV VARNISH_TTL=2419200

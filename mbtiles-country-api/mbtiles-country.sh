@@ -2,6 +2,7 @@
 
 # PATH_INFO=status/france API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
 # PATH_INFO=trigger/france API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
+# PATH_INFO=trigger/world API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
 # PATH_INFO=data/france API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
 # PATH_INFO=list/world API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
 
@@ -105,7 +106,6 @@ case $action in
     echo "Content-type: application/json"
     echo ""
     echo '{"api":"mbtiles-country", "countries": '${countries}', "status": "trigger received"}'
-    (nohup /usr/bin/tic &) > /dev/null
     exit 0
     ;;
   *)

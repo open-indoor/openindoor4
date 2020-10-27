@@ -47,16 +47,16 @@ spec:
     spec:
       containers:
       - env:
-        - name: DOMAIN_NAME
+        - name: API_DOMAIN_NAME
           valueFrom:
             configMapKeyRef:
               name: openindoor-cm
-              key: domainName
-        - name: DOMAIN_NAMES
+              key: apiDomainName
+        - name: APP_DOMAIN_NAME
           valueFrom:
             configMapKeyRef:
               name: openindoor-cm
-              key: domainNames
+              key: appDomainName
         - name: CERTIFICATE_AUTHORITY
           valueFrom:
             configMapKeyRef:

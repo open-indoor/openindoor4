@@ -22,8 +22,8 @@ COPY ./index.html /front-api/www/index.html
 COPY ./front-api.sh /usr/bin/front-api.sh
 RUN chmod +x /usr/bin/front-api.sh
 
-ENV DOMAIN_NAME api.openindoor.io
-ENV DOMAIN_NAMES api.openindoor.io
+ENV API_DOMAIN_NAME api.openindoor.io
+ENV APP_DOMAIN_NAME app.openindoor.io
 ENV CERTIFICATE_AUTHORITY "https://acme-staging-v02.api.letsencrypt.org/directory"
 CMD /usr/bin/front-api.sh
 EXPOSE 80

@@ -21,22 +21,19 @@
       "tileSize": 256,
       "maxzoom": 19
     },
-    "building":
-    {
+    "building": {
       "type": "vector",
       "url": "https://${API_DOMAIN_NAME}/tileserver/data/${country}.json",
       "minzoom": $BUILDING_MIN_ZOOM,
       "maxzoom": $BUILDING_MAX_ZOOM
     },
-    "shape":
-    {
+    "shape": {
       "type": "vector",
       "url": "https://${API_DOMAIN_NAME}/tileserver/data/${country}.json",
       "minzoom": $SHAPE_MIN_ZOOM,
       "maxzoom": $SHAPE_MAX_ZOOM
     },
-    "indoor":
-    {
+    "indoor": {
       "type": "vector",
       "url": "https://${API_DOMAIN_NAME}/tileserver/data/${country}.json",
       "minzoom": $INDOOR_MIN_ZOOM
@@ -55,7 +52,20 @@
       "type": "raster",
       "source": "raster-tiles",
       "minzoom": 0,
-      "maxzoom": 19
+      "maxzoom": 20,
+      "raster-opacity": [
+        "interpolate",
+        [
+          "linear"
+        ],
+        [
+          "zoom"
+        ],
+        $RASTER_FULL_ZOOM,
+        1,
+        $RASTER_INVISIBLE_ZOOM,
+        0
+      ]
     }
   ]
 }

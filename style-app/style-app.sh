@@ -24,20 +24,6 @@ cat ./indoor/indoorLayers.json | envsubst > /tmp/indoorLayers.json \
 && mv -f /tmp/indoorLayers.json ./indoor/indoorLayers.json
 
 
-##################
-# indoor - rooms #
-##################
-while read i; do
-  export roomId="$(echo $i | jq -r -c '.id')"
-  export roomColor="$(echo $i | jq -r -c '.color')"
-  export roomFilter="$(echo $i | jq -r -c '.filter')"
-  export roomHeight="$(echo $i | jq -r -c '.height')"
-  cat ./indoor/room.json | envsubst > /tmp/room.json
-  jq '.[. | length] |= . + '"$(cat /tmp/room.json)" ./indoor/indoorLayers.json > /tmp/indoorLayers.json \
-    && mv -f /tmp/indoorLayers.json ./indoor/indoorLayers.json
-done <<< $(echo '[
-    {"id": "indoor-room-extrusion",    "color": "#ebbc00",   "height": 3, "filter": [ "all", [ "==", [ "get", "indoor" ], "room" ]]}
-]' | jq -c '.[]')
 
     # {"id": "indoor-area-extrusion",    "color": "#ff0000",   "height": 0, "filter": [ "all", [ "==", [ "get", "indoor" ], "area" ]]}
 
@@ -52,6 +38,7 @@ while read i; do
   jq '.[. | length] |= . + '"$(cat /tmp/symbol.json)" ./indoor/indoorLayers.json > /tmp/indoorLayers.json \
     && mv -f /tmp/indoorLayers.json ./indoor/indoorLayers.json
 done <<< $(echo '[
+    {"id": "poi-indoor-room",             "image": "",                  "filter": [ "all", [ "==", [ "get", "indoor" ], "room" ]]},
     {"id": "poi-indoor-shop",             "image": "shop_64",           "filter": [ "any", [ "has", "shop" ]]},
     {"id": "poi-indoor-fast-food",        "image": "fast_food_64",      "filter": [ "all", [ "==", ["get", "amenity"], "fast_food" ]]},
     {"id": "poi-indoor-toilets",          "image": "toilet_64",         "filter": [ "all", [ "==", ["get", "amenity"], "toilets" ]]},
@@ -64,6 +51,94 @@ done <<< $(echo '[
     {"id": "poi-indoor-shop-dim",         "image": "dim_64",            "filter": [ "any", [ "==", ["get", "name"], "DIM" ]]},
     {"id": "poi-indoor-shop-fnac",        "image": "fnac_64",           "filter": [ "any", [ "==", ["get", "name"], "Fnac" ]]}
 ]' | jq -c '.[]')
+
+##################
+# indoor - rooms #
+##################
+while read i; do
+  export roomId="$(echo $i | jq -r -c '.id')"
+  export roomColor="$(echo $i | jq -r -c '.color')"
+  export roomFilter="$(echo $i | jq -r -c '.filter')"
+  export roomHeight="$(echo $i | jq -r -c '.height')"
+  cat ./indoor/room.json | envsubst > /tmp/room.json
+  jq '.[. | length] |= . + '"$(cat /tmp/room.json)" ./indoor/indoorLayers.json > /tmp/indoorLayers.json \
+    && mv -f /tmp/indoorLayers.json ./indoor/indoorLayers.json
+done <<< $(echo '[
+    {"id": "indoor-room-extrusion",      "color": "#ebbc00",   "height": 3, "filter": [ "all", [ "==", [ "get", "indoor" ], "room" ]]},
+    {"id": "indoor-area-extrusion",      "color": "#e0b0F0",   "height": 0, "filter": [ "all", [ "==", [ "get", "indoor" ], "area" ]]},
+    {"id": "indoor-indoor-extrusion",    "color": "#10e0F0",   "height": 0, "filter": [ "all", [ "has", "indoor" ]]}
+]' | jq -c '.[]')
+
+####################
+# indoor - highway #
+####################
+layer="indoor"
+type="line"
+while read i; do
+  export id="$(echo $i | jq -r -c '.id')"
+  export color="$(echo $i | jq -r -c '.color')"
+  export width="$(echo $i | jq -r -c '.width')"
+  export filter="$(echo $i | jq -r -c '.filter')"
+  cat ./${layer}/${type}.json | envsubst > /tmp/${type}.json
+  jq '.[. | length] |= . + '"$(cat /tmp/${type}.json)" "./${layer}/${layer}Layers.json" > "/tmp/${layer}Layers.json" \
+    && mv -f "/tmp/${layer}Layers.json" "./${layer}/${layer}Layers.json"
+done <<< $(echo '[
+    {"id": "indoor-highway-line",      "color": "#ebbc00", "width": 5, "filter": [ "all", [ "has", "highway" ]]},
+    {"id": "indoor-footway-line",      "color": "#ff0000", "width": 5, "filter": [ "all", [ "has", "highway" ], [ "==", [ "get", "highway" ], "footway" ]]}
+]' | jq -c '.[]')
+
+
+#####################
+# shape - extrusion #
+#####################
+while read i; do
+  export id="$(echo $i | jq -r -c '.id')"
+  export color="$(echo $i | jq -r -c '.color')"
+  export filter="$(echo $i | jq -r -c '.filter')"
+  export extrusionBase="$(echo $i | jq -r -c '.extrusionBase')"
+  export extrusionHeight="$(echo $i | jq -r -c '.extrusionHeight')"
+  cat ./shape/extrusion.json | envsubst > /tmp/extrusion.json
+  jq '.[. | length] |= . + '"$(cat /tmp/extrusion.json)" ./shape/shapeLayers.json > /tmp/shapeLayers.json \
+    && mv -f /tmp/shapeLayers.json ./shape/shapeLayers.json
+done <<< $(echo '[
+    { "id": "shape-area-extrusion-indoor",
+      "color": "#FF00F0",
+      "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0]],
+      "extrusionBase": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]],
+      "extrusionHeight": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]
+    },
+    { "id": "shape-area-extrusion-area",
+      "color": "#FF0000",
+      "filter": ["all",["==",["get","indoor"],"area"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0]],
+      "extrusionBase": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]],
+      "extrusionHeight": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]
+    },
+    { "id": "shape-area-extrusion-room",
+      "color": "#0000FF",
+      "filter": ["all",["==",["get","indoor"],"room"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0]],
+      "extrusionBase": ["+",1,["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]],
+      "extrusionHeight": ["+",1,["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]]
+    }
+]' | jq -c '.[]')
+
+
+# ############
+# # Building #
+# ############
+# layer="building"
+# type="extrusion"
+# while read i; do
+#   export id="$(echo $i | jq -r -c '.id')"
+#   export color="$(echo $i | jq -r -c '.color')"
+#   export width="$(echo $i | jq -r -c '.width')"
+#   export filter="$(echo $i | jq -r -c '.filter')"
+#   cat ./${layer}/${type}.json | envsubst > /tmp/${type}.json
+#   jq '.[. | length] |= . + '"$(cat /tmp/${type}.json)" "./${layer}/${layer}Layers.json" > "/tmp/${layer}Layers.json" \
+#     && mv -f "/tmp/${layer}Layers.json" "./${layer}/${layer}Layers.json"
+# done <<< $(echo '[
+#     {"id": "indoor-highway-line",      "color": "#ebbc00", "width": 5, "filter": [ "all", [ "has", "highway" ]]},
+#     {"id": "indoor-footway-line",      "color": "#ff0000", "width": 5, "filter": [ "all", [ "has", "highway" ], [ "==", [ "get", "highway" ], "footway" ]]}
+# ]' | jq -c '.[]')
 
 #########
 # shape #

@@ -36,6 +36,11 @@ spec:
             configMapKeyRef:
               name: openindoor-cm
               key: appDomainName
+        - name: API_DOMAIN_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: apiDomainName
         image: openindoor/rastertiles-app:0.0.0
         name: rastertiles-app
         ports:

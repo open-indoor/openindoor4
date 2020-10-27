@@ -70,8 +70,10 @@ if [ "$?" -ne "0" ] && [ "${codeLastCksum}" -ge "400" ]; then
     && exit 0
 fi
 cksum=$(cat "${cksumFile}")
-mkdir -p "/tmp/mbtiles/${country}"
+rm -rf "${cksumFile}"
+pipeFile="/tmp/mbtilesPipe/${country}/${id}.cksum"
 mbtilesFile="/tmp/mbtiles/${country}/${id}_${cksum}.mbtiles"
+# mkdir -p $(dirname "${mbtilesFile}")
 
 case $action in
   data)
@@ -94,7 +96,7 @@ case $action in
   status)
     if [ -f "${mbtilesFile}" ]; then
       reply='{"id":"'${id}'", "status": "ready", "url": "'${mbtilesApiUrl}/data/${country}/${id}'"}'
-    elif [ -f "/tmp/mbtilesPipe/${country}_${id}.cksum" ]; then
+    elif [ -f "${pipeFile}" ]; then
       reply='{"id":"'${id}'", "status": "in progress"}'
     else
       reply='{"id":"'${id}'", "status": "not found"}'
@@ -105,8 +107,8 @@ case $action in
     exit 0
     ;;
   trigger)
-    mkdir -p /tmp/mbtilesPipe
-    echo -n "${cksum}" > /tmp/mbtilesPipe/${country}_${id}.cksum
+    mkdir -p $(dirname "${pipeFile}")
+    echo -n "${cksum}" > "${pipeFile}"
     reply='{"api":"mbtiles", "country":"'${country}'", "id":"'${id}'", "status": "trigger received"}'
     echo "Content-type: application/json"
     echo ""

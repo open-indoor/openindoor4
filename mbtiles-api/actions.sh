@@ -5,20 +5,22 @@ set -e
 source /mbtiles/mbtiles.src
 
 uuid=$(uuidgen)
-mkdir -p /tmp/geojson
-mkdir -p /tmp/mbtiles
 
 geojsonApiUrl="https://${DOMAIN_NAME}/geojson"
 
+
+# pipeFile="/tmp/mbtilesPipe/${country}/${id}.cksum"
+
+
 for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
   cksum=$(cat ${idFile})
+  country=$(basename $(dirname "${idFile}"))
   filename="$(basename ${idFile})"
-  filename="${filename%.*}"
-  country="${filename%_*}"
-  id="${filename##*_}"
-  mbtilesFileTmp="/tmp/${id}_${uuid}.mbtiles"
-  geojsonFile="/tmp/${id}_${uuid}.geojson"
+  id="${filename%.*}"
+  # mbtilesFileTmp="/tmp/${id}_${uuid}_tmp.mbtiles"
+  geojsonFile="/tmp/${id}_${uuid}_tmp.geojson"
   mbtilesFile="/tmp/mbtiles/${country}/${id}_${cksum}.mbtiles"
+  mkdir -p $(dirname "${mbtilesFile}")
 
   if [ -f "${mbtilesFile}" ]; then
     continue
@@ -31,5 +33,6 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
     -dsco MAXZOOM=20 \
     -nln "osm-indoor"
   # && mv "${mbtilesFileTmp}" "${mbtilesFile}"
+  rm -rf "${geojsonFile}"
   rm -rf ${idFile}
 done

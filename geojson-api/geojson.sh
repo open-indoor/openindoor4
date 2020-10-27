@@ -2,6 +2,7 @@
 
 # API_DOMAIN_NAME="api.openindoor.io" PATH_INFO="data/france/FranceParisGareDeLEst" /geojson/geojson
 # API_DOMAIN_NAME="api.openindoor.io" PATH_INFO="data/costa_rica/CostaRicaSanJoseStarbucks" /geojson/geojson
+# API_DOMAIN_NAME="api.openindoor.io" PATH_INFO="data/united_states/UnitedStatesLosAngelesUnionStation" /geojson/geojson
 
 
 action="$(echo ${PATH_INFO} | cut -d'/' -f1)"
@@ -36,6 +37,10 @@ osmtogeojson -m "${osmFile}" \
 '      select(.properties | has("level") | not) '\
 '    )'\
 '  )'\
+| jq -c '.features[].properties.level |= sub("-";";"))'
 )
 echo '}'
+
+# echo -n $(osmtogeojson -m "${osmFile}" | jq -c .)
+
 exit 0

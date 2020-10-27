@@ -27,8 +27,9 @@ CMD /usr/bin/style-app.sh
 EXPOSE 80
 
 COPY ./Caddyfile /etc/caddy/Caddyfile
-COPY ./style/ /data/www/style/
-COPY ./style-app.sh /usr/bin/style-app.sh
-RUN chmod +x /usr/bin/style-app.sh
 COPY ./tic.sh /usr/bin/tic
 COPY ./actions.sh /usr/bin/actions.sh
+
+COPY ./style-app.sh /usr/bin/style-app.sh
+RUN chmod +x /usr/bin/style-app.sh
+COPY ./style/ /data/www/style/

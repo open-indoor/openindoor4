@@ -15,8 +15,13 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
 
   while read i; do
     id=$(echo $i | jq -r -c '.id')
-    cksum=$(echo $i | jq -r -c '.cksum')
-    mbtilesFile=/tmp/mbtiles/${country}_${id}_${cksum}.mbtiles
+
+    # cksum=$(echo $i | jq -r -c '.cksum')
+    # https://api.openindoor.io/osm/france/FranceParisGareDeLEst.cksum
+    cksum=$(curl -k -L "https://api.openindoor.io/osm/${country}/${id}.cksum")
+
+    mbtilesFile=/tmp/mbtiles/${country}/${id}_${cksum}.mbtiles
+    mkdir -p $(dirname "${mbtilesFile}")
     if ! [ -f "${mbtilesFile}" ]; then
       complete=false
       status=$(curl -k -L "${mbtilesApiUrl}/status/${country}/${id}" | jq -r -c ".status")
@@ -48,13 +53,14 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
     #   -o "/tmp/${country}_bboxes.mbtiles" \
     #   "${mbtilesApiUrl}/data/bboxes/${country}" \
     # && mv "${mbtilesApiUrl}/data/bboxes" "/tmp/mbtiles/${country}_bboxes.mbtiles"
-  if ls /tmp/mbtiles/${country}_*.mbtiles 1> /dev/null 2>&1; then
-    cksum=$(ls /tmp/mbtiles/${country}_*.mbtiles |  sed "s/.*_//" | sed "s/.mbtiles//" | cksum | sed "s/\s\d*$//")
+  mbtilesFolder="/tmp/mbtiles/${country}"
+  if ls ${mbtilesFolder}/*.mbtiles 1> /dev/null 2>&1; then
+    cksum=$(ls ${mbtilesFolder}/*.mbtiles |  sed "s/.*_//" | sed "s/.mbtiles//" | cksum | sed "s/\s\d*$//")
     mkdir -p /tmp/mbtiles-country
     tile-join \
       -n ${country} \
       -o /tmp/${country}_${uuid}.mbtiles \
-      $(find /tmp/mbtiles -name "${country}_*.mbtiles") \
+      $(find "${mbtilesFolder}" -name "*.mbtiles") \
     && mv \
       /tmp/${country}_${uuid}.mbtiles \
       /tmp/mbtiles-country/${country}.mbtiles \

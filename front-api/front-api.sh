@@ -7,8 +7,8 @@ cp -r /front-api/www /data/
 
 cd /etc/caddy
 cat ./Caddyfile | envsubst > ./Caddyfile_tmp
-cat ./Caddyfile_tmp
 mv  ./Caddyfile_tmp              ./Caddyfile
+cat ./Caddyfile
 
 cd /data/www
 cat ./index.html | envsubst > /tmp/index.html
