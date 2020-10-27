@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: style-app
-          file: ./Dockerfile
+          file: ./style-app/Dockerfile
           platforms: linux/amd64
           push: false
           tags: openindoor/style-app
