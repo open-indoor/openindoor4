@@ -36,4 +36,4 @@ jobs:
           file: ./osm-api/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: openindoor/osm-api:OSM_API_VERSION
+          tags: openindoor/osm-api:${OSM_API_VERSION}
