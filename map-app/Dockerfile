@@ -15,7 +15,7 @@ RUN apk add --update-cache \
 RUN mkdir -p /map-app
 WORKDIR /map-app
 
-COPY ./Caddyfile /etc/caddy/Caddyfile
+COPY ./Caddyfile /tmp/Caddyfile
 RUN mkdir -p /map-app/www
 COPY ./www/ /map-app/www/
 COPY ./style.css /map-app/www/style.css

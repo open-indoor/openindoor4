@@ -2,7 +2,12 @@
 
 echo "DOMAIN_NAME=${DOMAIN_NAME}" > /tileserver/tileserver.src
 
-crontab -l | { cat; echo "* * * * * /usr/bin/flock /var/tmp/actions.lock /usr/bin/actions.sh 2>&1 > /var/log/actions.log"; } | crontab -
+chmod +x /tileserver/tileserver
+chmod +x /usr/bin/actions.sh
+chmod +x /usr/bin/tic
+
+
+crontab -l | { cat; echo "* * * * * /usr/bin/tic"; } | crontab -
 echo "Start cron task" && crontab -l && /usr/sbin/cron -l 8
 cat /usr/bin/actions.sh
 

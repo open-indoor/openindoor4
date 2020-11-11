@@ -1,14 +1,11 @@
 #!/bin/bash
 
 export CADDYPATH=/data/caddy
-
-
+export APP_URL=${APP_URL:-"https://${APP_DOMAIN_NAME}"}
+env
 cp -r /map-app/www /data/
 
-cd /etc/caddy
-cat ./Caddyfile | envsubst > ./Caddyfile_tmp
-cat ./Caddyfile_tmp
-mv  ./Caddyfile_tmp              ./Caddyfile
+cat /tmp/Caddyfile | envsubst | tee /etc/caddy/Caddyfile
 
 cd /data/www
 for f in `find . -name "*.html"`; do

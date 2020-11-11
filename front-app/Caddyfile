@@ -1,11 +1,9 @@
-${APP_DOMAIN_NAMES} {
+{$APP_SERVER} {
 
     root * /data/www
     file_server browse
 
-    tls contact@openindoor.io {
-        ca ${CERTIFICATE_AUTHORITY}
-    }
+    {$CADDY_TLS}
 
     log {
         level DEBUG

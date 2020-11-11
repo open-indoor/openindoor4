@@ -6,9 +6,6 @@
 
 export CADDYPATH=/data/caddy
 
-cd /etc/caddy
-cat ./Caddyfile | envsubst > ./Caddyfile_tmp
-cat ./Caddyfile_tmp
-mv  ./Caddyfile_tmp              ./Caddyfile
+cd /etc/caddy/Caddyfile
 
 caddy run --watch --config /etc/caddy/Caddyfile

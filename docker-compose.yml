@@ -1,59 +1,121 @@
 version: "3.6"
 services:
 
-  overpassCache:
-    image: varnish:6.2
-    tmpfs: /var/lib/varnish:exec
-    volumes:
-    - ./overpassCache/default.vcl:/etc/varnish/default.vcl:ro
-    - ./overpassCache/run.sh:/run.sh
-    - ./overpassCache/docker-varnish-entrypoint:/usr/local/bin/docker-varnish-entrypoint
 
-  tileCache:
-    image: varnish:6.2
-    tmpfs: /var/lib/varnish:exec
-    volumes:
-    - ./tileCache/default.vcl:/etc/varnish/default.vcl:ro
-    - ./tileCache/run.sh:/run.sh
-    - ./tileCache/docker-varnish-entrypoint:/usr/local/bin/docker-varnish-entrypoint
-
-  fonts:
+  map-app:
     build:
-      context: ./fonts
+      context: map-app
+    image: openindoor/map-app
     volumes:
-    - ./fonts/Caddyfile:/etc/Caddyfile
-
-  openindoor4:
-    build:
-      context: .
-    # image: openindoor4/openindoor
+    - ./map-app/Caddyfile:/tmp/Caddyfile
+    - ./map-app/map-app.sh:/usr/bin/map-app.sh
+    - ./map-app/www/:/map-app/www/
     environment:
-      - WEB_SITE=${WEB_SITE}
-      - CADDYFILE=Caddyfile_${DOMAIN_NAME}
-      - OVERPASS_API=${OVERPASS_API}
-    volumes:
-    - ./Caddyfiles:/etc/caddy/Caddyfiles
-    - ./index_template.html:/openindoor/index_template.html
-    - ./test/3buildings.html:/openindoor/3buildings.html
-    - ./test/data/3buildings.geojson:/openindoor/data/3buildings.geojson
-    - ./test/data/3buildings.osm:/openindoor/data/3buildings.osm
-    - ./test/vectortiles.html:/openindoor/vectortiles.html
-    - ./openmaptiles.html:/openindoor/openmaptiles.html
-    - ./favicon.ico:/openindoor/favicon.ico
-    - ./layer/blankLayers.json:/openindoor/layer/blankLayers.json
-    - ./layer/indoorLayers.json:/openindoor/layer/indoorLayers.json
-    - ./layer/equalLayers.json:/openindoor/layer/equalLayers.json
-    - ./layer/buildingLayers.json:/openindoor/layer/buildingLayers.json
-    - ./style/defaultStyle_template.json:/openindoor/style/defaultStyle_template.json
+      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+      APP_DOMAIN_NAME: ${APP_DOMAIN_NAME}
+      APP_URL: "http://${APP_DOMAIN_NAME}:8000"
 
+  mapbox-gl-openindoor:
+    build:
+      context: mapbox-gl-openindoor
+    image: openindoor/mapbox-gl-openindoor
+    volumes:
+    - ./mapbox-gl-openindoor/Caddyfile:/etc/caddy/Caddyfile
+    - ./mapbox-gl-openindoor/mapbox-gl-openindoor.sh:/usr/bin/mapbox-gl-openindoor.sh
+
+  sprite-app:
+    build:
+      context: sprite-app
+    image: openindoor/sprite-app
+    volumes:
+    - ./sprite-app/Caddyfile:/etc/caddy/Caddyfile
+    - ./sprite-app/sprite-app.sh:/usr/bin/sprite-app.sh
+
+  style-app:
+    build:
+      context: style-app
+    image: openindoor/style-app
+    volumes:
+    - ./style-app/Caddyfile:/etc/caddy/Caddyfile
+    - ./style-app/style-app.sh:/usr/bin/style-app.sh
+    environment:
+      APP_URL: "http://${APP_DOMAIN_NAME}:8000"
+      API_URL: "http://${API_DOMAIN_NAME}"
+
+  front-app:
+    build:
+      context: front-app
+    image: openindoor/front-app
+    volumes:
+    - ./front-app/Caddyfile:/tmp/Caddyfile_
+    - ./front-app/front-app.sh:/usr/bin/front-app.sh
+    environment:
+      APP_DOMAIN_NAME: ${APP_DOMAIN_NAME}
+      APP_SERVER: ":80"
+      APP_URL: http://${APP_DOMAIN_NAME}:8000
+      CADDY_TLS: " "
+    ports:
+    - 8000:80
+
+  geojson-api:
+    build:
+      context: geojson-api
+    image: openindoor/geojson-api
+    volumes:
+    - ./geojson-api/Caddyfile:/etc/caddy/Caddyfile_
+    # - ./geojson-api/places-api.sh:/geojson/geojson-api.sh
+    - ./geojson-api/geojson.py:/geojson/geojson
+    environment:
+      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+
+  mbtiles-api:
+    build:
+      context: mbtiles-api
+    image: openindoor/mbtiles-api
+    volumes:
+    - ./mbtiles-api/Caddyfile:/tmp/Caddyfile
+    - ./mbtiles-api/mbtiles-api.sh:/mbtiles/mbtiles-api.sh
+    - ./mbtiles-api/mbtiles.sh:/mbtiles/mbtiles
+    environment:
+      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+
+  osm-api:
+    build:
+      context: osm-api
+    image: openindoor/osm-api
+    volumes:
+    - ./osm-api/Caddyfile:/tmp/Caddyfile
+    - ./osm-api/action.py:/usr/bin/action
+    - ./osm-api/osm-api.sh:/osm/osm-api.sh
+    environment:
+      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+      API_URL: http://${API_DOMAIN_NAME}
+
+  places-api:
+    build:
+      context: places-api
+    image: openindoor/places-api
+    volumes:
+    - ./places-api/Caddyfile:/etc/caddy/Caddyfile_
+    - ./places-api/places-api.sh:/places/places-api.sh
+    - ./places-api/places.py:/places/places
+    environment:
+      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+      APP_URL: http://${APP_DOMAIN_NAME}
+    
+  front-api:
+    build:
+      context: front-api
+    image: openindoor/front-api
+    volumes:
+    - ./front-api/Caddyfile:/tmp/Caddyfile
+    - ./front-api/front-api.sh:/usr/bin/front-api.sh
+    - ./front-api/index.html:/tmp/index_template.html
+    environment:
+      # CERTIFICATE_AUTHORITY: https://acme-staging-v02.api.letsencrypt.org/directory
+      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+      API_SERVER: ${API_DOMAIN_NAME}:80
+      API_URL: http://${API_DOMAIN_NAME}
+      CADDY_TLS: " "
     ports:
     - 80:80
-    - 443:443
-
-  tileserver:
-    build:
-      context: ./tileserver
-    ports:
-    - 8084:80
-    command: "/usr/src/app/run.sh --verbose -c /mydata/config.json"
-

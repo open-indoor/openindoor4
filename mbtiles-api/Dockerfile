@@ -29,8 +29,7 @@ CMD ["/mbtiles/mbtiles-api.sh"]
 COPY ./mbtiles-api.sh /mbtiles/mbtiles-api.sh
 COPY ./mbtiles.sh /mbtiles/mbtiles
 COPY ./actions.sh /usr/bin/actions.sh
-RUN  chmod +x /usr/bin/actions.sh \
-  && chmod +x /mbtiles/mbtiles \
-  && chmod +x /mbtiles/mbtiles-api.sh
+RUN  chmod +x /mbtiles/mbtiles-api.sh
+COPY ./tic.sh /usr/bin/tic
 
 EXPOSE 80

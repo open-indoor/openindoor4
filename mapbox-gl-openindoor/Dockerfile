@@ -19,7 +19,7 @@ COPY ./rollup.config.js         ./
 COPY ./.babelrc                 ./
 COPY ./yarn.lock                ./
 COPY ./mapbox-gl-openindoor.css ./
-RUN npm install
+RUN npm install --loglevel verbose
 
 COPY ./src/                     ./src/
 RUN yarn build

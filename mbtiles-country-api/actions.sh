@@ -22,6 +22,7 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
 
     mbtilesFile=/tmp/mbtiles/${country}/${id}_${cksum}.mbtiles
     mkdir -p $(dirname "${mbtilesFile}")
+
     if ! [ -f "${mbtilesFile}" ]; then
       complete=false
       status=$(curl -k -L "${mbtilesApiUrl}/status/${country}/${id}" | jq -r -c ".status")
@@ -42,6 +43,9 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
         || \
           (echo "Not available: ${country}/${id}" \
           && continue)
+          
+        find $(dirname "${mbtilesFile}") -name $(basename ${mbtilesFile}) -size 16384c | xargs rm -rf
+
       fi
     fi
   done <<<$(echo "${bboxes}" | jq -c '.[]')
@@ -53,14 +57,14 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
     #   -o "/tmp/${country}_bboxes.mbtiles" \
     #   "${mbtilesApiUrl}/data/bboxes/${country}" \
     # && mv "${mbtilesApiUrl}/data/bboxes" "/tmp/mbtiles/${country}_bboxes.mbtiles"
-  mbtilesFolder="/tmp/mbtiles/${country}"
-  if ls ${mbtilesFolder}/*.mbtiles 1> /dev/null 2>&1; then
-    cksum=$(ls ${mbtilesFolder}/*.mbtiles |  sed "s/.*_//" | sed "s/.mbtiles//" | cksum | sed "s/\s\d*$//")
+  # mbtilesFolder="/tmp/mbtiles/${country}"
+  if ls /tmp/mbtiles/${country}/*.mbtiles 1> /dev/null 2>&1; then
+    cksum=$(ls /tmp/mbtiles/${country}/*.mbtiles |  sed "s/.*_//" | sed "s/.mbtiles//" | cksum | sed "s/\s\d*$//")
     mkdir -p /tmp/mbtiles-country
     tile-join \
       -n ${country} \
       -o /tmp/${country}_${uuid}.mbtiles \
-      $(find "${mbtilesFolder}" -name "*.mbtiles") \
+      $(find /tmp/mbtiles/${country} -name "*.mbtiles") \
     && mv \
       /tmp/${country}_${uuid}.mbtiles \
       /tmp/mbtiles-country/${country}.mbtiles \

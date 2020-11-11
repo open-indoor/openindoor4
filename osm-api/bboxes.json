@@ -481,6 +481,45 @@
         ]
     },
     {
+        "id": "FranceToulouseUniversiteToulouseJeanJaures",
+        "update": "0",
+        "country": "France",
+        "town": "Toulouse",
+        "place": "Université Toulouse Jean Jaurès",
+        "bbox": [
+            1.39956,
+            43.57421,
+            1.40576,
+            43.58275
+        ]
+    },
+    {
+        "id": "FranceToulousePlaceVictorHugo",
+        "update": "0",
+        "country": "France",
+        "town": "Toulouse",
+        "place": "Place Victor Hugo",
+        "bbox": [
+            1.44632,
+            43.60529,
+            1.447,
+            43.60764
+        ]
+    },
+    {
+        "id": "FranceToulousePlaceOccitane",
+        "update": "0",
+        "country": "France",
+        "town": "Toulouse",
+        "place": "Place Occitane",
+        "bbox": [
+            1.44799,
+            43.60077,
+            1.45087,
+            43.60483
+        ]
+    },
+    {
         "id": "FranceValDeMarneThiaisCentrecommercialBelleEpine",
         "update": "0",
         "country": "France",
@@ -517,6 +556,19 @@
             48.85819,
             2.35335,
             48.86253
+        ]
+    },
+    {
+        "id": "FranceParisLesHalles",
+        "update": "1m",
+        "country": "France",
+        "town": "Paris",
+        "place": "Les Halles",
+        "bbox": [
+            2.34161,
+            48.85778,
+            2.34883,
+            48.86625
         ]
     },
     {

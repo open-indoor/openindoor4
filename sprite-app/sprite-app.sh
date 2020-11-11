@@ -2,12 +2,8 @@
 
 export CADDYPATH=/data/caddy
 
+cp -r /tmp/www /data/
 
-cp -r /sprite-app/www /data/
-
-cd /etc/caddy
-cat ./Caddyfile | envsubst > ./Caddyfile_tmp
-cat ./Caddyfile_tmp
-mv  ./Caddyfile_tmp              ./Caddyfile
+cat /etc/caddy/Caddyfile_tmp
 
 caddy run --watch --config /etc/caddy/Caddyfile

@@ -15,9 +15,8 @@ RUN apk add --update-cache \
 RUN mkdir -p /front-app
 WORKDIR /front-app
 
-COPY ./Caddyfile /etc/caddy/Caddyfile
-RUN mkdir -p /front-app/www
-COPY ./index.html /front-app/www/index.html
+COPY ./Caddyfile /tmp/Caddyfile
+COPY ./index.html /tmp/index.html
 
 COPY ./front-app.sh /usr/bin/front-app.sh
 RUN chmod +x /usr/bin/front-app.sh

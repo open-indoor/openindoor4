@@ -14,7 +14,7 @@
 #        transport fastcgi {
 #            split mbtiles
 #            env API mbtiles-api
-#            env DOMAIN_NAME ${DOMAIN_NAME}
+#            env DOMAIN_NAME 
 #        }
 #    }
 
@@ -22,7 +22,7 @@
 		reverse_proxy unix//var/run/fcgiwrap.socket {
 			transport fastcgi {
     		    env SCRIPT_FILENAME /mbtiles/mbtiles
-                env API_DOMAIN_NAME ${API_DOMAIN_NAME}
+                env API_DOMAIN_NAME api-local.openindoor.io
 		        split "/mbtiles/"
 			}
 		}

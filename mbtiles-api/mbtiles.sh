@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # PATH_INFO=status/france/FranceParisGareDeLEst DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
+# PATH_INFO=data/france/FranceParisGareDeLEst DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
 # PATH_INFO=trigger/france/FranceParisGareDeLEst DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
 # PATH_INFO=pins/france DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
 

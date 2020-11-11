@@ -1,18 +1,18 @@
 #!/bin/bash
+set -x
+set -e
 
 export CADDYPATH=/data/caddy
+export APP_SERVER=${APP_SERVER:-${APP_DOMAIN_NAME}}
+export APP_URL=${APP_URL:-https://${APP_DOMAIN_NAME}}
+export CADDY_TLS=${CADDY_TLS:-"tls contact@openindoor.io {ca ${CERTIFICATE_AUTHORITY}}"}
 
+env
 
-cp -r /front-app/www /data/
+# cat /tmp/Caddyfile | envsubst | tee /etc/caddy/Caddyfile
+cat /tmp/Caddyfile | tee /etc/caddy/Caddyfile
 
-cd /etc/caddy
-cat ./Caddyfile | envsubst > ./Caddyfile_tmp
-cat ./Caddyfile_tmp
-mv  -f ./Caddyfile_tmp              ./Caddyfile
-
-cd /data/www
-cat ./index.html | envsubst > ./index_tmp.html
-cat ./index_tmp.html
-mv -f ./index_tmp.html ./index.html
+mkdir -p /data/www
+cat /tmp/index.html | envsubst | tee /data/www/index.html
 
 caddy run --watch --config /etc/caddy/Caddyfile

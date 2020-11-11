@@ -1,14 +1,9 @@
-${API_DOMAIN_NAME} {
+{$API_SERVER} {
 
-    header Access-Control-Allow-Origin "${APP_DOMAIN_NAME}"
-
-#Access to fetch at 'https://api.openindoor.io/places/pins/france/pins.json' from origin 'https://app.openindoor.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
     root * /data/www
     file_server browse
 
-    tls contact@openindoor.io {
-        ca ${CERTIFICATE_AUTHORITY}
-    }
+    {$CADDY_TLS}
 
     log {
         level DEBUG
@@ -35,7 +30,7 @@ ${API_DOMAIN_NAME} {
         }
     }
 
-    route /geojson* {
+    route /geojson/* {
 	    reverse_proxy {
             to http://geojson-api:80
         }

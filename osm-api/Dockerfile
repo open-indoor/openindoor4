@@ -8,18 +8,21 @@ RUN apk add --update-cache \
     vim \
     util-linux \
     jq \
+    gettext \
+    python3 py3-pip geos geos-dev py3-wheel py3-scipy curl-dev gcc musl-dev \
     && rm -rf /var/cache/apk/*
 
-COPY ./Caddyfile /etc/caddy/Caddyfile
+COPY ./requirements.txt /osm/
+RUN pip install -r /osm/requirements.txt
+
+COPY ./Caddyfile /tmp/Caddyfile
 
 WORKDIR /usr/bin
-COPY ./osm.sh /usr/bin/osm.sh
-RUN chmod +x /usr/bin/osm.sh
-COPY ./osm-api.sh /usr/bin/osm-api.sh
-RUN chmod +x /usr/bin/osm-api.sh
+COPY ./action.py /usr/bin/action
+COPY ./tic.sh /usr/bin/tic
+COPY ./osm-api.sh /osm/osm-api.sh
+RUN chmod +x /osm/osm-api.sh
 
-COPY ./bboxes.json /tmp/bboxes_default.json
-
-CMD /usr/bin/osm-api.sh
+CMD /osm/osm-api.sh
 
 EXPOSE 80

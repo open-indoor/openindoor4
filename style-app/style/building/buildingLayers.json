@@ -18,7 +18,7 @@
       ]
     ],
     "paint": {
-      "fill-extrusion-color": "#000000",
+      "fill-extrusion-color": "${BUILDING_COLOR}",
       "fill-extrusion-height": [
         "interpolate",
         [
@@ -81,7 +81,7 @@
         [
           "zoom"
         ],
-        $BUILDING_INVISIBLE_ZOOM,
+        $BUILDING_INVISIBLE_FAR_ZOOM,
         0,
         $BUILDING_FULL_ZOOM,
         0.5

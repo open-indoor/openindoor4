@@ -15,15 +15,14 @@ RUN apk add --update-cache \
 RUN mkdir -p /front-api
 WORKDIR /front-api
 
-COPY ./Caddyfile /etc/caddy/Caddyfile
-RUN mkdir -p /front-api/www
-COPY ./index.html /front-api/www/index.html
+COPY ./Caddyfile /tmp/Caddyfile
+COPY ./index.html /tmp/index.html
 
 COPY ./front-api.sh /usr/bin/front-api.sh
 RUN chmod +x /usr/bin/front-api.sh
 
-ENV API_DOMAIN_NAME api.openindoor.io
-ENV APP_DOMAIN_NAME app.openindoor.io
+ENV API_DOMAIN_NAME xxx.openindoor.io
+ENV APP_DOMAIN_NAME xxx.openindoor.io
 ENV CERTIFICATE_AUTHORITY "https://acme-staging-v02.api.letsencrypt.org/directory"
 CMD /usr/bin/front-api.sh
 EXPOSE 80

@@ -4,6 +4,8 @@
 # wget 'https://www.openstreetmap.org/api/0.6/map?bbox=2.35787,48.87617,2.3614,48.87758'
 # https://api.openindoor.io/osm/costa_rica/CostaRicaSanJoseStarbucks.osm
 
+# https://api.openindoor.io/places/bboxes/world
+
 set -x
 
 # /usr/bin/flock /var/tmp/osm.lock /usr/bin/osm.sh
@@ -11,11 +13,7 @@ set -x
 osmUpdate () {
   mkdir -p /data/osm
   uuid="$(uuidgen)"
-  BBOXES_JSON="/data/osm/bboxes.json"
 
-  if [ ! -f "$BBOXES_JSON" ]; then
-    mv -f /tmp/bboxes_default.json "$BBOXES_JSON"
-  fi
   while read bbox; do
     myBbox=$(echo -e "${bbox}" | jq '.')
     id=$(echo "${myBbox}" | grep '"id":' | cut -d'"' -f4)

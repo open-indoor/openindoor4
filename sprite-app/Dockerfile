@@ -51,9 +51,9 @@ RUN apk add --update-cache \
     && rm -rf /var/cache/apk/*
 
 COPY ./Caddyfile /etc/caddy/Caddyfile
-RUN mkdir -p /sprite-app/www
+RUN mkdir -p /tmp/www
 # COPY --from=sprite_builder /sprite-32/ /sprite-app/www/
-COPY --from=sprite_builder /sprite-64/ /sprite-app/www/
+COPY --from=sprite_builder /sprite-64/ /tmp/www/
 COPY --from=sprite_builder /input/ /input/
 
 COPY ./sprite-app.sh /usr/bin/sprite-app.sh

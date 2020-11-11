@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
 
-  <title>The HTML5 Herald</title>
+  <title>OpenIndoor APIs</title>
   <meta name="description" content="OpenIndoor">
   <meta name="author" content="OpenIndoor">
 
@@ -14,40 +14,40 @@
 </head>
 
 <body>
-    This page: <a href="https://${API_DOMAIN_NAME}">https://${API_DOMAIN_NAME}</a><br/>
+    This page: <a href="${API_URL}">${API_URL}</a><br/>
     <br/>
     PLACES: api / action / country / format<br/>
-    Web bounding box list: <a href="https://${API_DOMAIN_NAME}/places/bboxes/world/html">https://${API_DOMAIN_NAME}/places/bboxes/world/html</a><br/>
-    Country list: <a href="https://${API_DOMAIN_NAME}/places/countries/">https://${API_DOMAIN_NAME}/places/countries/</a><br/>
-    Country checksum: <a href="https://${API_DOMAIN_NAME}/places/checksum/france">https://${API_DOMAIN_NAME}/places/checksum/france</a><br/>
-    Bounding box list: <a href="https://${API_DOMAIN_NAME}/places/bboxes/world">https://${API_DOMAIN_NAME}/places/bboxes/world</a><br/>
-    Bounding box list by country: <a href="https://${API_DOMAIN_NAME}/places/bboxes/france">https://${API_DOMAIN_NAME}/places/bboxes/france</a><br/>
-    Geojson pin points by country: <a href="https://${API_DOMAIN_NAME}/places/pins/france">https://${API_DOMAIN_NAME}/places/pins/france</a><br/>
+    Web bounding box list: <a href="${API_URL}/places/pins/world/html">${API_URL}/places/pins/world/html</a><br/>
+    Geojson pin points by country: <a href="${API_URL}/places/pins/france">${API_URL}/places/pins/france</a><br/>
+    Country list: <a href="${API_URL}/places/countries/">${API_URL}/places/countries/</a><br/>
+    Country checksum: <a href="${API_URL}/places/checksum/france">${API_URL}/places/checksum/france</a><br/>
+    Bounding box list: <a href="${API_URL}/places/data/world">${API_URL}/places/data/world</a><br/>
+    Bounding box list by country: <a href="${API_URL}/places/data/france">${API_URL}/places/data/france</a><br/>
+    Bounding box list by id: <a href="${API_URL}/places/data/france/FranceParisGareDeLEst">${API_URL}/places/data/france/FranceParisGareDeLEst</a><br/>
     <br/>
     OSM: api / country / id<br/>
-    Data in osm format: <a href="https://${API_DOMAIN_NAME}/osm/france/FranceParisGareDeLEst.osm">https://${API_DOMAIN_NAME}/osm/france/FranceParisGareDeLEst.osm</a><br/>
-    Cksum: <a href="https://${API_DOMAIN_NAME}/osm/france/FranceParisGareDeLEst.cksum">https://${API_DOMAIN_NAME}/osm/france/FranceParisGareDeLEst.cksum</a><br/>
-    Full bounding box list: <a href="https://${API_DOMAIN_NAME}/osm/bboxes.json">https://${API_DOMAIN_NAME}/osm/bboxes.json</a><br/>
+    Data in osm format: <a href="${API_URL}/osm/france/FranceParisGareDeLEst.osm">${API_URL}/osm/france/FranceParisGareDeLEst.osm</a><br/>
+    Cksum: <a href="${API_URL}/osm/france/FranceParisGareDeLEst.cksum">${API_URL}/osm/france/FranceParisGareDeLEst.cksum</a><br/>
     <br/>
     GEOJSON: api / action / country / id<br/>
-    Data in geojson format: <a href="https://${API_DOMAIN_NAME}/geojson/data/france/FranceParisGareDeLEst">https://${API_DOMAIN_NAME}/geojson/data/france/FranceParisGareDeLEst</a><br/>
+    Data in geojson format: <a href="${API_URL}/geojson/data/france/FranceParisGareDeLEst">${API_URL}/geojson/data/france/FranceParisGareDeLEst</a><br/>
     <br/>
     MBTILES: api / action / country <br/>
-    Get mbtiles file status: <a href="https://${API_DOMAIN_NAME}/mbtiles/status/france/FranceParisGareDeLEst">https://${API_DOMAIN_NAME}/mbtiles/status/france/FranceParisGareDeLEst</a><br/>
-    Trigger mbtiles download: <a href="https://${API_DOMAIN_NAME}/mbtiles/trigger/france/FranceParisGareDeLEst">https://${API_DOMAIN_NAME}/mbtiles/trigger/france/FranceParisGareDeLEst</a><br/>
-    Data in mbtiles format: <a href="https://${API_DOMAIN_NAME}/mbtiles/data/france/FranceParisGareDeLEst">https://${API_DOMAIN_NAME}/mbtiles/data/france/FranceParisGareDeLEst</a><br/>
-    Pins in mbtiles format by country: <a href="https://${API_DOMAIN_NAME}/mbtiles/pins/france">https://${API_DOMAIN_NAME}/mbtiles/pins/france</a><br/>
+    Get mbtiles file status: <a href="${API_URL}/mbtiles/status/france/FranceParisGareDeLEst">${API_URL}/mbtiles/status/france/FranceParisGareDeLEst</a><br/>
+    Trigger mbtiles download: <a href="${API_URL}/mbtiles/trigger/france/FranceParisGareDeLEst">${API_URL}/mbtiles/trigger/france/FranceParisGareDeLEst</a><br/>
+    Data in mbtiles format: <a href="${API_URL}/mbtiles/data/france/FranceParisGareDeLEst">${API_URL}/mbtiles/data/france/FranceParisGareDeLEst</a><br/>
+    Pins in mbtiles format by country: <a href="${API_URL}/mbtiles/pins/france">${API_URL}/mbtiles/pins/france</a><br/>
     <br/>
     MBTILES by Country: api / action / country <br/>
-    List of available mbtiles data by country: <a href="https://${API_DOMAIN_NAME}/mbtiles-country/list/world">https://${API_DOMAIN_NAME}/mbtiles-country/list/world</a><br/>
-    Get mbtiles mix file status country: <a href="https://${API_DOMAIN_NAME}/mbtiles-country/status/france">https://${API_DOMAIN_NAME}/mbtiles-country/status/france</a><br/>
-    Trigger france mbtiles download: <a href="https://${API_DOMAIN_NAME}/mbtiles-country/trigger/france">https://${API_DOMAIN_NAME}/mbtiles-country/trigger/france</a><br/>
-    Trigger argentina mbtiles download: <a href="https://${API_DOMAIN_NAME}/mbtiles-country/trigger/argentina">https://${API_DOMAIN_NAME}/mbtiles-country/trigger/argentina</a><br/>
-    Trigger world mbtiles download: <a href="https://${API_DOMAIN_NAME}/mbtiles-country/trigger/world">https://${API_DOMAIN_NAME}/mbtiles-country/trigger/world</a><br/>
-    Mix of mbtiles data by country: <a href="https://${API_DOMAIN_NAME}/mbtiles-country/data/france">https://${API_DOMAIN_NAME}/mbtiles-country/data/france</a><br/>
+    List of available mbtiles data by country: <a href="${API_URL}/mbtiles-country/list/world">${API_URL}/mbtiles-country/list/world</a><br/>
+    Get mbtiles mix file status country: <a href="${API_URL}/mbtiles-country/status/france">${API_URL}/mbtiles-country/status/france</a><br/>
+    Trigger france mbtiles download: <a href="${API_URL}/mbtiles-country/trigger/france">${API_URL}/mbtiles-country/trigger/france</a><br/>
+    Trigger argentina mbtiles download: <a href="${API_URL}/mbtiles-country/trigger/argentina">${API_URL}/mbtiles-country/trigger/argentina</a><br/>
+    Trigger world mbtiles download: <a href="${API_URL}/mbtiles-country/trigger/world">${API_URL}/mbtiles-country/trigger/world</a><br/>
+    Mix of mbtiles data by country: <a href="${API_URL}/mbtiles-country/data/france">${API_URL}/mbtiles-country/data/france</a><br/>
     <br/>
     MVT:<br/>
-    Mapbox Vector Tiles server info command: <a href="https://${API_DOMAIN_NAME}/tileserver/cmd/info">https://${API_DOMAIN_NAME}/tileserver/cmd/info</a><br/>
-    Mapbox Vector Tiles server by country: <a href="https://${API_DOMAIN_NAME}/tileserver/">https://${API_DOMAIN_NAME}/tileserver/</a><br/>
+    Mapbox Vector Tiles server info command: <a href="${API_URL}/tileserver/cmd/info">${API_URL}/tileserver/cmd/info</a><br/>
+    Mapbox Vector Tiles server by country: <a href="${API_URL}/tileserver/">${API_URL}/tileserver/</a><br/>
 </body>
 </html>

@@ -2,7 +2,11 @@
 
 echo "API_DOMAIN_NAME=${API_DOMAIN_NAME}" > /mbtiles/mbtiles.src
 
-crontab -l | { cat; echo "* * * * * /usr/bin/flock /var/tmp/actions.lock /usr/bin/actions.sh > /dev/stdout 2> /dev/stderr"; } | crontab -
+chmod +x /mbtiles-country/mbtiles-country
+chmod +x /usr/bin/actions.sh
+chmod +x /usr/bin/tic
+
+crontab -l | { cat; echo "* * * * * /usr/bin/tic > /dev/stdout 2> /dev/stderr"; } | crontab -
 echo "Start cron task" && crontab -l && /usr/sbin/crond -l 8
 cat /usr/bin/actions.sh
 

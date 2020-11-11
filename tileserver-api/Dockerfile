@@ -68,15 +68,13 @@ COPY ./Caddyfile /etc/caddy/Caddyfile
 
 RUN mkdir -p /tileserver
 COPY ./tileserver.sh /tileserver/tileserver
-RUN chmod +x /tileserver/tileserver
 
 COPY ./tileserver-api.sh /tileserver/tileserver-api.sh
 RUN chmod +x /tileserver/tileserver-api.sh
 
 COPY ./config.json /tileserver/config.json
-
 COPY ./actions.sh /usr/bin/actions.sh
-RUN chmod +x /usr/bin/actions.sh
+COPY ./tic.sh /usr/bin/tic
 
 WORKDIR /tileserver
 

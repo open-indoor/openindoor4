@@ -19,7 +19,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: front-pvc
+  name: front-api-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -69,8 +69,8 @@ spec:
         - containerPort: 443
         volumeMounts:
           - mountPath: /data
-            name: front-storage
+            name: front-api-storage
       volumes:
-      - name: front-storage
+      - name: front-api-storage
         persistentVolumeClaim:
-          claimName: front-pvc
+          claimName: front-api-pvc

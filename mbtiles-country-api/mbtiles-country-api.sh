@@ -7,7 +7,9 @@ chmod +x /usr/bin/actions.sh
 chmod +x /usr/bin/tic
 
 crontab -l | { cat; echo "* * * * * /usr/bin/tic"; } | crontab -
-echo "Start cron task" && crontab -l && /usr/sbin/crond -l 8
+crontab -l | { cat; echo "45 6 * * * /usr/bin/curl https://mbtiles-country-api/mbtiles-country/trigger/world"; } | crontab -
+
+echo "Start cron task" && crontab -l && /usrn/sbin/crond -l 8
 
 cat /usr/bin/tic
 cat /usr/bin/actions.sh

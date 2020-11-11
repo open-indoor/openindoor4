@@ -3,12 +3,17 @@
 set -x
 set -e
 
+export APP_URL=${APP_URL:-"https://${APP_DOMAIN_NAME}"}
+export API_URL=${API_URL:-"https://${API_DOMAIN_NAME}"}
+
 chmod +x /usr/bin/tic
 chmod +x /usr/bin/actions.sh
 
 cat << EOF > /style/style.src
 API_DOMAIN_NAME="${API_DOMAIN_NAME}"
 APP_DOMAIN_NAME="${APP_DOMAIN_NAME}"
+APP_URL="${APP_URL}"
+API_URL="${API_URL}"
 EOF
 
 cat /usr/bin/tic
@@ -101,26 +106,38 @@ while read i; do
   jq '.[. | length] |= . + '"$(cat /tmp/extrusion.json)" ./shape/shapeLayers.json > /tmp/shapeLayers.json \
     && mv -f /tmp/shapeLayers.json ./shape/shapeLayers.json
 done <<< $(echo '[
-    { "id": "shape-area-extrusion-indoor",
-      "color": "#FF00F0",
-      "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0]],
+    { "id": "shape-area-extrusion-indoor-00",
+      "color": "#dad0c8",
+      "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 0]],
       "extrusionBase": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]],
       "extrusionHeight": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]
     },
-    { "id": "shape-area-extrusion-area",
-      "color": "#FF0000",
-      "filter": ["all",["==",["get","indoor"],"area"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0]],
+    { "id": "shape-area-extrusion-indoor-01",
+      "color": "#6a615b",
+      "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 1]],
       "extrusionBase": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]],
       "extrusionHeight": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]
     },
-    { "id": "shape-area-extrusion-room",
-      "color": "#0000FF",
-      "filter": ["all",["==",["get","indoor"],"room"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0]],
-      "extrusionBase": ["+",1,["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]],
-      "extrusionHeight": ["+",1,["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]]
+    { "id": "shape-area-extrusion-indoor-02",
+      "color": "#39312b",
+      "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 2]],
+      "extrusionBase": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]],
+      "extrusionHeight": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]
     }
 ]' | jq -c '.[]')
 
+    # { "id": "shape-area-extrusion-area",
+    #   "color": "#487838",
+    #   "filter": ["all",["==",["get","indoor"],"area"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0]],
+    #   "extrusionBase": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]],
+    #   "extrusionHeight": ["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]
+    # },
+    # { "id": "shape-area-extrusion-room",
+    #   "color": "#6a615b",
+    #   "filter": ["all",["==",["get","indoor"],"room"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0]],
+    #   "extrusionBase": ["+",1,["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]],
+    #   "extrusionHeight": ["+",1,["*",'${DEFAULT_LEVEL_HEIGHT}',["to-number",["get","level"]]]]
+    # }
 
 # ############
 # # Building #
@@ -177,10 +194,7 @@ done <<<$(cat ./building/buildingLayers.json | jq -c '.[]')
 
 /usr/bin/tic
 
-cd /etc/caddy
-cat ./Caddyfile | envsubst > ./Caddyfile_tmp
-cat ./Caddyfile_tmp
-mv  ./Caddyfile_tmp              ./Caddyfile
+cat /etc/caddy/Caddyfile
 
 crontab -l | { cat; echo "* * * * * /usr/bin/tic"; } | crontab -
 echo "Start cron task" && crontab -l && /usr/sbin/crond -l 8
