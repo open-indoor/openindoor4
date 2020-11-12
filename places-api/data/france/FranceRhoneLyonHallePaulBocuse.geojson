@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[4.85016, 45.76189], [4.85134, 45.76189], [4.85134, 45.76384], [4.85016, 45.76384], [4.85016, 45.76189]]}, "properties": {"id": "FranceRhoneLyonHallePaulBocuse", "update": "0", "country": "France", "town": "Rhone / Lyon", "place": "Halle Paul Bocuse"}}]}

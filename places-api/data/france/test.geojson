@@ -1,0 +1,57 @@
+{
+    "type": "FeatureCollection",
+    "generator": "JOSM",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        2.35747,
+                        48.875939
+                    ],
+                    [
+                        2.357457,
+                        48.876639
+                    ],
+                    [
+                        2.359248,
+                        48.87983
+                    ],
+                    [
+                        2.361687,
+                        48.880598
+                    ],
+                    [
+                        2.362258,
+                        48.879259
+                    ],
+                    [
+                        2.362011,
+                        48.878653
+                    ],
+                    [
+                        2.360415,
+                        48.875735
+                    ],
+                    [
+                        2.359935,
+                        48.875649
+                    ],
+                    [
+                        2.35747,
+                        48.875939
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "FranceParisGareDeLEst",
+                "update": "0",
+                "country": "France",
+                "town": "Paris",
+                "place": "Gare de l'Est"
+            }
+        }
+    ]
+}
