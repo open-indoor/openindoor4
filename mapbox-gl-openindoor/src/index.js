@@ -21,12 +21,12 @@ import loadSprite from './sprite';
 export default class OpenIndoor {
   constructor(map, options = {}) {
     const defaultOpts = {
-      sourceId: "osm-indoor",
+      sourceId: "indoor",
       // source: {
       //   type: 'vector',
       //   url: 'https://api.openindoor.io/tileserver/data/france.json'
       // },
-      layerId: "indoor",
+      layerId: "osm-indoor",
       layers
     };
 
@@ -246,7 +246,9 @@ export default class OpenIndoor {
 
   _updateLevels() {
     if (this.map.isSourceLoaded(this.sourceId)) {
-      const features = this.map.querySourceFeatures(this.sourceId, { sourceLayer: this.layerId });
+      // const features = this.map.querySourceFeatures(this.sourceId, { sourceLayer: this.layerId });
+      const features = this.map.querySourceFeatures(this.sourceId);
+      console.log('features for updating levels:' + JSON.stringify(features))
       const levels = findAllLevels(features);
       if (!arrayEqual(levels, this.levels)) {
         this.levels = levels;

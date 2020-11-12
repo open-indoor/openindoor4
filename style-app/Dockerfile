@@ -15,6 +15,10 @@ RUN apk add --update-cache \
     wget \
     && rm -rf /var/cache/apk/*
 
+RUN apk add --update-cache \
+    python3 py3-pip py3-wheel curl-dev \
+    && rm -rf /var/cache/apk/*
+
 RUN mkdir -p /style
 
 ENV API_DOMAIN_NAME api.openindoor.io
@@ -29,7 +33,8 @@ EXPOSE 80
 COPY ./Caddyfile /etc/caddy/Caddyfile
 COPY ./tic.sh /usr/bin/tic
 COPY ./actions.sh /usr/bin/actions.sh
+COPY ./processStyle.py /usr/bin/processStyle
 
 COPY ./style-app.sh /usr/bin/style-app.sh
 RUN chmod +x /usr/bin/style-app.sh
-COPY ./style/ /data/www/style/
+COPY ./style/ /tmp/style/

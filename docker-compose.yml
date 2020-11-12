@@ -9,7 +9,8 @@ services:
     volumes:
     - ./map-app/Caddyfile:/tmp/Caddyfile
     - ./map-app/map-app.sh:/usr/bin/map-app.sh
-    - ./map-app/www/:/map-app/www/
+    # - ./map-app/www/:/map-app/www/
+    - ./map-app/www/local.html:/map-app/www/index.html
     environment:
       API_DOMAIN_NAME: ${API_DOMAIN_NAME}
       APP_DOMAIN_NAME: ${APP_DOMAIN_NAME}
@@ -38,9 +39,19 @@ services:
     volumes:
     - ./style-app/Caddyfile:/etc/caddy/Caddyfile
     - ./style-app/style-app.sh:/usr/bin/style-app.sh
+    - ./style-app/processStyle.py:/usr/bin/processStyle
+    - ./style-app/actions.sh:/usr/bin/actions.sh
     environment:
       APP_URL: "http://${APP_DOMAIN_NAME}:8000"
       API_URL: "http://${API_DOMAIN_NAME}"
+      BUILDING_GEOJSON: "http://${API_DOMAIN_NAME}/geojson/data/france/FranceParisGareDeLEst"
+      INDOOR_GEOJSON: "http://${API_DOMAIN_NAME}/geojson/data/france/FranceParisGareDeLEst"
+      SHAPE_GEOJSON: "http://${API_DOMAIN_NAME}/geojson/data/france/FranceParisGareDeLEst"
+
+  rastertiles-app:
+    build:
+      context: rastertiles-app
+    image: openindoor/rastertiles-app
 
   front-app:
     build:
@@ -76,8 +87,23 @@ services:
     - ./mbtiles-api/Caddyfile:/tmp/Caddyfile
     - ./mbtiles-api/mbtiles-api.sh:/mbtiles/mbtiles-api.sh
     - ./mbtiles-api/mbtiles.sh:/mbtiles/mbtiles
+    - ./mbtiles-api/actions.sh:/usr/bin/actions.sh
     environment:
       API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+      API_URL: http://${API_DOMAIN_NAME}
+
+  mbtiles-country-api:
+    build:
+      context: mbtiles-country-api
+    image: openindoor/mbtiles-country-api
+    volumes:
+    - ./mbtiles-country-api/Caddyfile:/tmp/Caddyfile
+    - ./mbtiles-country-api/mbtiles-country-api.sh:/mbtiles-country/mbtiles-api.sh
+    - ./mbtiles-country-api/mbtiles-country.sh:/mbtiles-country/mbtiles
+    - ./mbtiles-country-api/actions.sh:/usr/bin/actions.sh
+    environment:
+      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+      API_URL: http://${API_DOMAIN_NAME}
 
   osm-api:
     build:

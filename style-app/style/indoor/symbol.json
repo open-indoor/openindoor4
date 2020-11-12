@@ -1,11 +1,11 @@
 {
-  "id": "${symbolId}",
+  "id": __id__,
   "type": "symbol",
   "source-layer": "osm-indoor",
   "source": "indoor",
   "minzoom": $INDOOR_MIN_ZOOM,
   "interactive": true,
-  "filter": $symbolFilter,
+  "filter": __filter__,
   "layout": {
     "text-line-height": 1.2,
     "icon-size": {
@@ -35,7 +35,7 @@
       ]
     },
     "text-allow-overlap": false,
-    "icon-image": "${symbolImage}",
+    "icon-image": __image__,
     "icon-anchor": "center",
     "text-ignore-placement": false,
     "text-max-angle": 38,

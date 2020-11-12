@@ -66,7 +66,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN npm install -g osmtogeojson
 
 COPY ./requirements.txt /geojson/
-# RUN pip3 install -v -r /geojson/requirements.txt
+RUN pip3 install -v -r /geojson/requirements.txt
 
 COPY ./Caddyfile /tmp/Caddyfile_template
 

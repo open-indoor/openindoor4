@@ -1,6 +1,11 @@
 #!/bin/bash
 
-echo "API_DOMAIN_NAME=${API_DOMAIN_NAME}" > /mbtiles-country/mbtiles-country.src
+export API_URL=${API_URL:-"https://${API_DOMAIN_NAME}"}
+
+cat << EOF > /mbtiles-country/mbtiles-country.src
+API_DOMAIN_NAME="${API_DOMAIN_NAME}"
+API_URL="${API_URL}"
+EOF
 
 chmod +x /mbtiles-country/mbtiles-country
 chmod +x /usr/bin/actions.sh

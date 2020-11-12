@@ -31,6 +31,8 @@
     }
 
     route /geojson/* {
+     	header Access-Control-Allow-Origin *
+    	header Access-Control-Request-Method GET
 	    reverse_proxy {
             to http://geojson-api:80
         }

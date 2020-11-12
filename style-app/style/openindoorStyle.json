@@ -23,19 +23,19 @@
     },
     "building": {
       "type": "vector",
-      "url": "${API_URL}/tileserver/data/${country}.json",
+      "url": "${API_URL}/tileserver/data/__country__.json",
       "minzoom": $BUILDING_MIN_ZOOM,
       "maxzoom": $BUILDING_MAX_ZOOM
     },
     "shape": {
       "type": "vector",
-      "url": "${API_URL}/tileserver/data/${country}.json",
+      "url": "${API_URL}/tileserver/data/__country__.json",
       "minzoom": $SHAPE_MIN_ZOOM,
       "maxzoom": $SHAPE_MAX_ZOOM
     },
     "indoor": {
       "type": "vector",
-      "url": "${API_URL}/tileserver/data/${country}.json",
+      "url": "${API_URL}/tileserver/data/__country__.json",
       "minzoom": $INDOOR_MIN_ZOOM
     }
   },

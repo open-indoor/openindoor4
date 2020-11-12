@@ -6,11 +6,11 @@ source /mbtiles/mbtiles.src
 
 uuid=$(uuidgen)
 
-geojsonApiUrl="https://${DOMAIN_NAME}/geojson"
-
+geojsonApiUrl="http://geojson-api/geojson"
 
 # pipeFile="/tmp/mbtilesPipe/${country}/${id}.cksum"
 
+mkdir -p /tmp/mbtilesPipe
 
 for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
   cksum=$(cat ${idFile})
