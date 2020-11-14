@@ -7,7 +7,7 @@ source /tileserver/tileserver.src
 uuid=$(uuidgen)
 mkdir -p /tmp/mbtiles-country
 # placesApiUrl="https://${DOMAIN_NAME}/places"
-mbtilesCountryApiUrl="https://${DOMAIN_NAME}/mbtiles-country"
+mbtilesCountryApiUrl="http://mbtiles-country-api/mbtiles-country"
 
 ################################
 # Get mbtiles and publish them #

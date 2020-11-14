@@ -64,7 +64,7 @@ RUN mkdir -p /data
 # WORKDIR /data
 
 # setup
-COPY ./Caddyfile /etc/caddy/Caddyfile
+COPY ./Caddyfile /tmp/Caddyfile
 
 RUN mkdir -p /tileserver
 COPY ./tileserver.sh /tileserver/tileserver
@@ -78,8 +78,7 @@ COPY ./tic.sh /usr/bin/tic
 
 WORKDIR /tileserver
 
-ENV SCRIPT_FILENAME /tileserver/tileserver
-ENV DOMAIN_NAME api.openindoor.io
+ENV API_DOMAIN_NAME api.openindoor.io
 
 RUN sed -i "s/-p 80/-p 8080/g" /usr/src/app/run.sh
 

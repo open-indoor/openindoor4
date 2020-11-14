@@ -32,7 +32,7 @@ RUN make \
   && rm -rf /usr/local/src/tippecanoe-${tippecanoeBranch}
 
 # setup
-COPY ./Caddyfile /etc/caddy/Caddyfile
+COPY ./Caddyfile /tmp/Caddyfile
 
 RUN mkdir -p /mbtiles-country
 

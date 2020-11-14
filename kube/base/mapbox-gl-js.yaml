@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: tileserver-api
+  name: mapbox-gl-js
 spec:
   ports:
   - name: http
@@ -9,34 +9,34 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    run: tileserver-api
+    run: mapbox-gl-js
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: tileserver-api
-  name: tileserver-api
+    run: mapbox-gl-js
+  name: mapbox-gl-js
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: tileserver-api
+      run: mapbox-gl-js
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        run: tileserver-api
+        run: mapbox-gl-js
     spec:
       containers:
       - env:
-        - name: API_DOMAIN_NAME
+        - name: APP_DOMAIN_NAME
           valueFrom:
             configMapKeyRef:
               name: openindoor-cm
-              key: apiDomainName
-        image: openindoor/tileserver-api:0.0.0
-        name: tileserver-api
+              key: appDomainName
+        image: openindoor/mapbox-gl-js:0.0.0
+        name: mapbox-gl-js
         ports:
         - containerPort: 80

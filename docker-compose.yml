@@ -99,7 +99,7 @@ services:
     volumes:
     - ./mbtiles-country-api/Caddyfile:/tmp/Caddyfile
     - ./mbtiles-country-api/mbtiles-country-api.sh:/mbtiles-country/mbtiles-api.sh
-    - ./mbtiles-country-api/mbtiles-country.sh:/mbtiles-country/mbtiles
+    - ./mbtiles-country-api/mbtiles-country.sh:/mbtiles-country/mbtiles-country
     - ./mbtiles-country-api/actions.sh:/usr/bin/actions.sh
     environment:
       API_DOMAIN_NAME: ${API_DOMAIN_NAME}

@@ -15,6 +15,8 @@ echo "Start cron task" && crontab -l && /usr/sbin/crond -l 8
 
 cat /usr/bin/action
 
+nohup tic 2>/dev/null 1>/dev/null &
+
 cat /tmp/Caddyfile | envsubst | tee /etc/caddy/Caddyfile
 
 caddy run --watch --config /etc/caddy/Caddyfile

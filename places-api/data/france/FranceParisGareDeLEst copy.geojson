@@ -1,1 +1,0 @@
-{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.35787, 48.87617], [2.3614, 48.87617], [2.3614, 48.87758], [2.35787, 48.87758], [2.35787, 48.87617]]}, "properties": {"id": "FranceParisGareDeLEst", "update": "1m", "country": "France", "town": "Paris", "place": "Gare de l'Est"}}]}

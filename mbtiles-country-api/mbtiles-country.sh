@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# PATH_INFO=status/france API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
-# PATH_INFO=trigger/france API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
-# PATH_INFO=trigger/world API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
-# PATH_INFO=data/france API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
-# PATH_INFO=list/world API_DOMAIN_NAME=api.openindoor.io /mbtiles-country/mbtiles-country
+# PATH_INFO=list/world     /mbtiles-country/mbtiles-country
+# PATH_INFO=status/france  /mbtiles-country/mbtiles-country
+# PATH_INFO=trigger/france /mbtiles-country/mbtiles-country
+# PATH_INFO=trigger/world  /mbtiles-country/mbtiles-country
+# PATH_INFO=data/france    /mbtiles-country/mbtiles-country
 
 # world/list
 # france/status
@@ -18,9 +18,9 @@ format="$(echo ${PATH_INFO} | cut -d'/' -f3)"
 mkdir -p /tmp/mbtiles-country
 
 uuid=$(uuidgen)
-placesApiUrl="https://${API_DOMAIN_NAME}/places"
-mbtilesApiUrl="https://${API_DOMAIN_NAME}/mbtiles"
-mbtilesCountryApiUrl="https://${API_DOMAIN_NAME}/mbtiles-country"
+placesApiUrl="http://places-api/places"
+# mbtilesApiUrl="http://mbtiles-api/mbtiles"
+mbtilesCountryApiUrl="http://mbtiles-countr-api/mbtiles-country"
 BBOXES="/tmp/bboxes_${country}.json"
 mbtilesCountryFile=/tmp/mbtiles-country/${country}.mbtiles
 code=$(curl \
@@ -29,7 +29,7 @@ code=$(curl \
     -o "${BBOXES}" \
     -s \
     -w "%{http_code}" \
-    "${placesApiUrl}/bboxes/${country}")
+    "${placesApiUrl}/data/${country}")
 
 if [ "${code}" -ge "400" ]; then
     echo "HTTP/1.1 404 Not Found"
@@ -101,11 +101,12 @@ case $action in
     mkdir -p /tmp/mbtilesCountryPipe
     while read i; do
       myCountry="$(echo $i | jq -r -c '.country | ascii_downcase | gsub("\\s+";"_")')"
-      curl -k -L "${placesApiUrl}/bboxes/${myCountry}" > /tmp/mbtilesCountryPipe/${myCountry}.json
+      curl -k -L "${placesApiUrl}/data/${myCountry}" > /tmp/mbtilesCountryPipe/${myCountry}.geojson
     done <<< $(echo "${countries}" | jq -c '.[]')
     echo "Content-type: application/json"
     echo ""
     echo '{"api":"mbtiles-country", "countries": '${countries}', "status": "trigger received"}'
+    nohup tic 2>/dev/null 1>/dev/null &
     exit 0
     ;;
   *)

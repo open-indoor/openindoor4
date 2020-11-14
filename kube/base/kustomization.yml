@@ -4,25 +4,25 @@ commonLabels:
   app: openindoor
 images:
   - name: openindoor/osm-api
-    newTag: 1.0.76
+    newTag: 1.0.77
   - name: openindoor/places-api
-    newTag: 0.0.35
+    newTag: 0.0.45
   - name: openindoor/geojson-api
-    newTag: 1.0.49
+    newTag: 1.0.53
   - name: openindoor/mbtiles-api
-    newTag: 1.0.72
+    newTag: 1.0.80
   - name: openindoor/mbtiles-country-api
-    newTag: 1.0.54
+    newTag: 1.0.59
   - name: openindoor/tileserver-api
-    newTag: 1.0.33
+    newTag: 1.0.36
   - name: openindoor/front-api
-    newTag: 1.0.113
+    newTag: 1.0.115
   - name: openindoor/rastertiles-app
     newTag: 1.0.8
   - name: openindoor/fonts-app
     newTag: 1.0.0
   - name: openindoor/style-app
-    newTag: 1.0.118
+    newTag: 1.0.119
   - name: openindoor/mapbox-gl-openindoor
     newTag: 1.0.9
   - name: openindoor/mapbox-gl-js
@@ -30,9 +30,9 @@ images:
   - name: openindoor/sprite-app
     newTag: 1.0.22
   - name: openindoor/map-app
-    newTag: 1.0.72
+    newTag: 1.0.75
   - name: openindoor/front-app
-    newTag: 1.0.12
+    newTag: 1.0.14
 resources:
 - osm-api.yaml
 - places-api.yaml

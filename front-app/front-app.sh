@@ -5,7 +5,9 @@ set -e
 export CADDYPATH=/data/caddy
 export APP_SERVER=${APP_SERVER:-${APP_DOMAIN_NAME}}
 export APP_URL=${APP_URL:-https://${APP_DOMAIN_NAME}}
-export CADDY_TLS=${CADDY_TLS:-"tls contact@openindoor.io {ca ${CERTIFICATE_AUTHORITY}}"}
+export CADDY_TLS=${CADDY_TLS:-'tls contact@openindoor.io {
+    ca ${CERTIFICATE_AUTHORITY}
+}'}
 
 env
 

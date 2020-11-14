@@ -6,7 +6,7 @@
 		reverse_proxy unix//var/run/fcgiwrap.socket {
 			transport fastcgi {
     		    env SCRIPT_FILENAME /tileserver/tileserver
-                env DOMAIN_NAME ${DOMAIN_NAME}
+                env API_DOMAIN_NAME ${API_DOMAIN_NAME}
 		        split ""
 			}
 		}

@@ -26,13 +26,26 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
     rm -rf ${idFile}
     continue
   fi
+  # curl -k -L \
+  #   -o "${geojsonFile}" \
+  #   "${geojsonApiUrl}/data/${country}/${id}" \
+  # && ogr2ogr -f MBTILES "${mbtilesFileTmp}" \
+  #   "${geojsonFile}" \
+  #   -dsco MAXZOOM=20 \
+  #   -lco ENCODING=UTF-8 \
+  #   -nln "osm-indoor" \
+  # && mv "${mbtilesFileTmp}" "${mbtilesFile}" \
+  # && rm -rf "${geojsonFile}" \
+  # && find $(dirname "${mbtilesFile}") -name $(basename ${mbtilesFile}) -size 16384c | xargs rm -rf
+
+# ogr2ogr -f MBTILES /tmp/FranceToulouseUniversiteToulouseJeanJaures_9926d8bf-ee4d-40d6-beb1-c8a645ba9014_tmp.mbtiles /tmp/FranceToulouseUniversiteToulouseJeanJaures_9926d8bf-ee4d-40d6-beb1-c8a645ba9014_tmp.geojson -dsco MAXZOOM=20 -lco ENCODING=UTF-8 -nln osm-indoor
   curl -k -L \
     -o "${geojsonFile}" \
     "${geojsonApiUrl}/data/${country}/${id}" \
-  && ogr2ogr -f MBTILES "${mbtilesFileTmp}" \
+  && tippecanoe \
+    --output="${mbtilesFileTmp}" \
+    --layer="osm-indoor" \
     "${geojsonFile}" \
-    -dsco MAXZOOM=20 \
-    -nln "osm-indoor" \
   && mv "${mbtilesFileTmp}" "${mbtilesFile}" \
   && rm -rf "${geojsonFile}" \
   && find $(dirname "${mbtilesFile}") -name $(basename ${mbtilesFile}) -size 16384c | xargs rm -rf

@@ -2,6 +2,7 @@
 
 export CADDYPATH=/data/caddy
 export APP_URL=${APP_URL:-"https://${APP_DOMAIN_NAME}"}
+export API_URL=${API_URL:-"https://${API_DOMAIN_NAME}"}
 env
 cp -r /map-app/www /data/
 

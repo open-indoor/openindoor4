@@ -6,15 +6,16 @@ source /mbtiles-country/mbtiles-country.src
 
 uuid=$(uuidgen)
 mkdir -p /tmp/mbtiles
-mbtilesApiUrl="https://${API_DOMAIN_NAME}/mbtiles"
-for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
-  bboxes=$(cat ${countryBboxesFile})
+mbtilesApiUrl="http://mbtiles-api/mbtiles"
+allComplete=true
+for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.geojson"); do
+  bounds=$(cat ${countryBboxesFile})
   filename="$(basename ${countryBboxesFile})"
   country="${filename%.*}"
   complete=true
 
   while read i; do
-    id=$(echo $i | jq -r -c '.id')
+    id=$(echo $i | jq -r -c '.properties.id')  
 
     # cksum=$(echo $i | jq -r -c '.cksum')
     # https://api.openindoor.io/osm/france/FranceParisGareDeLEst.cksum
@@ -25,6 +26,7 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
 
     if ! [ -f "${mbtilesFile}" ]; then
       complete=false
+      allComplete=false
       status=$(curl -k -L "${mbtilesApiUrl}/status/${country}/${id}" | jq -r -c ".status")
       if [ "${status}" != "ready" ]; then
       # mbtiles not ready => Trigger mbtiles build
@@ -48,7 +50,7 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
 
       fi
     fi
-  done <<<$(echo "${bboxes}" | jq -c '.[]')
+  done <<<$(echo "${bounds}" | jq -c '.features[]')
   if [ "X${complete}" = "Xtrue" ]; then
       rm -rf ${countryBboxesFile}
   fi
@@ -69,5 +71,7 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.json"); do
       /tmp/${country}_${uuid}.mbtiles \
       /tmp/mbtiles-country/${country}.mbtiles \
     && echo -n "$cksum" > /tmp/mbtiles-country/${country}.cksum
-  fi  
+  fi
 done
+
+

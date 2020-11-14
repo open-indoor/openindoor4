@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# PATH_INFO=status/france/FranceParisGareDeLEst DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
-# PATH_INFO=data/france/FranceParisGareDeLEst DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
-# PATH_INFO=trigger/france/FranceParisGareDeLEst DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
-# PATH_INFO=pins/france DOMAIN_NAME=api.openindoor.io /mbtiles/mbtiles
+# PATH_INFO=status/france/FranceParisGareDeLEst /mbtiles/mbtiles
+# PATH_INFO=trigger/france/FranceParisGareDeLEst /mbtiles/mbtiles
+# PATH_INFO=data/france/FranceParisGareDeLEst /mbtiles/mbtiles
+# PATH_INFO=pins/france /mbtiles/mbtiles
 
 # /mbtiles/status/france/FranceParisGareDeLEst
 # /mbtiles/trigger/france/FranceParisGareDeLEst
@@ -55,8 +55,8 @@ case ${action} in
 esac 
 
 cksumFile="/tmp/${id}.cksum"
-mbtilesApiUrl="https://${DOMAIN_NAME}/mbtiles"
-osmApiUrl="https://${DOMAIN_NAME}/osm"
+mbtilesApiUrl="${API_URL}/mbtiles"
+osmApiUrl="http://osm-api/osm"
 codeLastCksum=$(curl \
   -k \
   -L \
@@ -96,9 +96,9 @@ case $action in
     ;;
   status)
     if [ -f "${mbtilesFile}" ]; then
-      reply='{"id":"'${id}'", "status": "ready", "url": "'${mbtilesApiUrl}/data/${country}/${id}'"}'
+      reply='{"id":"'${id}'", "status": "ready", "cksum": "'${cksum}'", "url": "'${mbtilesApiUrl}/data/${country}/${id}'"}'
     elif [ -f "${pipeFile}" ]; then
-      reply='{"id":"'${id}'", "status": "in progress"}'
+      reply='{"id":"'${id}'", "status": "in progress", "cksum": "'${cksum}'"}'
     else
       reply='{"id":"'${id}'", "status": "not found"}'
     fi
@@ -114,6 +114,7 @@ case $action in
     echo "Content-type: application/json"
     echo ""
     echo "${reply}"
+    nohup tic 2>/dev/null 1>/dev/null &
     exit 0
     ;;
   *)
