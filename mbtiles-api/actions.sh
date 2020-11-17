@@ -45,6 +45,13 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
   && tippecanoe \
     --output="${mbtilesFileTmp}" \
     --layer="osm-indoor" \
+    --drop-rate=1 \
+    --no-feature-limit \
+    --no-tile-size-limit \
+    --use-source-polygon-winding \
+    --minimum-zoom=13 \
+    --maximum-zoom 20 \
+    --generate-ids \
     "${geojsonFile}" \
   && mv "${mbtilesFileTmp}" "${mbtilesFile}" \
   && rm -rf "${geojsonFile}" \

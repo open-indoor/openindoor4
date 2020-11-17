@@ -27,4 +27,9 @@ sub vcl_recv {
     # send all traffic to the bar director:
     set req.backend_hint = bar.backend();
     set req.http.user-agent = "${API_DOMAIN_NAME} 4.0.0 contact contact@openindoor.io";
+    set req.http.X-Saved-Origin = req.http.Origin;
+    unset req.http.Origin;
 }
+
+
+  

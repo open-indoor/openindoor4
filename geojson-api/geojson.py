@@ -71,7 +71,7 @@ os.system('osmtogeojson -m ' + osmFile + ' > ' + geojsonFileTmp)
 with open(geojsonFileTmp) as json_file:
     geojson = json.load(json_file)
     regMulti = re.compile(r'^(-?\d+\.?\d*).*;(-?\d+\.?\d*)$')
-    regMinus = re.compile(r'^(-?\d+\.?\d*).*;(-?\d+\.?\d*)$')
+    regMinus = re.compile(r'^(-?\d+\.?\d*)-(-?\d+\.?\d*)$')
     for feature in geojson['features']:
         if (('properties' in feature) and ('level' in feature['properties'])):
             level = feature['properties']['level']

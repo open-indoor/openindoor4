@@ -72,7 +72,7 @@
     // default
     var map = new mapboxgl.Map({
       container: 'map',
-      style: ("/style/openindoorStyle_" + country + ".json"),
+      style: ("${APP_URL}/style/openindoorStyle_" + country + ".json"),
       center: center,
       pitch: pitch,
       maxPitch: 65,
@@ -90,7 +90,7 @@
       let bearing = map.getBearing();
       let pitch = map.getPitch();
       let level = (typeof openIndoor !== 'undefined') ? openIndoor.level : "0";
-      console.log("level 02:", level);
+      // console.log("level 02:", level);
       window.location.hash =
         'map='
         + map.getZoom().toFixed(2)

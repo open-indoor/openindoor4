@@ -160,7 +160,7 @@ export default class OpenIndoor {
 
   _updateFilters() {
     this.layers.forEach((layer) => {
-      console.log("this.level 02:", this.level);
+      // console.log("this.level 02:", this.level);
       let levelFilter = [
         "all",
         [
@@ -226,7 +226,7 @@ export default class OpenIndoor {
           ]
         ]
       ];
-      console.log("layer.filter:", layer.filter);
+      // console.log("layer.filter:", layer.filter);
       let combinedFilter = ["all", layer.filter, levelFilter];
       this.map.setFilter(
         layer.id,

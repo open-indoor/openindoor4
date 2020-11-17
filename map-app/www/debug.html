@@ -8,15 +8,15 @@
   <script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
   <!-- <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
-  <script src="https://app-local.openindoor.io/mapbox-gl-js/dist/mapbox-gl.js"></script>
-  <link href="https://app-local.openindoor.io/mapbox-gl-js/dist/mapbox-gl.css" rel="stylesheet" />
-  <script src="https://app-local.openindoor.io/mapbox-gl-openindoor/dist/mapbox-gl-openindoor.umd.min.js"></script>
-  <link href="https://app-local.openindoor.io/mapbox-gl-openindoor/dist/mapbox-gl-openindoor.css" rel="stylesheet" />
-  <script
+  <script src="${APP_URL}/mapbox-gl-js/dist/mapbox-gl.js"></script>
+  <link href="${APP_URL}/mapbox-gl-js/dist/mapbox-gl.css" rel="stylesheet" />
+  <script src="${APP_URL}/mapbox-gl-openindoor/dist/mapbox-gl-openindoor.umd.min.js"></script>
+  <link href="${APP_URL}/mapbox-gl-openindoor/dist/mapbox-gl-openindoor.css" rel="stylesheet" />
+  <!-- <script
     src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
     <link rel="stylesheet"
     href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
-    type="text/css" />
+    type="text/css" /> -->
     <link rel="stylesheet" href="style.css" type="text/css" />
 
 </head>
@@ -91,7 +91,7 @@
       style: ("/style/openindoorStyle_" + country + ".json"),
       center: center,
       pitch: pitch,
-      maxPitch: 60,
+      maxPitch: 65,
       // maxBounds: geoMaxBounds,
       bearing: bearing,
       zoom: zoom,
@@ -135,7 +135,7 @@
       let bearing = map.getBearing();
       let pitch = map.getPitch();
       let level = (typeof openIndoor !== 'undefined') ? openIndoor.level : "0";
-      console.log("level 02:", level);
+      // console.log("level 02:", level);
       window.location.hash =
         'map='
         + map.getZoom().toFixed(2)
@@ -149,7 +149,7 @@
     map.on('load', () => {
 
       map.loadImage(
-        'https://app-local.openindoor.io/custom_marker.png',
+        "${APP_URL}/custom_marker.png",
         function (error, image) {
           if (error) throw error;
           map.addImage('custom-marker', image);
@@ -157,7 +157,7 @@
 
           map.addSource("pins", {
             "type": "geojson",
-            "data": "https://api.openindoor.io/places/pins/" + country + "/pins.json"
+            "data": "${API_URL}/places/pins/" + country + "/pins.geojson"
           });
           map.addLayer({
             'id': 'pins',
@@ -178,7 +178,7 @@
       )
 
       map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-      fetch("https://app-local.openindoor.io/style/indoor/indoorLayers.json")
+      fetch("${APP_URL}/style/indoor/indoorLayers.json")
         .then(response => response.json())
         .then(
           function (response) {
@@ -193,7 +193,7 @@
                 sourceId: INDOOR_SOURCE_ID,
                 // source: {
                 //   'type': 'vector',
-                //   'url': "https://api-local.openindoor.io/tileserver/data/" + country + '.json'
+                //   'url': "${API_URL}/tileserver/data/" + country + '.json'
                 // },
                 // source: {
                 //   'type': 'geojson',

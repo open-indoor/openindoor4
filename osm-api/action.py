@@ -14,7 +14,6 @@ import shutil
 
 # You must initialize logging, otherwise you'll not see debug output.
 
-apiUrl = os.environ['API_URL']
 placesApiUrl='http://places-api/places'  
 
 BBOXES_GEOJSON = "/data/osm/bboxes.geojson"

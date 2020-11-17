@@ -20,6 +20,8 @@
     }
 
     handle /sprite/* {
+     	header Access-Control-Allow-Origin *
+    	header Access-Control-Request-Method GET
         uri strip_prefix /sprite
     	reverse_proxy http://sprite-app:80
     }
@@ -30,10 +32,14 @@
     }
 
     handle /fonts/* {
+     	header Access-Control-Allow-Origin *
+    	header Access-Control-Request-Method GET
     	reverse_proxy http://fonts-app:80
     }
 
     handle /style/* {
+     	header Access-Control-Allow-Origin *
+    	header Access-Control-Request-Method GET
     	reverse_proxy http://style-app:80
     }
 
