@@ -2,8 +2,6 @@
 set -x
 set -e
 
-export GEOJSON_API_LOCAL_PORT=${GEOJSON_API_LOCAL_PORT:-80}
-
 cat /tmp/Caddyfile_template | envsubst > /etc/caddy/Caddyfile
 cat /etc/caddy/Caddyfile
 

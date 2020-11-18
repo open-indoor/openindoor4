@@ -41,7 +41,7 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
 # ogr2ogr -f MBTILES /tmp/FranceToulouseUniversiteToulouseJeanJaures_9926d8bf-ee4d-40d6-beb1-c8a645ba9014_tmp.mbtiles /tmp/FranceToulouseUniversiteToulouseJeanJaures_9926d8bf-ee4d-40d6-beb1-c8a645ba9014_tmp.geojson -dsco MAXZOOM=20 -lco ENCODING=UTF-8 -nln osm-indoor
   curl -k -L \
     -o "${geojsonFile}" \
-    "${geojsonApiUrl}/data/${country}/${id}" \
+    "http://geojson-api/geojson/data/${country}/${id}" \
   && tippecanoe \
     --output="${mbtilesFileTmp}" \
     --layer="osm-indoor" \

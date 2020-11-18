@@ -11,8 +11,8 @@ export CADDY_TLS=${CADDY_TLS:-'tls contact@openindoor.io {
 
 env
 
-# cat /tmp/Caddyfile | envsubst | tee /etc/caddy/Caddyfile
-cat /tmp/Caddyfile | tee /etc/caddy/Caddyfile
+cat  /etc/caddy/Caddyfile
+
 mkdir -p /data/www
 cat /tmp/index.html | envsubst | tee /data/www/index.html
 

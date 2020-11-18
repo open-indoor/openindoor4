@@ -1,4 +1,4 @@
-:${GEOJSON_API_LOCAL_PORT}  {
+:80 {
 
     log {
         level DEBUG
@@ -18,7 +18,7 @@
 			transport fastcgi {
 		        split "/geojson/"
                 env API geojson-api
-                env API_DOMAIN_NAME ${API_DOMAIN_NAME}
+                env API_DOMAIN_NAME {$API_DOMAIN_NAME}
 			}
 		}
     }

@@ -6,6 +6,7 @@
 # PATH_INFO="data/france/FranceRennesCampusDeVillejean" /geojson/geojson
 # PATH_INFO="data/costa_rica/CostaRicaSanJoseStarbucks" /geojson/geojson
 # PATH_INFO="data/united_states/UnitedStatesLosAngelesUnionStation" /geojson/geojson
+# PATH_INFO="data/germany/GermanyKarlsruheEngesser" /geojson/geojson
 
 import os
 import uuid
