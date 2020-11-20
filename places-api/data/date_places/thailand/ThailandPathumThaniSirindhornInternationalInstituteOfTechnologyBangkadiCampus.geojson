@@ -1,0 +1,65 @@
+{
+    "type": "FeatureCollection",
+    "generator": "JOSM",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "ThailandPathumThaniSirindhornInternationalInstituteOfTechnologyBangkadiCampus",
+                "update": "0",
+                "country": "Thailand",
+                "town": "Pathum Thani",
+                "place": "Sirindhorn International Institute of Technology, Bangkadi Campus"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        100.55424512104,
+                        13.98099875542
+                    ],
+                    [
+                        100.55493738924,
+                        13.98099875542
+                    ],
+                    [
+                        100.55497453533,
+                        13.98054982244
+                    ],
+                    [
+                        100.55511298897,
+                        13.98054654556
+                    ],
+                    [
+                        100.55510285822,
+                        13.98003862762
+                    ],
+                    [
+                        100.55476854333,
+                        13.98004190451
+                    ],
+                    [
+                        100.55477867409,
+                        13.98049083848
+                    ],
+                    [
+                        100.55486647396,
+                        13.98049083848
+                    ],
+                    [
+                        100.55488673547,
+                        13.98074643554
+                    ],
+                    [
+                        100.55426875947,
+                        13.98074315865
+                    ],
+                    [
+                        100.55424512104,
+                        13.98099875542
+                    ]
+                ]
+            }
+        }
+    ]
+}

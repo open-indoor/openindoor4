@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.3517, 48.85819], [2.35335, 48.85819], [2.35335, 48.86253], [2.3517, 48.86253], [2.3517, 48.85819]]}, "properties": {"id": "FranceParisBeaubourg", "update": "1m", "country": "France", "town": "Paris", "place": "Beaubourg"}}]}
