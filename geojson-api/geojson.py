@@ -22,8 +22,52 @@ addr = os.environ['PATH_INFO'].split('/')
 apiDomainName = os.environ['API_DOMAIN_NAME']
 action = addr[0]
 country = addr[1]
-myId = addr[2].replace('.geojson', '')
+place = addr[2].replace('.geojson', '')
+
 myUuid = uuid.uuid1()
+
+def getChecksum(country, place):
+    with open(osmFile, 'wb') as file:
+        url = 'http://osm-api' + '/osm/' + country + '/' + myId + '.cksum'
+        crl = pycurl.Curl()
+        crl.setopt(crl.URL, url)
+        crl.setopt(crl.WRITEDATA, file)
+        crl.perform()
+        if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
+            print('HTTP/1.1 404 Not Found')
+            print('Content-type: application/json')
+            print('')
+            print('{"country": "' + country + '", "id": "' + place + '", "checksum": 0}')
+            exit(0)
+        crl.close()
+
+def getBounds(country, place):
+    
+# get checksum (if mandatory) => function
+# get place in geojson (if mandatory) => function
+
+geojsonFile = '/tmp/geojson/' + country + '/' + place + '_' + cksum + '.geojson'
+geojsonFilePipe = '/tmp/geojsonPipe/' + country + '/' + place + '.geojson'
+if (action == 'status'):
+    # {"id":"FranceParisGareDeLEst", "status": "not found"}
+    # Check if file exists locally
+    status = 'not found'
+    if os.path.isfile(geojsonFile):
+        status = 'ready'
+    elif os.path.isfile(geojsonFilePipe)
+        status = 'in progress'
+    else
+        status = 'not found'
+    print('Content-type: application/json')
+    print('')
+    print('{"id":"' + place + '", "status": "' + status + '"}')
+    exit(0)
+elif (action == 'trigger'):
+
+
+myId = addr[2].replace('.geojson', '')
+
+
 
 geojsonFileTmp = '/tmp/' + country + '_' + \
     myId + '_' + str(myUuid) + '.geojson'
@@ -31,9 +75,9 @@ placeFile = '/tmp/' + country + '_' + myId + \
     '_' + str(myUuid) + '_bounds.geojson'
 
 osmFile = '/tmp/' + myId + '_' + str(myUuid) + '.osm'
-osmApiUrl = 'http://osm-api/osm'
-placesApiUrl = 'http://places-api/places'
 
+
+if act
 with open(osmFile, 'wb') as file:
     url = osmApiUrl + '/' + country + '/' + myId + '.osm'
     # print('url: ' + url)
