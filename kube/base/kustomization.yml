@@ -6,17 +6,17 @@ images:
   - name: openindoor/osm-api
     newTag: 1.0.78
   - name: openindoor/places-api
-    newTag: 0.0.46
+    newTag: 0.0.53
   - name: openindoor/geojson-api
-    newTag: 1.0.55
+    newTag: 1.0.67
   - name: openindoor/mbtiles-api
-    newTag: 1.0.83
+    newTag: 1.0.85
   - name: openindoor/mbtiles-country-api
     newTag: 1.0.59
   - name: openindoor/tileserver-api
     newTag: 1.0.36
   - name: openindoor/front-api
-    newTag: 1.0.118
+    newTag: 1.0.119
   - name: openindoor/rastertiles-app
     newTag: 1.0.10
   - name: openindoor/fonts-app

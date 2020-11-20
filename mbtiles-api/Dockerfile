@@ -46,7 +46,7 @@ CMD ["/mbtiles/mbtiles-api.sh"]
 
 COPY ./mbtiles-api.sh /mbtiles/mbtiles-api.sh
 COPY ./mbtiles.sh /mbtiles/mbtiles
-COPY ./actions.sh /usr/bin/actions.sh
+COPY ./action.sh /usr/bin/action
 RUN  chmod +x /mbtiles/mbtiles-api.sh
 COPY ./tic.sh /usr/bin/tic
 
