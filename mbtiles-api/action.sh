@@ -44,7 +44,7 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
     -s -w "%{http_code}" \
     -o "${geojsonFile}" \
     "http://geojson-api/geojson/data/${country}/${id}.geojson")
-  if [ "$?" -ne "0" ] && [ "${codePins}" -ge "400" ]; then
+  if [ "${codePins}" -ge "400" ]; then
       echo "geosjon not yet available: http://geojson-api/geojson/data/${country}/${id}.geojson"
       curl -k -L \
         -s -w "%{http_code}" \

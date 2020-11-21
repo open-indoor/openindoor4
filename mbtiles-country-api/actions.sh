@@ -19,7 +19,7 @@ for countryBboxesFile in $(find /tmp/mbtilesCountryPipe -name "*.geojson"); do
 
     # cksum=$(echo $i | jq -r -c '.cksum')
     # https://api.openindoor.io/osm/france/FranceParisGareDeLEst.cksum
-    cksum=$(curl -k -L "https://api.openindoor.io/osm/${country}/${id}.cksum")
+    cksum=$(curl -k -L "http://osm-api/osm/${country}/${id}.cksum")
 
     mbtilesFile=/tmp/mbtiles/${country}/${id}_${cksum}.mbtiles
     mkdir -p $(dirname "${mbtilesFile}")

@@ -58,7 +58,7 @@ def getOsm(country, place, myUuid):
     return osmFile
 
 def osmToGeojson(osmFile, geojsonFile):
-    cmd = 'osmtogeojson -m ' + osmFile + ' > ' + geojsonFile
+    cmd = ('osmtogeojson -m ' + osmFile + ' > ' + geojsonFile)
     print('start cmd: ' + cmd)
     os.system(cmd)
     print('cmd done.')
@@ -68,6 +68,7 @@ def osmToGeojson(osmFile, geojsonFile):
         regMulti = re.compile(r'^(-?\d+\.?\d*).*;(-?\d+\.?\d*)$')
         regMinus = re.compile(r'^(-?\d+\.?\d*)-(-?\d+\.?\d*)$')
         for feature in geojson['features']:
+            del feature['id']
             if (('properties' in feature) and ('level' in feature['properties'])):
                 level = feature['properties']['level']
                 level = regMulti.sub(r'\1;\2', level)

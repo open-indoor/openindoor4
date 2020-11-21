@@ -234,15 +234,14 @@ elif (action == 'pins'):
             if urlExists('http://geojson-api/geojson/data/' + country + '/' + myId + '.geojson'):
                 print('<a href="/geojson/data/' + country + '/' + myId + '.geojson">download</a>')
             else:
-                print('Not found')
+                print('<button onclick="fetch(\'/geojson/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
             print('<td>')
             print('<a href="/mbtiles/status/' + country +
                   '/' + myId + '">' + statusText + '</a>')
             print('</td>')
             print('<td>')
-            print('<button onclick="fetch(\'/mbtiles/trigger/' +
-                  country + '/' + myId + '\')">trigger</button>')
+            print('<button onclick="fetch(\'/mbtiles/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
             print('<td>')
             if status == "ready":

@@ -22,8 +22,8 @@ RUN apk add --update-cache \
 
 # Install tippecanoe
 ARG tippecanoeBranch=1.36.0
-# ADD https://github.com/mapbox/tippecanoe/archive/${tippecanoeBranch}.tar.gz /usr/local/src/tippecanoe-${tippecanoeBranch}.tar.gz
-copy ./tippecanoe-${tippecanoeBranch}.tar.gz /usr/local/src/tippecanoe-${tippecanoeBranch}.tar.gz
+ADD https://github.com/mapbox/tippecanoe/archive/${tippecanoeBranch}.tar.gz /usr/local/src/tippecanoe-${tippecanoeBranch}.tar.gz
+# copy ./tippecanoe-${tippecanoeBranch}.tar.gz /usr/local/src/tippecanoe-${tippecanoeBranch}.tar.gz
 WORKDIR /usr/local/src/
 RUN tar xvfz tippecanoe-${tippecanoeBranch}.tar.gz
 WORKDIR /usr/local/src/tippecanoe-${tippecanoeBranch}

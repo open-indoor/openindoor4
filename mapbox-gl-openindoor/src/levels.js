@@ -1,5 +1,4 @@
 export default function findAllLevels(features) {
-  console.log('############### findAllLevels ##############')
   const levels = [];
   for (let i = 0; i < features.length; i++) {
     const feature = features[i];
@@ -23,8 +22,5 @@ export default function findAllLevels(features) {
       }
     }
   }
-  result = levels.sort((a, b) => a - b).reverse();
-  console.log('result:', result)
-  console.log('############### findAllLevels - end ########')
-  return result;
+  return levels.sort((a, b) => a - b).reverse();
 }

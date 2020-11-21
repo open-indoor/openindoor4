@@ -90,6 +90,8 @@ elif (action == 'trigger'):
     print('Content-type: application/json')
     print('')
     print('{"id":"' + place + '", "status": "in progress"}')
+    cmd = 'nohup tic 2>/dev/null 1>/dev/null &'
+    os.system(cmd)
     exit(0)
 elif (action == 'data'):
     myGeojsonFile = geojsonFile(country, place)
