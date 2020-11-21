@@ -48,5 +48,5 @@ EXPOSE 80
 COPY ./mbtiles-country-api.sh /mbtiles-country/mbtiles-country-api.sh
 RUN chmod +x /mbtiles-country/mbtiles-country-api.sh
 COPY ./mbtiles-country.sh /mbtiles-country/mbtiles-country
-COPY ./actions.sh /usr/bin/actions.sh
+COPY ./action.sh /usr/bin/action
 COPY ./tic.sh /usr/bin/tic

@@ -8,16 +8,16 @@ API_URL="${API_URL}"
 EOF
 
 chmod +x /mbtiles-country/mbtiles-country
-chmod +x /usr/bin/actions.sh
+chmod +x /usr/bin/action
 chmod +x /usr/bin/tic
 
-crontab -l | { cat; echo "* * * * * /usr/bin/tic"; } | crontab -
+crontab -l | { cat; echo "* * * * * /usr/bin/tic >/dev/stdout 2>/dev/stderr"; } | crontab -
 crontab -l | { cat; echo "45 6 * * * /usr/bin/curl https://mbtiles-country-api/mbtiles-country/trigger/world"; } | crontab -
 
 echo "Start cron task" && crontab -l && /usrn/sbin/crond -l 8
 
 cat /usr/bin/tic
-cat /usr/bin/actions.sh
+cat /usr/bin/action
 
 cat /tmp/Caddyfile | envsubst | tee /etc/caddy/Caddyfile
 
