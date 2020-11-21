@@ -24,13 +24,13 @@ images:
   - name: openindoor/style-app
     newTag: 1.0.131
   - name: openindoor/mapbox-gl-openindoor
-    newTag: 2.0.1
+    newTag: 2.0.2
   - name: openindoor/mapbox-gl-js
     newTag: 0.0.3
   - name: openindoor/sprite-app
     newTag: 1.0.22
   - name: openindoor/map-app
-    newTag: 2.0.2
+    newTag: 2.0.3
   - name: openindoor/front-app
     newTag: 1.0.19
 resources:

@@ -92,7 +92,8 @@
       } else {
         if (map.getPitch() > maxPitchLow) {
           map.flyTo({
-            pitch: maxPitchLow
+            pitch: maxPitchLow,
+            center: map.getCenter()
           });
         }
         // map.setMaxPitch(maxPitchLow)
