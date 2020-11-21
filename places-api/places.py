@@ -107,6 +107,23 @@ if (action == 'checksum'):
     print('')
     print(checksum)
     exit(0)
+# elif (action == 'wp' ):
+#     print('<!-- wp:table -->')
+#     # Open table
+#     print('<table class="wp-block-table"><tbody><tr><td>Place</td></tr>')
+#     # Country
+#     print('<tr><td style="text-align:center"><b>')
+#     print(Country)
+#     print('</b></td></tr>')
+#     # Places
+#     print('<tr><td><a href="')
+#     print(url)
+#     print('">')
+#     print(place)
+#     print('</a></td></tr>')
+#     # Close table
+#     print('</tbody></table>')
+#     print('<!-- /wp:table -->')
 elif (action == 'pins'):
     # pinsCache = '/tmp/places/' + country + \
     #     '_pins_' + str(checksum) + '.geojson'
