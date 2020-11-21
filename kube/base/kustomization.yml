@@ -8,7 +8,7 @@ images:
   - name: openindoor/places-api
     newTag: 0.0.53
   - name: openindoor/geojson-api
-    newTag: 1.0.67
+    newTag: 1.0.68
   - name: openindoor/mbtiles-api
     newTag: 1.0.85
   - name: openindoor/mbtiles-country-api
@@ -30,7 +30,7 @@ images:
   - name: openindoor/sprite-app
     newTag: 1.0.22
   - name: openindoor/map-app
-    newTag: 1.0.81
+    newTag: 1.0.83
   - name: openindoor/front-app
     newTag: 1.0.19
 resources:
