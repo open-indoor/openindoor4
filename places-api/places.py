@@ -214,8 +214,10 @@ elif (action == 'pins'):
                 print('Not found')
             print('</td>')
             print('<td>')
-            print('<a href="/geojson/data/' +
-                  country + '/' + myId + '.geojson">geojson</a>')
+            if urlExists('http://geojson-api/geojson/data/' + country + '/' + myId + '.geojson'):
+                print('<a href="/geojson/data/' + country + '/' + myId + '.geojson">download</a>')
+            else:
+                print('Not found')
             print('</td>')
             print('<td>')
             print('<a href="/mbtiles/status/' + country +

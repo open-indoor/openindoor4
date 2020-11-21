@@ -47,12 +47,11 @@ def getChecksum(country, place):
         exit(0)
     crl.close()
     body = buffer.getvalue()
-    return body.decode('utf-8')
+    result = body.decode('utf-8').rstrip('\n')
+    return result
 
 def queue(country, place):
     jsonPipe = geojsonFilePipe(country, place)
-    print('jsonPipe:' + jsonPipe)
-    print('os.path.dirname(jsonPipe):' + os.path.basename(jsonPipe))
     pathlib.Path(os.path.dirname(jsonPipe)).mkdir(parents=True, exist_ok=True)
     with open(jsonPipe, 'wb') as file:
         # https://api-gke.openindoor.io/places/data/france/FranceParisGareDeLEst
@@ -69,12 +68,13 @@ def queue(country, place):
             exit(0)
         crl.close()
 
-cksum = getChecksum(country, place)
-geojsonFile = '/tmp/geojson/' + country + '/' + place + '_' + cksum + '.geojson'
+def geojsonFile(country, place):
+    cksum = getChecksum(country, place)
+    return '/tmp/geojson/' + country + '/' + place + '_' + cksum + '.geojson'
 
-if (action == 'status'):
+def status(country, place):
     status = 'not found'
-    if os.path.isfile(geojsonFile):
+    if os.path.isfile(geojsonFile(country, place)):
         status = 'ready'
     elif os.path.isfile(geojsonFilePipe(country, place)):
         status = 'in progress'
@@ -82,6 +82,9 @@ if (action == 'status'):
     print('')
     print('{"id":"' + place + '", "format": "geojson", "status": "' + status + '"}')
     exit(0)
+
+if (action == 'status'):
+    status(country, place)
 elif (action == 'trigger'):
     queue(country, place)
     print('Content-type: application/json')
@@ -89,9 +92,13 @@ elif (action == 'trigger'):
     print('{"id":"' + place + '", "status": "in progress"}')
     exit(0)
 elif (action == 'data'):
-    if os.path.isfile(geojsonFile):
+    myGeojsonFile = geojsonFile(country, place)
+    if os.path.isfile(myGeojsonFile):
         print('Content-type: application/json')
         print('')
-        with open(geojsonFile) as json_file:
-            print(json_file)
+        with open(myGeojsonFile) as json_file:
+            print(json_file.readlines())
         exit(0)
+    else:
+        print('HTTP/1.1 404 Not Found')
+        status(country, place)
