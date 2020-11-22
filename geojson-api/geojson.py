@@ -2,6 +2,8 @@
 
 # set -x
 # set -e
+# PATH_INFO="status/germany/GermanyKarlsruheEngesser" /geojson/geojson
+# PATH_INFO="trigger/germany/GermanyKarlsruheEngesser" /geojson/geojson
 # PATH_INFO="data/france/FranceParisGareDeLEst" /geojson/geojson
 # PATH_INFO="data/france/FranceRennesCampusDeVillejean" /geojson/geojson
 # PATH_INFO="data/costa_rica/CostaRicaSanJoseStarbucks" /geojson/geojson
@@ -17,85 +19,88 @@ import re
 import json
 import geopandas
 import io
+import pathlib
 
 addr = os.environ['PATH_INFO'].split('/')
 apiDomainName = os.environ['API_DOMAIN_NAME']
 action = addr[0]
 country = addr[1]
-myId = addr[2].replace('.geojson', '')
+place = addr[2].replace('.geojson', '')
+
 myUuid = uuid.uuid1()
 
-geojsonFileTmp = '/tmp/' + country + '_' + \
-    myId + '_' + str(myUuid) + '.geojson'
-placeFile = '/tmp/' + country + '_' + myId + \
-    '_' + str(myUuid) + '_bounds.geojson'
+def geojsonFilePipe(country, place):
+    return '/tmp/geojsonPipe/' + country + '/' + place + '_bounds.geojson'
 
-osmFile = '/tmp/' + myId + '_' + str(myUuid) + '.osm'
-osmApiUrl = 'http://osm-api/osm'
-placesApiUrl = 'http://places-api/places'
-
-with open(osmFile, 'wb') as file:
-    url = osmApiUrl + '/' + country + '/' + myId + '.osm'
-    # print('url: ' + url)
+def getChecksum(country, place):
+    buffer = io.BytesIO()
+    url = 'http://osm-api/osm/' + country + '/' + place + '.cksum'
     crl = pycurl.Curl()
     crl.setopt(crl.URL, url)
-    crl.setopt(crl.WRITEDATA, file)
+    crl.setopt(crl.WRITEDATA, buffer)
     crl.perform()
     if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
         print('HTTP/1.1 404 Not Found')
         print('Content-type: application/json')
         print('')
+        print('{"country": "' + country + '", "id": "' + place + '", "message": "checksum unavailable"}')
         exit(0)
     crl.close()
+    body = buffer.getvalue()
+    result = body.decode('utf-8').rstrip('\n')
+    return result
 
-# http://api-local.openindoor.io/places/data/france/FranceParisGareDeLEst
-with open(placeFile, 'wb') as file:
-    url = placesApiUrl + '/data/' + country + '/' + myId
-    # print('url: ' + url)
-    crl = pycurl.Curl()
-    crl.setopt(crl.URL, url)
-    crl.setopt(crl.WRITEDATA, file)
-    crl.perform()
-    if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
-        print('HTTP/1.1 404 Not Found')
+def queue(country, place):
+    jsonPipe = geojsonFilePipe(country, place)
+    pathlib.Path(os.path.dirname(jsonPipe)).mkdir(parents=True, exist_ok=True)
+    with open(jsonPipe, 'wb') as file:
+        # https://api-gke.openindoor.io/places/data/france/FranceParisGareDeLEst
+        url = 'http://places-api/places/data/' + country + '/' + place
+        crl = pycurl.Curl()
+        crl.setopt(crl.URL, url)
+        crl.setopt(crl.WRITEDATA, file)
+        crl.perform()
+        if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
+            print('HTTP/1.1 404 Not Found')
+            print('Content-type: application/json')
+            print('')
+            print('{"country": "' + country + '", "id": "' + place + '", "message": "checksum unavailable"}')
+            exit(0)
+        crl.close()
+
+def geojsonFile(country, place):
+    cksum = getChecksum(country, place)
+    return '/tmp/geojson/' + country + '/' + place + '_' + cksum + '.geojson'
+
+def status(country, place):
+    status = 'not found'
+    if os.path.isfile(geojsonFile(country, place)):
+        status = 'ready'
+    elif os.path.isfile(geojsonFilePipe(country, place)):
+        status = 'in progress'
+    print('Content-type: application/json')
+    print('')
+    print('{"id":"' + place + '", "format": "geojson", "status": "' + status + '"}')
+    exit(0)
+
+if (action == 'status'):
+    status(country, place)
+elif (action == 'trigger'):
+    queue(country, place)
+    print('Content-type: application/json')
+    print('')
+    print('{"id":"' + place + '", "status": "in progress"}')
+    cmd = 'nohup tic 2>/dev/null 1>/dev/null &'
+    os.system(cmd)
+    exit(0)
+elif (action == 'data'):
+    myGeojsonFile = geojsonFile(country, place)
+    if os.path.isfile(myGeojsonFile):
         print('Content-type: application/json')
         print('')
+        with open(myGeojsonFile) as json_file:
+            print(json_file.readlines())
         exit(0)
-    crl.close()
-
-print('Content-type: application/json')
-print('')
-
-# osmtogeojson -m "${osmFile}" > "${geojsonFileTmp}"
-os.system('osmtogeojson -m ' + osmFile + ' > ' + geojsonFileTmp)
-
-with open(geojsonFileTmp) as json_file:
-    geojson = json.load(json_file)
-    regMulti = re.compile(r'^(-?\d+\.?\d*).*;(-?\d+\.?\d*)$')
-    regMinus = re.compile(r'^(-?\d+\.?\d*)-(-?\d+\.?\d*)$')
-    for feature in geojson['features']:
-        if (('properties' in feature) and ('level' in feature['properties'])):
-            level = feature['properties']['level']
-            level = regMulti.sub(r'\1;\2', level)
-            level = regMinus.sub(r'\1;\2', level)
-            if (regMulti.match(level)):
-                num1 = float(regMulti.sub(r'\1', level))
-                num2 = float(regMulti.sub(r'\2', level))
-                if (num1 > num2):
-                    level = regMulti.sub(r'\2;\1', level)
-            feature['properties']['level'] = level
-
-
-    # print(json.dumps(geojson))
-
-
-    geojsonIo = io.StringIO(json.dumps(geojson))
-    place = geopandas.read_file(geojsonIo)
-    # file = open(placeFile)
-    # bounds = geopandas.read_file(file)
-
-    # selection = geopandas.clip(place, bounds, True)
-    # print(selection.to_json(na='drop'))
-    print(place.to_json(na='drop'))
-
-exit (0)
+    else:
+        print('HTTP/1.1 404 Not Found')
+        status(country, place)

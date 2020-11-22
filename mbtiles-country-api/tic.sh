@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/bin/flock -w 1 /var/tmp/action.lock /usr/bin/action.sh
+/usr/bin/flock -w 0 /var/tmp/actions.lock /usr/bin/action

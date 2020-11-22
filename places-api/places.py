@@ -29,6 +29,34 @@ from turfpy.measurement import centroid
 import pycurl
 import io
 
+
+def urlExists(url):
+    buffer = BytesIO()
+    crl = pycurl.Curl()
+    crl.setopt(crl.URL, url)
+    crl.setopt(crl.WRITEDATA, buffer)
+    crl.perform()
+    result = not (crl.getinfo(pycurl.HTTP_CODE) >= 400)
+    crl.close()
+    return result
+
+def getData(url):
+    buffer = BytesIO()
+    crl = pycurl.Curl()
+    crl.setopt(crl.URL, url)
+    crl.setopt(crl.WRITEDATA, buffer)
+    crl.perform()
+    if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
+        print('HTTP/1.1 404 Not Found')
+        print('Content-type: application/json')
+        print('')
+        print('{"url": "' + url + '"}')
+        exit(0)
+    crl.close()
+    body = buffer.getvalue()
+    result = body.decode('utf-8')
+    return result
+
 addr = os.environ['PATH_INFO'].split('/')
 apiDomainName = os.environ['API_DOMAIN_NAME']
 appUrl = os.environ['APP_URL'] if 'APP_URL' in os.environ else (
@@ -79,6 +107,23 @@ if (action == 'checksum'):
     print('')
     print(checksum)
     exit(0)
+# elif (action == 'wp' ):
+#     print('<!-- wp:table -->')
+#     # Open table
+#     print('<table class="wp-block-table"><tbody><tr><td>Place</td></tr>')
+#     # Country
+#     print('<tr><td style="text-align:center"><b>')
+#     print(Country)
+#     print('</b></td></tr>')
+#     # Places
+#     print('<tr><td><a href="')
+#     print(url)
+#     print('">')
+#     print(place)
+#     print('</a></td></tr>')
+#     # Close table
+#     print('</tbody></table>')
+#     print('<!-- /wp:table -->')
 elif (action == 'pins'):
     # pinsCache = '/tmp/places/' + country + \
     #     '_pins_' + str(checksum) + '.geojson'
@@ -149,22 +194,10 @@ elif (action == 'pins'):
 
                 print('</tr>')
 
-            # GET STATUS
-            buffer = BytesIO()
-            crl = pycurl.Curl()
+            # GET MBTILES STATUS
             url = 'http://mbtiles-api/mbtiles/status/' + country + '/' + myId
-            crl.setopt(crl.URL, url)
-            crl.setopt(crl.WRITEDATA, buffer)
-            crl.perform()
-            if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
-                print('HTTP/1.1 404 Not Found')
-                print('Content-type: application/json')
-                print('')
-                print('url: ' + url)
-                exit(0)
-            crl.close()
-            body = buffer.getvalue()
-            status = json.loads(body.decode('utf-8'))['status']
+            statusJson = getData(url)
+            status = json.loads(statusJson)['status']
             if status == "ready":
                 color = "#00FF00"
             elif status == "in progress":
@@ -173,22 +206,9 @@ elif (action == 'pins'):
                 color = "#FF0000"
             statusText = '<b style="color:' + color + '";>' + status + '</b>'
 
-            # GET CHECKSUM
-            buffer = BytesIO()
-            crl = pycurl.Curl()
+            # GET OSM CHECKSUM
             url = 'http://osm-api/osm/' + country + '/' + myId + '.cksum'
-            crl.setopt(crl.URL, url)
-            crl.setopt(crl.WRITEDATA, buffer)
-            crl.perform()
-            if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
-                print('HTTP/1.1 404 Not Found')
-                print('Content-type: application/json')
-                print('')
-                print('url: ' + url)
-                exit(0)
-            crl.close()
-            body = buffer.getvalue()
-            cksum = body.decode('utf-8')
+            cksum = getData(url)
 
             print('<tr>')
             print('<td>')
@@ -201,20 +221,27 @@ elif (action == 'pins'):
                   f['properties']['country'] + ' - ' + f['properties']['id'] + '</a><br/>')
             print('</td>')
             print('<td>' + cksum + '</td>')
+
+            ### OSM ###
+
             print('<td>')
-            print('<a href="/osm/' + country + '/' + myId + '.osm">download</a>')
+            if urlExists('http://osm-api/osm/' + country + '/' + myId + '.osm'):
+                print('<a href="/osm/' + country + '/' + myId + '.osm">download</a>')
+            else:
+                print('Not found')
             print('</td>')
             print('<td>')
-            print('<a href="/geojson/data/' +
-                  country + '/' + myId + '.geojson">geojson</a>')
+            if urlExists('http://geojson-api/geojson/data/' + country + '/' + myId + '.geojson'):
+                print('<a href="/geojson/data/' + country + '/' + myId + '.geojson">download</a>')
+            else:
+                print('<button onclick="fetch(\'/geojson/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
             print('<td>')
             print('<a href="/mbtiles/status/' + country +
                   '/' + myId + '">' + statusText + '</a>')
             print('</td>')
             print('<td>')
-            print('<button onclick="fetch(\'/mbtiles/trigger/' +
-                  country + '/' + myId + '\')">trigger</button>')
+            print('<button onclick="fetch(\'/mbtiles/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
             print('<td>')
             if status == "ready":

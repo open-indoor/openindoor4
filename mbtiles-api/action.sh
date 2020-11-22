@@ -39,22 +39,36 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
   # && find $(dirname "${mbtilesFile}") -name $(basename ${mbtilesFile}) -size 16384c | xargs rm -rf
 
 # ogr2ogr -f MBTILES /tmp/FranceToulouseUniversiteToulouseJeanJaures_9926d8bf-ee4d-40d6-beb1-c8a645ba9014_tmp.mbtiles /tmp/FranceToulouseUniversiteToulouseJeanJaures_9926d8bf-ee4d-40d6-beb1-c8a645ba9014_tmp.geojson -dsco MAXZOOM=20 -lco ENCODING=UTF-8 -nln osm-indoor
-  curl -k -L \
+
+  codePins=$(curl -k -L \
+    -s -w "%{http_code}" \
     -o "${geojsonFile}" \
-    "http://geojson-api/geojson/data/${country}/${id}" \
-  && tippecanoe \
-    --output="${mbtilesFileTmp}" \
-    --layer="osm-indoor" \
-    --drop-rate=1 \
-    --no-feature-limit \
-    --no-tile-size-limit \
-    --use-source-polygon-winding \
-    --minimum-zoom=13 \
-    --maximum-zoom 20 \
-    --generate-ids \
-    "${geojsonFile}" \
-  && mv "${mbtilesFileTmp}" "${mbtilesFile}" \
-  && rm -rf "${geojsonFile}" \
-  && find $(dirname "${mbtilesFile}") -name $(basename ${mbtilesFile}) -size 16384c | xargs rm -rf
+    "http://geojson-api/geojson/data/${country}/${id}.geojson")
+  if [ "${codePins}" -ge "400" ]; then
+      echo "geosjon not yet available: http://geojson-api/geojson/data/${country}/${id}.geojson"
+      curl -k -L \
+        -s -w "%{http_code}" \
+        "http://geojson-api/geojson/trigger/${country}/${id}"
+  else
+    tippecanoe \
+      --output="${mbtilesFileTmp}" \
+      --layer="osm-indoor" \
+      --drop-rate=1 \
+      --no-feature-limit \
+      --no-tile-size-limit \
+      --use-source-polygon-winding \
+      --minimum-zoom=13 \
+      --maximum-zoom 20 \
+      --generate-ids \
+      "${geojsonFile}" \
+    && mv "${mbtilesFileTmp}" "${mbtilesFile}" \
+    && rm -rf "${geojsonFile}" \
+    && find $(dirname "${mbtilesFile}") -name $(basename ${mbtilesFile}) -size 16384c | xargs rm -rf
+  fi
+    
+  # curl -k -L \
+  #   -o "${geojsonFile}" \
+  #   "http://geojson-api/geojson/data/${country}/${id}.geojson" \
+  # && 
 
 done

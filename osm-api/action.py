@@ -32,9 +32,6 @@ with open(BBOXES_GEOJSON, 'wb') as f:
         exit(0)
     c.close()
 
-
-
-
 with open(BBOXES_GEOJSON) as f:
     gj = geojson.load(f)
 
