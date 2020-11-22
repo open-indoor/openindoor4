@@ -46,15 +46,12 @@ def getData(url):
     crl.setopt(crl.URL, url)
     crl.setopt(crl.WRITEDATA, buffer)
     crl.perform()
-    if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
-        print('HTTP/1.1 404 Not Found')
-        print('Content-type: application/json')
-        print('')
-        print('{"url": "' + url + '"}')
-        exit(0)
+    code = crl.getinfo(pycurl.HTTP_CODE)
     crl.close()
-    body = buffer.getvalue()
-    result = body.decode('utf-8')
+    if code >= 400:
+        result = None
+    else:   
+        result = buffer.getvalue().decode('utf-8')
     return result
 
 addr = os.environ['PATH_INFO'].split('/')
@@ -197,18 +194,19 @@ elif (action == 'pins'):
             # GET MBTILES STATUS
             url = 'http://mbtiles-api/mbtiles/status/' + country + '/' + myId
             statusJson = getData(url)
-            status = json.loads(statusJson)['status']
-            if status == "ready":
-                color = "#00FF00"
-            elif status == "in progress":
-                color = "#FF7F00"
-            else:
-                color = "#FF0000"
+            status = str(None)
+            color = "#FF0000"
+            if statusJson != None:
+                status = json.loads(statusJson)['status']
+                if status == "ready":
+                    color = "#00FF00"
+                elif status == "in progress":
+                    color = "#FF7F00"
             statusText = '<b style="color:' + color + '";>' + status + '</b>'
 
             # GET OSM CHECKSUM
             url = 'http://osm-api/osm/' + country + '/' + myId + '.cksum'
-            cksum = getData(url)
+            cksum = str(getData(url))
 
             print('<tr>')
             print('<td>')

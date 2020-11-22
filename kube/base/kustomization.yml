@@ -6,7 +6,7 @@ images:
   - name: openindoor/osm-api
     newTag: 1.0.78
   - name: openindoor/places-api
-    newTag: 2.0.6
+    newTag: 2.0.7
   - name: openindoor/geojson-api
     newTag: 2.0.0
   - name: openindoor/mbtiles-api
@@ -24,7 +24,7 @@ images:
   - name: openindoor/style-app
     newTag: 1.0.131
   - name: openindoor/mapbox-gl-openindoor
-    newTag: 2.0.2
+    newTag: 2.0.4
   - name: openindoor/mapbox-gl-js
     newTag: 0.0.3
   - name: openindoor/sprite-app

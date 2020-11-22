@@ -247,6 +247,12 @@ export default class OpenIndoor {
   _updateLevels() {
     if (this.map.isSourceLoaded(this.sourceId)) {
       const features = this.map.querySourceFeatures(this.sourceId, { sourceLayer: this.layerId });
+      console.log('features to detect levels:', features)
+      // for (let feat in features) {
+      //   if (('properties' in feat) && ('level' in feat['properties'])) {
+      //     console.log('level: ' + feat['properties']['level'])
+      //   }
+      // }
       // console.log('features from ' + this.sourceId + ' to update levels: ' + JSON.stringify(features))
       const levels = findAllLevels(features);
       if (!arrayEqual(levels, this.levels)) {
