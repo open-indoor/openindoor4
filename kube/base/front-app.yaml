@@ -52,11 +52,11 @@ spec:
             configMapKeyRef:
               name: openindoor-cm
               key: appDomainName
-        - name: APP_DOMAIN_NAMES
+        - name: API_DOMAIN_NAME
           valueFrom:
             configMapKeyRef:
               name: openindoor-cm
-              key: appDomainNames
+              key: apiDomainName
         - name: CERTIFICATE_AUTHORITY
           valueFrom:
             configMapKeyRef:
