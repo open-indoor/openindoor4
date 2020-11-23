@@ -57,7 +57,7 @@ def getOsm(country, place, myUuid):
     print('osmFile: ' + osmFile)
     return osmFile
 
-def osmToGeojson(osmFile, geojsonFile):
+def osmToGeojson(osmFile, geojsonFile, boundsFile = None):
     cmd = ('osmtogeojson -m ' + osmFile + ' > ' + geojsonFile)
     print('start cmd: ' + cmd)
     os.system(cmd)
@@ -81,6 +81,11 @@ def osmToGeojson(osmFile, geojsonFile):
                 feature['properties']['level'] = level
     with open(geojsonFile, 'w') as outfile:
         json.dump(geojson, outfile)
+    if (boundsFile != None):
+        geojsonGpd = geopandas.read_file(geojsonFile)
+        boundsGpd = geopandas.read_file(boundsFile)
+        geojsonFilteredGpd = selection = geopandas.clip(geojsonGpd, boundsGpd)
+        geojsonFilteredGpd.to_file(geojsonGpd, driver='GeoJSON')
 
     # print(json.dumps(geojson))
     # geojsonIo = io.StringIO(json.dumps(geojson))
@@ -117,7 +122,8 @@ for country in os.listdir(pipeDir):
         print('geojsonFileTmp: ' + geojsonFileTmp)
         # mkdir basename geojsonFile
         os.makedirs(os.path.dirname(geojsonFile), exist_ok=True)
-        osmToGeojson(osmFile, geojsonFileTmp)
+
+        osmToGeojson(osmFile, geojsonFileTmp, boundsFile)
         os.rename(geojsonFileTmp, geojsonFile)
         print('geojsonFile: ' + geojsonFile)
         dst = '/tmp/geojson/' + country + '/' + place + '.geojson'
