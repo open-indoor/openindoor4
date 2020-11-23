@@ -8,6 +8,8 @@ import re
 import json
 import geopandas
 import io
+from shapely.geometry import shape
+import geojson
 
 myUuid = str(uuid.uuid1())
 
@@ -20,11 +22,7 @@ def getChecksum(country, place):
     crl.setopt(crl.WRITEDATA, buffer)
     crl.perform()
     if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
-        print('HTTP/1.1 404 Not Found')
-        print('Content-type: application/json')
-        print('')
-        print('{"country": "' + country + '", "id": "' + place + '", "message": "checksum unavailable"}')
-        exit(0)
+        return None
     crl.close()
     body = buffer.getvalue()
     print('downloaded: ' + url)
@@ -43,19 +41,58 @@ def getOsm(country, place, myUuid):
         crl.setopt(crl.WRITEDATA, file)
         crl.perform()
         if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
-            print('HTTP/1.1 404 Not Found')
-            print('Content-type: application/json')
-            print('')
-            print('{"country": "' + country + '", "id": "' + place + '", "message": "file unavailable"}')
-            exit(0)
+            return None
         crl.close()
         print('downloaded: ' + url)
-    osmFile = '/tmp/osm/' + country + '/' + place + '_' + getChecksum(country, place) + '.osm'
+    osmFile = '/tmp/osm/' + country + '/' + place + '_' + str(getChecksum(country, place)) + '.osm'
     os.makedirs(os.path.dirname(osmFile), exist_ok=True)
     print('osmFileTmp: ' + osmFileTmp)
     os.rename(osmFileTmp, osmFile)
     print('osmFile: ' + osmFile)
     return osmFile
+
+def intersects_02(geojsonFile, boundsFile):
+    geojsonGpd = geopandas.read_file(geojsonFile)
+    print('geojson to clip: ' + geojsonFile)
+    print(geojsonGpd)
+    boundsGpd = geopandas.read_file(boundsFile)
+    # boundsGpd = boundsGpd.buffer(100)
+    print('boundingFile: ' + boundsFile)
+    print(boundsGpd)
+    # geojsonFilteredGpd = geopandas.clip(geojsonGpd, boundsGpd, keep_geom_type=True)
+    # geojsonFilteredGpd = geopandas.overlay(geojsonGpd, boundsGpd, how='intersection')
+    geojsonFilteredGpd = geopandas.overlay(boundsGpd, geojsonGpd, how='intersection')
+    geojsonFilteredGpd.to_file(geojsonGpd, driver='GeoJSON')
+
+def intersects_01(geojsonFile, boundsFile):
+    with open(geojsonFile) as json_file:
+        placeJson = json.load(json_file)
+    with open(boundsFile) as json_file:
+        boundsGeojson = json.load(json_file)
+    if len(boundsGeojson['features']) == 0:
+        return
+    boundsJson = boundsGeojson['features'][0]['geometry']
+    boundsShp = shape(boundsJson)
+    cleanPlace = {
+            "type": "FeatureCollection",
+        "generator": "JOSM",
+        "features":  []
+    }
+    for feature in placeJson['features']:
+        # print('feature to add:' + json.dumps(feature))
+        gj = geojson.Feature(feature)
+        gj.errors()
+        # print('feature validated')
+
+        featureShp = shape(feature['geometry'])
+        try:
+            if boundsShp.intersects(featureShp):
+                cleanPlace['features'].append(feature)
+        except Exception:
+            pass  # or you could use 'continue'
+    with open(geojsonFile, 'w') as outfile:
+        json.dump(cleanPlace, outfile)
+    
 
 def osmToGeojson(osmFile, geojsonFile, boundsFile = None):
     cmd = ('osmtogeojson -m ' + osmFile + ' > ' + geojsonFile)
@@ -64,10 +101,10 @@ def osmToGeojson(osmFile, geojsonFile, boundsFile = None):
     print('cmd done.')
     print('alter geojson: ' + geojsonFile)
     with open(geojsonFile) as json_file:
-        geojson = json.load(json_file)
+        myGeojson = json.load(json_file)
         regMulti = re.compile(r'^(-?\d+\.?\d*).*;(-?\d+\.?\d*)$')
         regMinus = re.compile(r'^(-?\d+\.?\d*)-(-?\d+\.?\d*)$')
-        for feature in geojson['features']:
+        for feature in myGeojson['features']:
             del feature['id']
             if (('properties' in feature) and ('level' in feature['properties'])):
                 level = feature['properties']['level']
@@ -80,12 +117,23 @@ def osmToGeojson(osmFile, geojsonFile, boundsFile = None):
                         level = regMulti.sub(r'\2;\1', level)
                 feature['properties']['level'] = level
     with open(geojsonFile, 'w') as outfile:
-        json.dump(geojson, outfile)
+        json.dump(myGeojson, outfile)
     if (boundsFile != None):
-        geojsonGpd = geopandas.read_file(geojsonFile)
-        boundsGpd = geopandas.read_file(boundsFile)
-        geojsonFilteredGpd = selection = geopandas.clip(geojsonGpd, boundsGpd)
-        geojsonFilteredGpd.to_file(geojsonGpd, driver='GeoJSON')
+        intersects_01(geojsonFile, boundsFile)
+        # intersects_02(geojsonFile, boundsFile)
+        # geojsonGpd = geopandas.read_file(geojsonFile)
+        # print('geojson to clip: ' + geojsonFile)
+        # print(geojsonGpd)
+        # boundsGpd = geopandas.read_file(boundsFile)
+        # boundsGpd = boundsGpd.buffer(100)
+        # print('boundingFile: ' + boundsFile)
+        # print(boundsGpd)
+        # geojsonFilteredGpd = geopandas.clip(geojsonGpd, boundsGpd, keep_geom_type=True)
+        # geojsonFilteredGpd.to_file(geojsonGpd, driver='GeoJSON')
+
+
+
+    # shapely.geometry.Polygon
 
     # print(json.dumps(geojson))
     # geojsonIo = io.StringIO(json.dumps(geojson))
@@ -110,20 +158,24 @@ for country in os.listdir(pipeDir):
         place = re.sub('_bounds\.geojson$', '', boundsFile)
         print('place: ' + place)
         cksum = getChecksum(country, place)
+        if cksum == None:
+            continue
         print('cksum: ' + cksum)
         geojsonFile = '/tmp/geojson/' + country + '/' + place + '_' + cksum + '.geojson'
         if os.path.isfile(geojsonFile):
             continue
         # Create geojson
         osmFile = getOsm(country, place, myUuid)
+        if osmFile == None:
+            continue
 
-        print('osmFile: ' + osmFile)
+        print('osmFile: ' + str(osmFile))
         geojsonFileTmp = '/tmp/geojson/' + country + '/' + place + '_' + myUuid + '.geojson'
         print('geojsonFileTmp: ' + geojsonFileTmp)
         # mkdir basename geojsonFile
         os.makedirs(os.path.dirname(geojsonFile), exist_ok=True)
 
-        osmToGeojson(osmFile, geojsonFileTmp, boundsFile)
+        osmToGeojson(osmFile, geojsonFileTmp, '/tmp/geojsonPipe/' + country + '/' + boundsFile)
         os.rename(geojsonFileTmp, geojsonFile)
         print('geojsonFile: ' + geojsonFile)
         dst = '/tmp/geojson/' + country + '/' + place + '.geojson'

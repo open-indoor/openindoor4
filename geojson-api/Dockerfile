@@ -20,6 +20,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       fcgiwrap \
       file \
       gettext \
+      git \
       grep \
       jq \
       less \
@@ -27,6 +28,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       npm nodejs \
       procps \
       python3-geopandas \
+      python3-geojson \
       python3-pycurl \
       python3-pip \
       unzip \
@@ -36,6 +38,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       wget \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip install git+git://github.com/geopandas/geopandas.git@v0.16.2
 
 RUN npm install -g osmtogeojson
 
