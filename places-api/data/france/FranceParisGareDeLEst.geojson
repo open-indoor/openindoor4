@@ -5,6 +5,7 @@
         {
             "type": "Feature",
             "properties": {
+                "area": "yes",
                 "id": "FranceParisGareDeLEst",
                 "update": "0",
                 "country": "France",
