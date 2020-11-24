@@ -1,1 +1,0 @@
-{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[8.6585, 50.10174], [8.66473, 50.10174], [8.66473, 50.10974], [8.6585, 50.10974], [8.6585, 50.10174]]}, "properties": {"id": "GermanyMunichHauptbahnhof", "update": "0", "country": "Germany", "town": "Munich", "place": "Hauptbahnhof"}}]}
