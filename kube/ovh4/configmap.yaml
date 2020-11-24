@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  apiDomainName: api-ovh4.openindoor.io
+  appDomainName: app-ovh4.openindoor.io
+  certificateAuthority: https://acme-v02.api.letsencrypt.org/directory
+  certificateAuthorityStaging: https://acme-staging-v02.api.letsencrypt.org/directory
+kind: ConfigMap
+metadata:
+  name: openindoor-cm
