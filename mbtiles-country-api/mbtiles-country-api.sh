@@ -1,4 +1,6 @@
 #!/bin/bash
+set -x
+set -e
 
 export API_URL=${API_URL:-"https://${API_DOMAIN_NAME}"}
 
