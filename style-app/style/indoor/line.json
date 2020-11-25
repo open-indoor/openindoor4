@@ -1,0 +1,13 @@
+{
+    "id": __id__,
+    "type": "line",
+    "source-layer": "osm-indoor",
+    "source": "indoor",
+    "minzoom": $INDOOR_MIN_ZOOM,
+    "interactive": true,
+    "filter": __filter__,
+    "paint": {
+        "line-width": __width__,
+        "line-color": __color__
+    }
+}

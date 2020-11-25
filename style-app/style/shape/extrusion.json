@@ -1,0 +1,72 @@
+{
+    "id": __id__,
+    "source-layer": "osm-indoor",
+    "source": "shape",
+    "type": "fill-extrusion",
+    "minzoom": $SHAPE_MIN_ZOOM,
+    "maxzoom": $SHAPE_MAX_ZOOM,
+    "filter": __filter__,
+    "paint": {
+        "fill-extrusion-color": [
+            "case",
+            [
+                "==",
+                [
+                    "feature-state",
+                    "mouse"
+                ],
+                "hover"
+            ],
+            __color_hover__,
+            [
+                "==",
+                [
+                    "feature-state",
+                    "mouse"
+                ],
+                "clic"
+            ],
+            __color_clic__,
+            __color__
+        ],
+        "fill-extrusion-height": [
+            "interpolate",
+            [
+                "linear"
+            ],
+            [
+                "zoom"
+            ],
+            $SHAPE_TALL_ZOOM,
+            __extrusionHeight__,
+            $SHAPE_FLAT_ZOOM,
+            0
+        ],
+        "fill-extrusion-base": [
+            "interpolate",
+            [
+                "linear"
+            ],
+            [
+                "zoom"
+            ],
+            $SHAPE_TALL_ZOOM,
+            __extrusionBase__,
+            $SHAPE_FLAT_ZOOM,
+            0
+        ],
+        "fill-extrusion-opacity": [
+            "interpolate",
+            [
+                "linear"
+            ],
+            [
+                "zoom"
+            ],
+            $SHAPE_INVISIBLE_ZOOM,
+            0,
+            $SHAPE_FULL_ZOOM,
+            1
+        ]
+    }
+}
