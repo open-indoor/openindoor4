@@ -102,10 +102,17 @@ def osmToGeojson(osmFile, geojsonFile, boundsFile = None):
     print('alter geojson: ' + geojsonFile)
     with open(geojsonFile) as json_file:
         myGeojson = json.load(json_file)
+        # filter on id field
+        # myGeojson['features'] = dict(filter(lambda feature: 'id' in feature, myGeojson['features'].items()))
+
+        myGeojson['features'] = [feature for feature in myGeojson['features'] if 'id' in feature]
+
+
         regMulti = re.compile(r'^(-?\d+\.?\d*).*;(-?\d+\.?\d*)$')
         regMinus = re.compile(r'^(-?\d+\.?\d*)-(-?\d+\.?\d*)$')
+
         for feature in myGeojson['features']:
-            del feature['id']
+            # del feature['id']
             if (('properties' in feature) and ('level' in feature['properties'])):
                 level = feature['properties']['level']
                 level = regMulti.sub(r'\1;\2', level)

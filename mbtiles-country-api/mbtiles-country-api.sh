@@ -1,4 +1,6 @@
 #!/bin/bash
+set -x
+set -e
 
 export API_URL=${API_URL:-"https://${API_DOMAIN_NAME}"}
 
@@ -14,7 +16,7 @@ chmod +x /usr/bin/tic
 crontab -l | { cat; echo "* * * * * /usr/bin/tic >/dev/stdout 2>/dev/stderr"; } | crontab -
 crontab -l | { cat; echo "45 6 * * * /usr/bin/curl https://mbtiles-country-api/mbtiles-country/trigger/world"; } | crontab -
 
-echo "Start cron task" && crontab -l && /usrn/sbin/crond -l 8
+echo "Start cron task" && crontab -l && /usr/sbin/crond -l 8
 
 cat /usr/bin/tic
 cat /usr/bin/action

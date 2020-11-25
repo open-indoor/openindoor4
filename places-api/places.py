@@ -90,7 +90,8 @@ for path in pathlist:
     # print('path: ' + path_to_file)
     with open(path_to_file) as f:
         gj = geojson.load(f)
-    myPlaces['features'].append(gj['features'][0])
+    if gj['features'][0]['properties']['update'] != "-1":
+        myPlaces['features'].append(gj['features'][0])
     # print(path_in_str)
 
 m = hashlib.md5()

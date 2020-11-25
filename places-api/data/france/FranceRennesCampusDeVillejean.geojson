@@ -1,1 +1,51 @@
-{"type": "FeatureCollection", "generator": "JOSM", "features": [{"type": "Feature", "properties": {"id": "FranceRennesCampusDeVillejean", "update": "0", "country": "France", "town": "Rennes", "place": "Universit\u00e9 de Rennes 2 - Campus de Villejean"}, "geometry": {"type": "Polygon", "coordinates": [[[-1.70474989235, 48.12137341326], [-1.70383658425, 48.12153430165], [-1.70074148458, 48.12133954196], [-1.69809035413, 48.11902777275], [-1.69820451764, 48.11735950836], [-1.70492748004, 48.11734257139], [-1.70474989235, 48.12137341326]]]}}]}
+{
+    "type": "FeatureCollection",
+    "generator": "JOSM",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "id": "FranceRennesCampusDeVillejean",
+                "update": "-1",
+                "country": "France",
+                "town": "Rennes",
+                "place": "Universit\u00e9 de Rennes 2 - Campus de Villejean"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -1.70474989235,
+                            48.12137341326
+                        ],
+                        [
+                            -1.70383658425,
+                            48.12153430165
+                        ],
+                        [
+                            -1.70074148458,
+                            48.12133954196
+                        ],
+                        [
+                            -1.69809035413,
+                            48.11902777275
+                        ],
+                        [
+                            -1.69820451764,
+                            48.11735950836
+                        ],
+                        [
+                            -1.70492748004,
+                            48.11734257139
+                        ],
+                        [
+                            -1.70474989235,
+                            48.12137341326
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+}
