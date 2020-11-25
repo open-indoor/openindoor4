@@ -20,7 +20,6 @@ mkdir -p /tmp/mbtiles-country
 uuid=$(uuidgen)
 placesApiUrl="http://places-api/places"
 # mbtilesApiUrl="http://mbtiles-api/mbtiles"
-mbtilesCountryApiUrl="http://mbtiles-countr-api/mbtiles-country"
 BBOXES="/tmp/bboxes_${country}.json"
 mbtilesCountryFile=/tmp/mbtiles-country/${country}.mbtiles
 code=$(curl \
@@ -78,7 +77,7 @@ case $action in
     # https://api.openindoor.io/mbtiles/country/status/france
   status)
     if [ -f "${mbtilesCountryFile}" ]; then
-      reply='{"country":"'${country}'", "status": "ready", "url": "'${mbtilesCountryApiUrl}/data/${country}'"}'
+      reply='{"country":"'${country}'", "status": "ready", "url": "'${API_URL}/data/${country}'"}'
     elif [ -f "/tmp/mbtilesCountryPipe/${country}.json" ]; then
       reply='{"country":"'${country}'", "status": "in progress"}'
     else

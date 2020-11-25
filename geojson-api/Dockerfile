@@ -22,6 +22,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       gettext \
       git \
       grep \
+      htop \
       jq \
       less \
       net-tools \
