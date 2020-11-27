@@ -10,6 +10,7 @@ RUN apk add --update-cache \
     file \
     gettext \
     grep \
+    htop \
     jq \
     net-tools \
     procps \

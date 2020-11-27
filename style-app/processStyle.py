@@ -79,29 +79,40 @@ with open('shape/extrusion.json') as extrusion_file:
 
 for extrusion in [
     { "id": "shape-area-extrusion-indoor-00",
-      "color": "#dad0c8",
-      "colorHover": "#ffaf99",
-      "colorClic": "#fdff00",
-      "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 0]],
-      "extrusionBase": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]],
-      "extrusionHeight": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]]
-    },
-    { "id": "shape-area-extrusion-indoor-01",
+    #   "color": "#dad0c8",
+    #   "colorHover": "#ffaf99",
+    #   "colorClic": "#fdff00",
       "color": "#6a615b",
-      "colorHover": "#ffaf99",
-      "colorClic": "#fdff70",
-      "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 1]],
+      "colorHover": "#00ff00",
+      "colorClic": "#0000ff",
+    #   "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 0]],
+      "filter": [
+          "all",
+            ["has","indoor"],
+            ["has","level"],
+            ["==",["index-of",";",["get","level"]],-1],
+            [">=",["to-number",["get","level"]],0]
+      ],
       "extrusionBase": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]],
-      "extrusionHeight": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]]
+      "extrusionHeight": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]],
     },
-    { "id": "shape-area-extrusion-indoor-02",
-      "color": "#39312b",
-      "colorHover": "#ffaf99",
-      "colorClic": "#fdfff0",
-      "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 2]],
-      "extrusionBase": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]],
-      "extrusionHeight": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]]
-    }
+    # { "id": "shape-area-extrusion-indoor-01",
+    #   "color": "#6a615b",
+    #   "colorHover": "#ffaf99",
+    #   "colorClic": "#fdff70",
+    #   "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 1]],
+    #   "extrusionBase": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]],
+    #   "extrusionHeight": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]]
+    # },
+    # { "id": "shape-area-extrusion-indoor-02",
+    #   "color": "#39312b",
+    #   "colorHover": "#ffaf99",
+    # #   "colorClic": "#fdfff0",
+    #   "colorClic": "#ff0000",
+    #   "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 2]],
+    #   "extrusionBase": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]],
+    #   "extrusionHeight": ["*",int(os.environ['DEFAULT_LEVEL_HEIGHT']),["to-number",["get","level"]]]
+    # }
 ]:
     extrusionStyleOut = extrusionStyle.replace(
         '__id__', json.dumps(extrusion['id'])).replace(

@@ -28,7 +28,7 @@ import hashlib
 from turfpy.measurement import centroid
 import pycurl
 import io
-
+import html
 
 def urlExists(url):
     buffer = BytesIO()
@@ -148,10 +148,15 @@ elif (action == 'pins'):
         lastCountry = ''
         print('<!DOCTYPE html><html><body><table border=4><tr>')
         print('<td>map</td>')
-        print('<td>checksum</td>')
+        print('<td>gmaps</td>')
         print('<td>osm</td>')
+        print('<td>checksum</td>')
+        print('<td>xml</td>')
         print('<td>geojson</td>')
-        print('<td colspan="3"; style="text-align: center; vertical-align: middle;">mbtiles</td>')
+        print('<td>mbtiles</td>')
+        print('<td>html</td>')
+
+        htmlContent = '<!-- wp:table --><table class="wp-block-table"><tbody><tr><td>Place</td></tr><tr><td>Place</td></tr>'    
         for f in pins['features']:
             country = str(f['properties']['country']).lower().replace(' ', '_')
             myId = f['properties']['id']
@@ -159,36 +164,26 @@ elif (action == 'pins'):
             if country != lastCountry:
                 lastCountry = country
                 country_statusText = ''
-                
-                # buffer = BytesIO()
-                # crl = pycurl.Curl()
+                # GET MBTILES COUNTRY STATUS
+                countryStatusText = '<button onclick="fetch(\'/mbtiles-country/trigger/' + country + '\')">trigger</button>'
+
                 # url = 'http://mbtiles-country-api/mbtiles-country/status/' + country
-                # crl.setopt(crl.URL, url)
-                # crl.setopt(crl.WRITEDATA, buffer)
-                # crl.perform()
-                # if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
-                #     print('HTTP/1.1 404 Not Found')
-                #     print('Content-type: application/json')
-                #     print('')
-                #     exit(0)
-                # crl.close()
-                # body = buffer.getvalue()
-                # country_status = json.loads(body.decode('utf-8'))['status']
-                # if country_status == "ready":
-                #     color = "#00FF00"
-                # elif country_status == "in progress":
-                #     color = "#FF7F00"
-                # else:
-                #     color = "#FF0000"
-                # country_statusText = '<b style="color:' + color + '";>' + country_status + '</b>'
-
-
-
-                print('<tr><td colspan="4"; style="text-align: center; vertical-align: middle;">' + country + '</td>')
-                print('<td><a href="/mbtiles/status/' + country + '">' + country_statusText + '</a></td>')
-                print('<td><button onclick="fetch(\'/mbtiles-country/trigger/' + country + '\')">trigger</button></td>')
-                # print('<td><a href="/mbtiles/data/' + country + '">download</a></td>')
+                # statusJson = getData(url)
+                # status = str(None)
+                # color = "#FF0000"
+                # if statusJson != None:
+                #     status = json.loads(statusJson)['status']
+                #     if status == "ready":
+                #         color = "#00FF00"
+                #         countryStatusText = '<b style="color:' + color + '";>' + status + '</b>'
+                #     elif status == "in progress":
+                #         color = "#FF7F00"
+                #         countryStatusText = '<b style="color:' + color + '";>' + status + '</b>'
+                htmlContent+='<tr><td><b>' + country + '</b></td></tr>'
+                print('<tr style="background-color:#FF0000"><td colspan="6"; style="text-align: center; vertical-align: middle;">' + country + '</td>')
+                print('<td>' + countryStatusText + '</td>')
                 print('<td></td>')
+                # print('<td><a href="/mbtiles/data/' + country + '">download</a></td>')
 
                 print('</tr>')
 
@@ -219,35 +214,82 @@ elif (action == 'pins'):
             print('<a href="' + link + '">' +
                   f['properties']['country'] + ' - ' + f['properties']['id'] + '</a><br/>')
             print('</td>')
+            htmlContent+='<tr><td><a href="' + link + '">' + f['properties']['id'] + '</a></td></tr>'
+
+            # GMAPS
+            # https://www.google.fr/maps/@41.9399375,25.553725,21z
+            print('<td>')
+            gmapsUrl = 'https://www.google.fr/maps/@' + \
+                str(f['geometry']['coordinates'][1]) + ',' + \
+                str(f['geometry']['coordinates'][0]) + ',' + \
+                '18z'
+            print('<a href="' + gmapsUrl + '">gmaps</a> | ')
+            print('</td>')
+
+            # OSM
+            print('<td>')
+            osmUrl = 'https://www.openstreetmap.org/#map=18/' + \
+                str(f['geometry']['coordinates'][1]) + '/' + \
+                str(f['geometry']['coordinates'][0])
+            editUrl = 'https://www.openstreetmap.org/edit#map=18/' + \
+                str(f['geometry']['coordinates'][1]) + '/' + \
+                str(f['geometry']['coordinates'][0])
+            print('<a href="' + osmUrl + '">map</a> | ')
+            print('<a href="' + editUrl + '">edit</a><br/>')
+            print('</td>')
             print('<td>' + cksum + '</td>')
 
-            ### OSM ###
-
+            ### XML ###
             print('<td>')
             if urlExists('http://osm-api/osm/' + country + '/' + myId + '.osm'):
                 print('<a href="/osm/' + country + '/' + myId + '.osm">download</a>')
             else:
                 print('Not found')
             print('</td>')
+
+            ## GEOJSON
             print('<td>')
             if urlExists('http://geojson-api/geojson/data/' + country + '/' + myId + '.geojson'):
                 print('<a href="/geojson/data/' + country + '/' + myId + '.geojson">download</a>')
             else:
                 print('<button onclick="fetch(\'/geojson/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
-            print('<td>')
-            print('<a href="/mbtiles/status/' + country +
-                  '/' + myId + '">' + statusText + '</a>')
-            print('</td>')
-            print('<td>')
-            print('<button onclick="fetch(\'/mbtiles/trigger/' + country + '/' + myId + '\')">trigger</button>')
-            print('</td>')
+
+            # MBTILES
             print('<td>')
             if status == "ready":
                 print('<b style="color:' + color + '";><a href="/mbtiles/data/' + country + '/' + myId + '">download</a></br>')
+            else:
+                print('<button onclick="fetch(\'/mbtiles/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
 
+            # HTML
+            print('<td></td>')
+
             print('</tr>')
+
+        htmlContent+='</tbody></table><!-- /wp:table -->'
+        print('<tr style="background-color:#FF0000">')
+        print('<td colspan="6"; style="text-align: center; vertical-align: middle;">WORLD</td>')
+        print('<td><button onclick="fetch(\'/mbtiles-country/trigger/world\')">trigger</button></td>')
+        # print('<td><button onclick=\'navigator.clipboard.writeText("' + html.escape(htmlContent) + '")\'>copy</button></td>')
+        # print('<td><button onclick=\'navigator.clipboard.writeText("&lt;!-- wp:table")\'>copy</button></td>')
+        # print('<td><button onclick=\'navigator.clipboard.writeText("&lt;!-- wp:table --&gt;&lt;")\'>copy</button></td>')
+        # htmlContent = '&lt;!-- wp:table --&gt;&lt;table class=&quot;'
+        # print('<td><button onclick=\'navigator.clipboard.writeText("' + html.escape(html.escape(htmlContent)) + '")\'>copy</button></td>')
+        # print('<td><button onclick=\'navigator.clipboard.writeText("<table><tr><td><a href=\\\"coucou\\\">coucou</a></td></tr></table>")\'>copy</button></td>')
+
+        print('<td><button onclick=\'navigator.clipboard.writeText("' + htmlContent.replace('"', '\\\"') + '")\'>copy</button></td>')
+
+        # print('<td><button onclick=\'navigator.clipboard.writeText(\\\'&amp;lt;!-- wp:table --&amp;gt;&amp;lt;table class=&amp;\\\')\'>copy</button></td>')
+        # print('<td><button onclick=\'navigator.clipboard.writeText(\\\'' + html.escape(html.escape(htmlContent)) + '\\\')\'>copy</button></td>')
+        # print('<td><button onclick=\'navigator.clipboard.writeText("&lt;!-- wp:table --&gt;&lt;table class=&quot;")\'>copy</button></td>')
+        # print('<td><button onclick=\'navigator.clipboard.writeText("&lt;!-- wp:table --&gt;&lt;table class=&quot;wp-block-table&quot;&gt;&lt;tbody")\'>copy</button></td>')
+
+        # &lt;!-- wp:table --&gt;&lt;table class=&quot;wp-block-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Place&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Place&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;!-- /wp:table --&gt;
+        # print('<td><button onclick=\'navigator.clipboard.writeText("coucou")\'>copy</button></td>')
+        
+        print('</tr>')
 
         print('</table></body></html>')
     else:

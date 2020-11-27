@@ -9,24 +9,10 @@
     "paint": {
         "fill-extrusion-color": [
             "case",
-            [
-                "==",
-                [
-                    "feature-state",
-                    "mouse"
-                ],
-                "hover"
-            ],
-            __color_hover__,
-            [
-                "==",
-                [
-                    "feature-state",
-                    "mouse"
-                ],
-                "clic"
-            ],
+            ["boolean", ["feature-state", "select"], true],
             __color_clic__,
+            ["boolean", ["feature-state", "hover"], true],
+            __color_hover__,
             __color__
         ],
         "fill-extrusion-height": [

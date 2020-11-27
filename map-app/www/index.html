@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <title>OpenIndoor</title>
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
+  <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
   <!-- <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
   <script src="${APP_URL}/mapbox-gl-js/dist/mapbox-gl.js"></script>
@@ -18,62 +18,63 @@
     href="${APP_URL}/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
     type="text/css" /> -->
   <link rel="stylesheet" href="style.css" type="text/css" />
-
 </head>
 
 <body>
   <div id="map"></div>
 
   <script>
-
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     // let country = 'france';
-    const country = urlParams.get('country') || 'france'
-    console.log('country:', country);
+    const country = urlParams.get("country") || "france";
+    console.log("country:", country);
 
     let level = 0;
     let bbox = [2.35794, 48.87613, 2.36108, 48.87759];
-    let center = [((bbox[2] + bbox[0]) / 2.0), ((bbox[3] + bbox[1]) / 2.0)];
-    console.log('center 01:', center);
+    let center = [(bbox[2] + bbox[0]) / 2.0, (bbox[3] + bbox[1]) / 2.0];
     let zoom = 17;
     let bearing = 0;
     let pitch = 0;
     let maxPitchLow = 65;
     let maxPitchHigh = 80;
-    const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+    let openIndoor
+    const hashParams = new URLSearchParams(
+      window.location.hash.replace("#", "")
+    );
 
-    if (!hashParams.has('map')) {
+    if (!hashParams.has("map")) {
       if ("geolocation" in navigator) {
         // geolocalization OK
         navigator.geolocation.getCurrentPosition(function (position) {
           center = [position.coords.longitude, position.coords.latitude];
-          console.log('center 02:', center);
         });
         navigator.geolocation.watchPosition(function (position) {
           if (map !== undefined) {
-            map.setCenter([position.coords.longitude, position.coords.latitude]);
+            map.setCenter([
+              position.coords.longitude,
+              position.coords.latitude,
+            ]);
           }
         });
       } else {
         // no geolocalization
       }
     } else {
-      let mapParams = hashParams.get('map').split('/');
-      console.log('mapParams:', mapParams);
+      let mapParams = hashParams.get("map").split("/");
+      console.log("mapParams:", mapParams);
 
-      zoom = (mapParams.length > 0) ? mapParams[0] : zoom;
-      center = (mapParams.length > 2) ? [mapParams[1], mapParams[2]] : center;
-      console.log('center 03:', center);
-      bearing = (mapParams.length > 3) ? mapParams[3] : bearing;
-      pitch = (mapParams.length > 4) ? mapParams[4] : pitch;
-      level = (mapParams.length > 5) ? mapParams[5] : level;
+      zoom = mapParams.length > 0 ? mapParams[0] : zoom;
+      center = mapParams.length > 2 ? [mapParams[1], mapParams[2]] : center;
+      bearing = mapParams.length > 3 ? mapParams[3] : bearing;
+      pitch = mapParams.length > 4 ? mapParams[4] : pitch;
+      level = mapParams.length > 5 ? mapParams[5] : level;
       console.log("level 01:", level);
     }
 
     // default
     var map = new mapboxgl.Map({
-      container: 'map',
+      container: "map",
       style: ("${APP_URL}/style/openindoorStyle_" + country + ".json"),
       center: center,
       pitch: pitch,
@@ -84,119 +85,186 @@
       attributionControl: false,
     });
 
-    map.addControl(new mapboxgl.FullscreenControl(), 'bottom-right');
+    map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
 
-    map.on('zoomend', function () {
-      if (map.getZoom() > 20) {
-        map.setMaxPitch(maxPitchHigh)
-      } else {
-        if (map.getPitch() > maxPitchLow) {
-          map.flyTo({
-            pitch: maxPitchLow,
-            center: map.getCenter()
-          });
+    const r = 255 * 0.65;
+    let hovered = [];
+    let focus = [];
+    let select = [];
+    let focusLevel = 0;
+    map.on("mousemove", function (e) {
+      const features = map.queryRenderedFeatures(e.point, {
+        // layers: ["building-part-extrusion"],
+      });
+
+      const allFeatures = map.queryRenderedFeatures()
+
+      for (const feature of focus) {
+        if (feature.id === null) {
+          console.log(
+            "Cannot manage feature without id field (01):",
+            JSON.stringify(feature)
+          )
+          continue;
         }
-        // map.setMaxPitch(maxPitchLow)
+        map.setFeatureState(feature, { hover: false });
+      }
+
+      const seen = {};
+      hovered = features;
+
+      // select focusLevel
+      hoveredLevel = hovered.filter(feature => ('properties' in feature) && 'level' in feature.properties);
+      if (hovered.length > 0) {
+        console.log('hoveredLevel:' + JSON.stringify(hoveredLevel));
+      }
+
+      focusLevel = Math.max.apply(Math, hoveredLevel.map(function (feature) { return Number(feature.properties.level); }))
+      console.log("focusLevel:", focusLevel)
+      //
+
+      if (isFinite(focusLevel)) {
+        focus = allFeatures.filter(
+          feature => (
+            ('properties' in feature) && ('level' in feature.properties)
+            && (Number(feature.properties.level) === focusLevel)
+          )
+        )
+      }
+       else {
+        focus = []
+      }
+
+      hoveredBuilding =
+        hovered.filter(feature => ('properties' in feature)
+          && ('building' in feature.properties || 'building;part' in feature.properties));
+      // const maxValues = hovered.map(item => Math.max(...item));
+
+      let i = 0;
+      for (const feature of focus) {
+        if (feature.id === null) {
+          console.log(
+            "Cannot manage feature without id field (02):",
+            JSON.stringify(feature)
+          )
+          continue;
+        }
+
+        if (seen[feature.id]) continue;
+
+        seen[feature.id] = true;
+        map.setFeatureState(feature, { hover: true });
+
+        // console.log("hover features:" + JSON.stringify(features))
+        i++;
       }
     });
 
-    map.on('flyend', function () {
-      if (map.getZoom() < 20) {
-        map.setMaxPitch(maxPitchLow)
+    map.on('click', function (e) {
+      selectLevel = focusLevel
+      for (const feature of select) {
+        map.setFeatureState(feature, { select: false });
+      }
+      select = focus
+      if (openIndoor) {
+        console.log('set selectLevel:', selectLevel)
+        openIndoor.setLevel(focusLevel)
+      }
+      for (const feature of select) {
+        map.setFeatureState(feature, { select: true });
       }
     });
 
-    map.on('moveend', ({ originalEvent }) => {
-      if (originalEvent) {
-        map.fire('usermoveend');
-      } else {
-        map.fire('flyend');
-      }
-    });
-
-    map.on('moveend', function (event) {
+    map.on("moveend", function (event) {
       // console.log(event);
       let center_ = map.getCenter();
       let bearing = map.getBearing();
       let pitch = map.getPitch();
-      let level = (typeof openIndoor !== 'undefined') ? openIndoor.level : "0";
+      let level = typeof openIndoor !== "undefined" ? openIndoor.level : "0";
       // console.log("level 02:", level);
       window.location.hash =
-        'map='
-        + map.getZoom().toFixed(2)
-        + '/' + center_.lng.toFixed(5)
-        + '/' + center_.lat.toFixed(5)
-        + '/' + Math.round(bearing)
-        + '/' + Math.round(pitch)
-        + '/' + level
+        "map=" +
+        map.getZoom().toFixed(2) +
+        "/" +
+        center_.lng.toFixed(5) +
+        "/" +
+        center_.lat.toFixed(5) +
+        "/" +
+        Math.round(bearing) +
+        "/" +
+        Math.round(pitch) +
+        "/" +
+        level;
     });
 
-    map.on('load', () => {
-
-      map.loadImage(
-        "${APP_URL}/custom_marker.png",
-        function (error, image) {
-          if (error) throw error;
-          map.addImage('custom-marker', image);
-          // Add a GeoJSON source with 2 points
-
-          map.addSource("pins", {
-            "type": "geojson",
-            "data": "${API_URL}/places/pins/" + country + "/pins.geojson"
-          });
-          map.addLayer({
-            'id': 'pins',
-            'type': 'symbol',
-            'source': 'pins',
-            'layout': {
-              'icon-image': 'custom-marker',
-              // get the title name from the source's "title" property
-              'text-field': ['get', 'title'],
-              "text-font": [
-                "Open Sans Regular"
-              ],
-              'text-offset': [0, 1.25],
-              'text-anchor': 'top'
-            }
-          });
+    map.on("load", () => {
+      const allFeatures = map.queryRenderedFeatures()
+      const featureLevel = allFeatures.filter(feature => ('properties' in feature) && 'level' in feature.properties);
+      for (const feature of featureLevel) {
+        if (feature.id === null) {
+          console.log(
+            "Cannot manage feature without id field (02):",
+            JSON.stringify(feature)
+          )
+          continue;
         }
-      )
+        map.setFeatureState(feature, { hover: false, select: false });
+      }
 
-      map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+      map.loadImage("${APP_URL}/custom_marker.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-marker", image);
+        // Add a GeoJSON source with 2 points
+
+        map.addSource("pins", {
+          type: "geojson",
+          data: "${API_URL}/places/pins/" + country + "/pins.geojson",
+        });
+        map.addLayer({
+          id: "pins",
+          type: "symbol",
+          source: "pins",
+          layout: {
+            "icon-image": "custom-marker",
+            // get the title name from the source's "title" property
+            "text-field": ["get", "title"],
+            "text-font": ["Open Sans Regular"],
+            "text-offset": [0, 1.25],
+            "text-anchor": "top",
+          },
+        });
+      });
+
+      map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
       fetch("${APP_URL}/style/indoor/indoorLayers.json")
-        .then(response => response.json())
-        .then(
-          function (response) {
-            let indoorLayers = response;
-            console.log('indoorLayers:', indoorLayers);
+        .then((response) => response.json())
+        .then(function (response) {
+          let indoorLayers = response;
+          console.log("indoorLayers:", indoorLayers);
 
-            const INDOOR_SOURCE_ID = "indoor";
-            const INDOOR_LAYER_ID = "osm-indoor";
-            console.log("level 03:", level);
-            const openIndoor = new OpenIndoor(map,
-              {
-                sourceId: INDOOR_SOURCE_ID,
-                // source: {
-                //   'type': 'vector',
-                //   'url': "${API_URL}/tileserver/data/" + country + '.json'
-                // },
-                // source: {
-                //   'type': 'geojson',
-                //   'data': ...
-                // },
-                layerId: INDOOR_LAYER_ID,
-                layers: indoorLayers,
-                level: level
-              }
-            );
-            map.addControl(openIndoor);
-          }
-        )
-        .catch(error => alert("Erreur : " + error));
-    })
+          const INDOOR_SOURCE_ID = "indoor";
+          const INDOOR_LAYER_ID = "osm-indoor";
+          console.log("level 03:", level);
+          openIndoor = new OpenIndoor(map, {
+            sourceId: INDOOR_SOURCE_ID,
+            // source: {
+            //   'type': 'vector',
+            //   'url': "${API_URL}/tileserver/data/" + country + '.json'
+            // },
+            // source: {
+            //   'type': 'geojson',
+            //   'data': ...
+            // },
+            layerId: INDOOR_LAYER_ID,
+            layers: indoorLayers,
+            level: level,
+          });
+          map.addControl(openIndoor);
+        })
+        .catch((error) => alert("Erreur : " + error));
+    });
 
   </script>
-
 </body>
 
 </html>
