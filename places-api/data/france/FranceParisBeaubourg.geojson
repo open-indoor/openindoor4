@@ -1,49 +1,7 @@
-
 {
     "type": "FeatureCollection",
     "generator": "JOSM",
     "features": [
-        {
-            "type": "Feature",
-            "properties": {
-                "changeset": "33342386",
-                "entrance": "exit",
-                "id": "node/3697611310",
-                "level": "4",
-                "source": "survey",
-                "timestamp": "2015-08-14T20:33:43Z",
-                "uid": "365274",
-                "user": "thbz",
-                "version": "1"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2.35211620000,
-                    48.86047750000
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "changeset": "33360362",
-                "entrance": "yes",
-                "id": "node/3699209532",
-                "level": "0",
-                "timestamp": "2015-08-15T22:33:02Z",
-                "uid": "365274",
-                "user": "thbz",
-                "version": "1"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2.35211520000,
-                    48.86047560000
-                ]
-            }
-        },
         {
             "type": "Feature",
             "properties": {
@@ -179,55 +137,6 @@
                         2.35243880000,
                         48.85970290000
                     ]
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "access": "customers",
-                "addr:city": "Paris",
-                "addr:housenumber": "1",
-                "addr:postcode": "75004",
-                "addr:street": "Rue Beaubourg",
-                "changeset": "39632460",
-                "entrance": "main",
-                "id": "node/3698413489",
-                "level": "1",
-                "name": "Entrée principal BPI (Bibliothèque Publique d'Information)",
-                "timestamp": "2016-05-28T21:46:00Z",
-                "uid": "3151022",
-                "user": "anonym_user",
-                "version": "2"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2.35299790000,
-                    48.86088020000
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "access": "customers",
-                "changeset": "33342386",
-                "entrance": "yes",
-                "fee": "yes",
-                "id": "node/3697611309",
-                "level": "5",
-                "source": "survey",
-                "timestamp": "2015-08-14T20:33:43Z",
-                "uid": "365274",
-                "user": "thbz",
-                "version": "1"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2.35199350000,
-                    48.86025080000
                 ]
             }
         }
