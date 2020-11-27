@@ -237,10 +237,13 @@ export default class OpenIndoor {
   }
 
   _refreshAfterLevelsUpdate() {
-    if (!this.levels.includes(this.level)) {
-      console.log("this.level 03:", this.level);
+    if (
+      (this.levels != undefined)
+      && (!this.levels.includes(this.level))
+    ) {
+      console.log('this.levels:' + this.levels)
+      console.log("this.level set to 0:", this.level);
       this.setLevel('0');
-      console.log("this.level 04:", this.level);
     }
   }
 

@@ -115,9 +115,9 @@
 
       // select focusLevel
       hoveredLevel = hovered.filter(feature => ('properties' in feature) && 'level' in feature.properties);
-      if (hovered.length > 0) {
-        console.log('hoveredLevel:' + JSON.stringify(hoveredLevel));
-      }
+      // if (hovered.length > 0) {
+      //   console.log('hoveredLevel:' + JSON.stringify(hoveredLevel));
+      // }
 
       focusLevel = Math.max.apply(Math, hoveredLevel.map(function (feature) { return Number(feature.properties.level); }))
       console.log("focusLevel:", focusLevel)
@@ -161,14 +161,14 @@
     });
 
     map.on('click', function (e) {
-      selectLevel = focusLevel
+      level = focusLevel
       for (const feature of select) {
         map.setFeatureState(feature, { select: false });
       }
       select = focus
       if (openIndoor) {
-        console.log('set selectLevel:', selectLevel)
-        openIndoor.setLevel(focusLevel)
+        console.log('set selected level:', level)
+        openIndoor.setLevel(level)
       }
       for (const feature of select) {
         map.setFeatureState(feature, { select: true });
@@ -182,8 +182,11 @@
       let pitch = map.getPitch();
       let level = typeof openIndoor !== "undefined" ? openIndoor.level : "0";
       // console.log("level 02:", level);
-      window.location.hash =
-        "map=" +
+      window.location.hash.replace("#", "")
+
+      // window.location.hash =
+      newHash = 
+        "#map=" +
         map.getZoom().toFixed(2) +
         "/" +
         center_.lng.toFixed(5) +
@@ -195,6 +198,7 @@
         Math.round(pitch) +
         "/" +
         level;
+        location.replace(newHash)
     });
 
     map.on("load", () => {

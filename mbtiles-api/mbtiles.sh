@@ -15,18 +15,17 @@ country="$(echo ${PATH_INFO} | cut -d'/' -f2)"
 id="$(echo ${PATH_INFO} | cut -d'/' -f3)"
 
 uuid=$(uuidgen)
-placesApiUrl="https://${DOMAIN_NAME}/places"
 
 case ${action} in
   pins)
     # get geojson
     geojsonFile="/tmp/${country}_${uuid}.geojson"
-    cksum=$(curl -k -L "${placesApiUrl}/checksum/${country}")
+    cksum=$(curl -k -L "http://places-api/places/checksum/${country}")
     mbtilesFile="/tmp/mbtiles/${country}/pins_${cksum}.mbtiles"
     mkdir -p "$(dirname ${mbtilesFile})"
     codePins=$(curl -k -L \
       -s -w "%{http_code}" \
-      -o "${geojsonFile}" "${placesApiUrl}/pins/${country}")
+      -o "${geojsonFile}" "http://places-api/places/pins/${country}")
     if [ "$?" -ne "0" ] && [ "${codePins}" -ge "400" ]; then
         echo "HTTP/1.1 404 Not Found" \
         && echo "Content-type: text/plain" \
@@ -108,6 +107,18 @@ case $action in
     exit 0
     ;;
   trigger)
+    mkdir -p $(dirname "${pipeFile}")
+    echo -n "${cksum}" > "${pipeFile}"
+    reply='{"api":"mbtiles", "country":"'${country}'", "id":"'${id}'", "status": "trigger received"}'
+    echo "Content-type: application/json"
+    echo ""
+    echo "${reply}"
+    nohup tic 2>/dev/null 1>/dev/null &
+    exit 0
+    ;;
+  update)
+    mbtilesFile="/tmp/mbtiles/${country}/${id}_${cksum}.mbtiles"
+    rm -rf ${mbtilesFile}
     mkdir -p $(dirname "${pipeFile}")
     echo -n "${cksum}" > "${pipeFile}"
     reply='{"api":"mbtiles", "country":"'${country}'", "id":"'${id}'", "status": "trigger received"}'
