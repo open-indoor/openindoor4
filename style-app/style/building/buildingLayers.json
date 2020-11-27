@@ -84,7 +84,7 @@
         $BUILDING_INVISIBLE_FAR_ZOOM,
         0,
         $BUILDING_FULL_ZOOM,
-        0
+        0.5
       ]
     }
   }

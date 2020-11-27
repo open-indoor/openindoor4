@@ -82,7 +82,7 @@ for extrusion in [
     #   "color": "#dad0c8",
     #   "colorHover": "#ffaf99",
     #   "colorClic": "#fdff00",
-      "color": "#ff0000",
+      "color": "#6a615b",
       "colorHover": "#00ff00",
       "colorClic": "#0000ff",
     #   "filter": ["all",["has","indoor"],["has","level"],["==",["index-of",";",["get","level"]],-1],[">=",["to-number",["get","level"]],0],["==", ["%", ["to-number",["get","level"]], 3], 0]],
