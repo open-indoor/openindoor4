@@ -148,10 +148,11 @@ elif (action == 'pins'):
         lastCountry = ''
         print('<!DOCTYPE html><html><body><table border=4><tr>')
         print('<td>map</td>')
-        print('<td>checksum</td>')
         print('<td>osm</td>')
+        print('<td>checksum</td>')
+        print('<td>xml</td>')
         print('<td>geojson</td>')
-        print('<td colspan="3"; style="text-align: center; vertical-align: middle;">mbtiles</td>')
+        print('<td>mbtiles</td>')
         for f in pins['features']:
             country = str(f['properties']['country']).lower().replace(' ', '_')
             myId = f['properties']['id']
@@ -159,36 +160,25 @@ elif (action == 'pins'):
             if country != lastCountry:
                 lastCountry = country
                 country_statusText = ''
-                
-                # buffer = BytesIO()
-                # crl = pycurl.Curl()
+                # GET MBTILES COUNTRY STATUS
+                countryStatusText = '<button onclick="fetch(\'/mbtiles-country/trigger/' + country + '\')">trigger</button>'
+
                 # url = 'http://mbtiles-country-api/mbtiles-country/status/' + country
-                # crl.setopt(crl.URL, url)
-                # crl.setopt(crl.WRITEDATA, buffer)
-                # crl.perform()
-                # if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
-                #     print('HTTP/1.1 404 Not Found')
-                #     print('Content-type: application/json')
-                #     print('')
-                #     exit(0)
-                # crl.close()
-                # body = buffer.getvalue()
-                # country_status = json.loads(body.decode('utf-8'))['status']
-                # if country_status == "ready":
-                #     color = "#00FF00"
-                # elif country_status == "in progress":
-                #     color = "#FF7F00"
-                # else:
-                #     color = "#FF0000"
-                # country_statusText = '<b style="color:' + color + '";>' + country_status + '</b>'
+                # statusJson = getData(url)
+                # status = str(None)
+                # color = "#FF0000"
+                # if statusJson != None:
+                #     status = json.loads(statusJson)['status']
+                #     if status == "ready":
+                #         color = "#00FF00"
+                #         countryStatusText = '<b style="color:' + color + '";>' + status + '</b>'
+                #     elif status == "in progress":
+                #         color = "#FF7F00"
+                #         countryStatusText = '<b style="color:' + color + '";>' + status + '</b>'
 
-
-
-                print('<tr><td colspan="4"; style="text-align: center; vertical-align: middle;">' + country + '</td>')
-                print('<td><a href="/mbtiles/status/' + country + '">' + country_statusText + '</a></td>')
-                print('<td><button onclick="fetch(\'/mbtiles-country/trigger/' + country + '\')">trigger</button></td>')
+                print('<tr style="background-color:#FF0000"><td colspan="4"; style="text-align: center; vertical-align: middle;">' + country + '</td>')
+                print('<td>' + countryStatusText + '</td>')
                 # print('<td><a href="/mbtiles/data/' + country + '">download</a></td>')
-                print('<td></td>')
 
                 print('</tr>')
 
@@ -219,16 +209,24 @@ elif (action == 'pins'):
             print('<a href="' + link + '">' +
                   f['properties']['country'] + ' - ' + f['properties']['id'] + '</a><br/>')
             print('</td>')
+            print('<td>')
+            osmUrl = 'https://www.openstreetmap.org/#map=18/' + \
+                str(f['geometry']['coordinates'][0]) + '/' + \
+                str(f['geometry']['coordinates'][1])
+            print(osmUrl)
+            print('</td>')
+# https://www.openstreetmap.org/#map=6/46.449/2.210
             print('<td>' + cksum + '</td>')
 
             ### OSM ###
-
             print('<td>')
             if urlExists('http://osm-api/osm/' + country + '/' + myId + '.osm'):
                 print('<a href="/osm/' + country + '/' + myId + '.osm">download</a>')
             else:
                 print('Not found')
             print('</td>')
+
+            ## GEOJSON
             print('<td>')
             if urlExists('http://geojson-api/geojson/data/' + country + '/' + myId + '.geojson'):
                 print('<a href="/geojson/data/' + country + '/' + myId + '.geojson">download</a>')
@@ -236,15 +234,10 @@ elif (action == 'pins'):
                 print('<button onclick="fetch(\'/geojson/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
             print('<td>')
-            print('<a href="/mbtiles/status/' + country +
-                  '/' + myId + '">' + statusText + '</a>')
-            print('</td>')
-            print('<td>')
-            print('<button onclick="fetch(\'/mbtiles/trigger/' + country + '/' + myId + '\')">trigger</button>')
-            print('</td>')
-            print('<td>')
             if status == "ready":
                 print('<b style="color:' + color + '";><a href="/mbtiles/data/' + country + '/' + myId + '">download</a></br>')
+            else:
+                print('<button onclick="fetch(\'/mbtiles/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
 
             print('</tr>')

@@ -115,6 +115,8 @@ def osmToGeojson(osmFile, geojsonFile, boundsFile = None):
             # del feature['id']
             if (('properties' in feature) and ('level' in feature['properties'])):
                 level = feature['properties']['level']
+                level = level.replace('--', '-')
+                level = level.replace(':', ';')
                 level = regMulti.sub(r'\1;\2', level)
                 level = regMinus.sub(r'\1;\2', level)
                 if (regMulti.match(level)):

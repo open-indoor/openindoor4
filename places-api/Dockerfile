@@ -2,14 +2,15 @@
 FROM caddy:2-alpine
 
 RUN apk add --update-cache \
-    jq \
-    curl \
     bash \
-    net-tools \
+    curl \
+    jq \
     fcgiwrap \
-    grep \
-    vim \
     gettext \
+    grep \
+    htop \
+    net-tools \
+    vim \
     util-linux \
     python3 py3-pip geos geos-dev py3-wheel py3-scipy curl-dev gcc musl-dev \
     && rm -rf /var/cache/apk/*
