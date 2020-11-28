@@ -9,6 +9,12 @@
     "paint": {
         "fill-extrusion-color": [
             "case",
+            [
+                "all",
+                ["boolean", ["feature-state", "select"], null],
+                ["boolean", ["feature-state", "hover"], null]
+            ],
+            __color__,
             ["boolean", ["feature-state", "select"], true],
             __color_clic__,
             ["boolean", ["feature-state", "hover"], true],

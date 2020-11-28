@@ -154,6 +154,7 @@ elif (action == 'pins'):
         print('<td>xml</td>')
         print('<td>geojson</td>')
         print('<td>mbtiles</td>')
+        print('<td>mvt</td>')
         print('<td>html</td>')
 
         htmlContent = '<!-- wp:table --><table class="wp-block-table"><tbody><tr><td>Place</td></tr><tr><td>Place</td></tr>'    
@@ -165,6 +166,19 @@ elif (action == 'pins'):
                 lastCountry = country
                 country_statusText = ''
                 # GET MBTILES COUNTRY STATUS
+                # https://api-gke.openindoor.io/mbtiles-country/status/france
+                # {"country":"france", "status": "ready", "url": "https://api-gke.openindoor.io/data/france"}
+                # urlCountryStatus = 'http://mbtiles-country-api/mbtiles-country/status/' + country
+                # print('urlCountryStatus: ' + urlCountryStatus)
+                # mbtilesCountryStatus = getData(urlCountryStatus)
+                # if (mbtilesCountryStatus == None):
+                #     countryStatusText = 'Not found'
+                # else:
+                #     countryStatus = json.loads(mbtilesCountryStatus)
+                #     if countryStatus['status'] == 'ready':
+                #         countryStatusText = '<a href="/mbtiles-country/data/' + country + '">download</a>'
+                #         countryStatusText += '<button onclick="fetch(\'/mbtiles-country/update/' + country + '\')">update</button>'
+                #     else:
                 countryStatusText = '<button onclick="fetch(\'/mbtiles-country/trigger/' + country + '\')">trigger</button>'
 
                 # url = 'http://mbtiles-country-api/mbtiles-country/status/' + country
@@ -179,13 +193,39 @@ elif (action == 'pins'):
                 #     elif status == "in progress":
                 #         color = "#FF7F00"
                 #         countryStatusText = '<b style="color:' + color + '";>' + status + '</b>'
+
                 htmlContent+='<tr><td><b>' + country + '</b></td></tr>'
                 print('<tr style="background-color:#FF0000"><td colspan="6"; style="text-align: center; vertical-align: middle;">' + country + '</td>')
                 print('<td>' + countryStatusText + '</td>')
+
+                # GET MVT status
+                # TileJSON
+                # https://api-gke.openindoor.io/tileserver/data/argentina.json
+                urlTileJson = 'http://tileserver-api/tileserver/data/' + country + '.json'
+                tileJson = getData(urlTileJson)
+                if tileJson == None:
+                    print('<td>None</td>')
+                else:
+                    inspect = json.loads(tileJson)
+                    center = inspect['center']
+                    lat = center[0]
+                    lon = center[1]
+                    zoom = center[2]
+                    # https://api-gke.openindoor.io/tileserver/data/france/#20/45.15916/5.73263
+                    print('<td>')
+                    print('<a href="/tileserver/data/' + country + '.json">tileJSON</a>')
+                    print('</td>')
+
+                # GET HTML
                 print('<td></td>')
+
                 # print('<td><a href="/mbtiles/data/' + country + '">download</a></td>')
 
                 print('</tr>')
+
+            # PLACE
+            lat = f['geometry']['coordinates'][0]
+            lon = f['geometry']['coordinates'][1]
 
             # GET MBTILES STATUS
             url = 'http://mbtiles-api/mbtiles/status/' + country + '/' + myId
@@ -226,6 +266,7 @@ elif (action == 'pins'):
             print('<a href="' + gmapsUrl + '">gmaps</a> | ')
             print('</td>')
 
+
             # OSM
             print('<td>')
             osmUrl = 'https://www.openstreetmap.org/#map=18/' + \
@@ -251,6 +292,7 @@ elif (action == 'pins'):
             print('<td>')
             if urlExists('http://geojson-api/geojson/data/' + country + '/' + myId + '.geojson'):
                 print('<a href="/geojson/data/' + country + '/' + myId + '.geojson">download</a>')
+                print('<button onclick="fetch(\'/geojson/update/' + country + '/' + myId + '\')">update</button>')
             else:
                 print('<button onclick="fetch(\'/geojson/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
@@ -259,9 +301,13 @@ elif (action == 'pins'):
             print('<td>')
             if status == "ready":
                 print('<b style="color:' + color + '";><a href="/mbtiles/data/' + country + '/' + myId + '">download</a></br>')
+                print('<button onclick="fetch(\'/mbtiles/update/' + country + '/' + myId + '\')">update</button>')
             else:
                 print('<button onclick="fetch(\'/mbtiles/trigger/' + country + '/' + myId + '\')">trigger</button>')
             print('</td>')
+
+            # MVT
+            print('<td><a href="/tileserver/data/' + country + '/#20/' + str(lon) + '/' + str(lat) + '">Inspect</a></td>')
 
             # HTML
             print('<td></td>')

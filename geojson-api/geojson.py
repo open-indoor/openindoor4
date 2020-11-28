@@ -93,6 +93,15 @@ elif (action == 'trigger'):
     cmd = 'nohup tic 2>/dev/null 1>/dev/null &'
     os.system(cmd)
     exit(0)
+elif (action == 'update'):
+    os.remove(geojsonFile(country, place))
+    queue(country, place)
+    print('Content-type: application/json')
+    print('')
+    print('{"id":"' + place + '", "status": "in progress"}')
+    cmd = 'nohup tic 2>/dev/null 1>/dev/null &'
+    os.system(cmd)
+    exit(0)
 elif (action == 'data'):
     myGeojsonFile = geojsonFile(country, place)
     if os.path.isfile(myGeojsonFile):

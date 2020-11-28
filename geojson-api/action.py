@@ -94,7 +94,7 @@ def intersects_01(geojsonFile, boundsFile):
         json.dump(cleanPlace, outfile)
     
 
-def osmToGeojson(osmFile, geojsonFile, boundsFile = None):
+def osmToGeojson(placeId, osmFile, geojsonFile, boundsFile = None):
     cmd = ('osmtogeojson -m ' + osmFile + ' > ' + geojsonFile)
     print('start cmd: ' + cmd)
     os.system(cmd)
@@ -106,7 +106,6 @@ def osmToGeojson(osmFile, geojsonFile, boundsFile = None):
         # myGeojson['features'] = dict(filter(lambda feature: 'id' in feature, myGeojson['features'].items()))
 
         myGeojson['features'] = [feature for feature in myGeojson['features'] if 'id' in feature]
-
 
         regMulti = re.compile(r'^(-?\d+\.?\d*).*;(-?\d+\.?\d*)$')
         regMinus = re.compile(r'^(-?\d+\.?\d*)-(-?\d+\.?\d*)$')
@@ -125,6 +124,8 @@ def osmToGeojson(osmFile, geojsonFile, boundsFile = None):
                     if (num1 > num2):
                         level = regMulti.sub(r'\2;\1', level)
                 feature['properties']['level'] = level
+            feature['place'] = placeId
+
     with open(geojsonFile, 'w') as outfile:
         json.dump(myGeojson, outfile)
     if (boundsFile != None):
@@ -184,7 +185,7 @@ for country in os.listdir(pipeDir):
         # mkdir basename geojsonFile
         os.makedirs(os.path.dirname(geojsonFile), exist_ok=True)
 
-        osmToGeojson(osmFile, geojsonFileTmp, '/tmp/geojsonPipe/' + country + '/' + boundsFile)
+        osmToGeojson(place, osmFile, geojsonFileTmp, '/tmp/geojsonPipe/' + country + '/' + boundsFile)
         os.rename(geojsonFileTmp, geojsonFile)
         print('geojsonFile: ' + geojsonFile)
         dst = '/tmp/geojson/' + country + '/' + place + '.geojson'

@@ -59,6 +59,7 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
       --use-source-polygon-winding \
       --minimum-zoom=13 \
       --maximum-zoom 20 \
+      --generate-ids \
       "${geojsonFile}" \
     && mv "${mbtilesFileTmp}" "${mbtilesFile}" \
     && rm -rf "${geojsonFile}" \

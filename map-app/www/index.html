@@ -202,18 +202,20 @@
     });
 
     map.on("load", () => {
-      const allFeatures = map.queryRenderedFeatures()
-      const featureLevel = allFeatures.filter(feature => ('properties' in feature) && 'level' in feature.properties);
-      for (const feature of featureLevel) {
-        if (feature.id === null) {
-          console.log(
-            "Cannot manage feature without id field (02):",
-            JSON.stringify(feature)
-          )
-          continue;
-        }
-        map.setFeatureState(feature, { hover: false, select: false });
-      }
+      // const allFeatures = map.queryRenderedFeatures()
+      // // const allFeatures = this.map.querySourceFeatures('shape', { sourceLayer: 'osm-indoor' });
+      // // console.log('allFeatures', JSON.stringify(allFeatures))
+      // const featureLevel = allFeatures.filter(feature => ('properties' in feature) && 'level' in feature.properties);
+      // for (const feature of featureLevel) {
+      //   if (feature.id === null) {
+      //     console.log(
+      //       "Cannot manage feature without id field (02):",
+      //       JSON.stringify(feature)
+      //     )
+      //     continue;
+      //   }
+      //   map.setFeatureState(feature, { hover: false, select: false });
+      // }
 
       map.loadImage("${APP_URL}/custom_marker.png", function (error, image) {
         if (error) throw error;
