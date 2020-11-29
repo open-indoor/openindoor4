@@ -114,16 +114,38 @@
       hovered = features;
 
       // select focusLevel
-      hoveredLevel = hovered.filter(feature => ('properties' in feature) && 'level' in feature.properties);
+      hoveredLevels = hovered.filter(function (feature) {
+        if (
+          ('properties' in feature)
+          && 'level' in feature.properties
+          && (!isNaN(feature.properties.level))
+        ) {
+          // console.log('feature.properties.level:', feature.properties.level);
+          // console.log('typeof feature.properties.level:', typeof feature.properties.level);
+          // console.log('isFinite:', isFinite(feature.properties.level));
+
+          //   && typeof feature.properties.level === 'number'
+          // && isFinite(feature.properties.level)
+
+          return true;
+        }
+        return false;
+      });
       // if (hovered.length > 0) {
-      //   console.log('hoveredLevel:' + JSON.stringify(hoveredLevel));
+      //   console.log('hoveredLevels:' + JSON.stringify(hoveredLevels));
       // }
 
-      focusLevel = Math.max.apply(Math, hoveredLevel.map(function (feature) { return Number(feature.properties.level); }))
-      console.log("focusLevel:", focusLevel)
+      maxLevel = Math.max.apply(Math, hoveredLevels.map(function (feature) {
+        // console.log('level:', feature.properties.level)
+        return Number(feature.properties.level);
+      }))
+
+      focusLevel = isFinite(maxLevel) ? maxLevel : null
+
+      // console.log("focusLevel:", focusLevel)
       //
 
-      if (isFinite(focusLevel)) {
+      if (focusLevel !== undefined) {
         focus = allFeatures.filter(
           feature => (
             ('properties' in feature) && ('level' in feature.properties)
@@ -131,7 +153,7 @@
           )
         )
       }
-       else {
+      else {
         focus = []
       }
 
@@ -185,7 +207,7 @@
       window.location.hash.replace("#", "")
 
       // window.location.hash =
-      newHash = 
+      newHash =
         "#map=" +
         map.getZoom().toFixed(2) +
         "/" +
@@ -198,7 +220,7 @@
         Math.round(pitch) +
         "/" +
         level;
-        location.replace(newHash)
+      location.replace(newHash)
     });
 
     map.on("load", () => {

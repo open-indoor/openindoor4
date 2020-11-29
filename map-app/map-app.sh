@@ -15,6 +15,6 @@ for f in `find . -name "*.html"`; do
     mv  /tmp/${f}            ./${f}
 done
 
-cat ./style/defaultStyle_template.json | envsubst > ./style/defaultStyle.json
+# cat ./style/defaultStyle_template.json | envsubst > ./style/defaultStyle.json
 
 caddy run --watch --config /etc/caddy/Caddyfile
