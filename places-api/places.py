@@ -5,6 +5,7 @@
 # PATH_INFO="data/" /places/places
 # PATH_INFO="data/world" /places/places
 # PATH_INFO="data/france" /places/places
+# PATH_INFO="data/bulgaria/BulgariaHaskovoXackoboGeorgiKirkovStreet" /places/places
 # PATH_INFO="pins/france/geojson" /places/places
 # PATH_INFO="pins/france/html" /places/places
 # PATH_INFO="checksum/france/text" /places/places
@@ -84,10 +85,12 @@ myPlaces = {
 }
 # loop on file, country oriented
 pathlist = Path(directory_in_str).glob(fileSearch)
+print('pathlist: ' + directory_in_str)
+print('fileSearch: ' + fileSearch)
 for path in pathlist:
     # because path is object not string
     path_to_file = str(path)
-    # print('path: ' + path_to_file)
+    print('path: ' + path_to_file)
     with open(path_to_file) as f:
         gj = geojson.load(f)
     if gj['features'][0]['properties']['update'] != "-1":
@@ -151,6 +154,7 @@ elif (action == 'pins'):
         print('<td>gmaps</td>')
         print('<td>osm</td>')
         print('<td>checksum</td>')
+        print('<td>bounds</td>')
         print('<td>xml</td>')
         print('<td>geojson</td>')
         print('<td>mbtiles</td>')
@@ -195,7 +199,7 @@ elif (action == 'pins'):
                 #         countryStatusText = '<b style="color:' + color + '";>' + status + '</b>'
 
                 htmlContent+='<tr><td><b>' + country + '</b></td></tr>'
-                print('<tr style="background-color:#FF0000"><td colspan="6"; style="text-align: center; vertical-align: middle;">' + country + '</td>')
+                print('<tr style="background-color:#FF0000"><td colspan="7"; style="text-align: center; vertical-align: middle;">' + country + '</td>')
                 print('<td>' + countryStatusText + '</td>')
 
                 # GET MVT status
@@ -266,8 +270,7 @@ elif (action == 'pins'):
             print('<a href="' + gmapsUrl + '">gmaps</a> | ')
             print('</td>')
 
-
-            # OSM
+            # OSM MAP
             print('<td>')
             osmUrl = 'https://www.openstreetmap.org/#map=18/' + \
                 str(f['geometry']['coordinates'][1]) + '/' + \
@@ -280,10 +283,15 @@ elif (action == 'pins'):
             print('</td>')
             print('<td>' + cksum + '</td>')
 
+            # BOUNDS
+            print('<td>')
+            print('<a href="/places/data/' + country + '/' + myId + '">bounds</a>')
+            print('</td>')
+
             ### XML ###
             print('<td>')
             if urlExists('http://osm-api/osm/' + country + '/' + myId + '.osm'):
-                print('<a href="/osm/' + country + '/' + myId + '.osm">download</a>')
+                print('<a href="/osm/' + country + '/' + myId + '.osm">.osm</a>')
             else:
                 print('Not found')
             print('</td>')

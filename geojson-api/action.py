@@ -27,7 +27,6 @@ def getChecksum(country, place):
     body = buffer.getvalue()
     print('downloaded: ' + url)
     result = body.decode('utf-8').rstrip('\n')
-    print('cksum: |-' + result + '-|')
     return result
 
 def getOsm(country, place, myUuid):
@@ -35,7 +34,7 @@ def getOsm(country, place, myUuid):
     os.makedirs(os.path.dirname(osmFileTmp), exist_ok=True)
     with open(osmFileTmp, 'wb') as file:
         url = 'http://osm-api/osm/' + country + '/' + place + '.osm'
-        print('downloading: ' + url)
+        # print('downloading: ' + url)
         crl = pycurl.Curl()
         crl.setopt(crl.URL, url)
         crl.setopt(crl.WRITEDATA, file)
@@ -43,7 +42,7 @@ def getOsm(country, place, myUuid):
         if (crl.getinfo(pycurl.HTTP_CODE) >= 400):
             return None
         crl.close()
-        print('downloaded: ' + url)
+        print('downloaded: ' + url + ' to ' + osmFileTmp)
     osmFile = '/tmp/osm/' + country + '/' + place + '_' + str(getChecksum(country, place)) + '.osm'
     os.makedirs(os.path.dirname(osmFile), exist_ok=True)
     print('osmFileTmp: ' + osmFileTmp)
@@ -65,11 +64,13 @@ def intersects_02(geojsonFile, boundsFile):
     geojsonFilteredGpd.to_file(geojsonGpd, driver='GeoJSON')
 
 def intersects_01(geojsonFile, boundsFile):
+    print('File to clean up:' + geojsonFile + ' with ' + boundsFile)
     with open(geojsonFile) as json_file:
         placeJson = json.load(json_file)
     with open(boundsFile) as json_file:
         boundsGeojson = json.load(json_file)
     if len(boundsGeojson['features']) == 0:
+        print('no bounds detected')
         return
     boundsJson = boundsGeojson['features'][0]['geometry']
     boundsShp = shape(boundsJson)
@@ -79,10 +80,10 @@ def intersects_01(geojsonFile, boundsFile):
         "features":  []
     }
     for feature in placeJson['features']:
-        # print('feature to add:' + json.dumps(feature))
+        print('feature to add:' + json.dumps(feature))
         gj = geojson.Feature(feature)
         gj.errors()
-        # print('feature validated')
+        print('feature validated')
 
         featureShp = shape(feature['geometry'])
         try:
@@ -90,7 +91,8 @@ def intersects_01(geojsonFile, boundsFile):
                 cleanPlace['features'].append(feature)
         except Exception:
             pass  # or you could use 'continue'
-    with open(geojsonFile, 'w') as outfile:
+    print('Going to write clean file')
+    with open(geojsonFile + '_clean', 'w') as outfile:
         json.dump(cleanPlace, outfile)
     
 
@@ -125,7 +127,6 @@ def osmToGeojson(placeId, osmFile, geojsonFile, boundsFile = None):
                         level = regMulti.sub(r'\2;\1', level)
                 feature['properties']['level'] = level
             feature['place'] = placeId
-
     with open(geojsonFile, 'w') as outfile:
         json.dump(myGeojson, outfile)
     if (boundsFile != None):
@@ -161,6 +162,7 @@ os.makedirs(pipeDir, exist_ok=True)
 for country in os.listdir(pipeDir):
     print('country: ' + country)
     for boundsFile in os.listdir('/tmp/geojsonPipe/' + country):
+        pipeFile = '/tmp/geojsonPipe/' + country + '/' + boundsFile
         print('boundsFile: ' + boundsFile)
         if not boundsFile.endswith("_bounds.geojson"):
             continue
@@ -173,6 +175,7 @@ for country in os.listdir(pipeDir):
         print('cksum: ' + cksum)
         geojsonFile = '/tmp/geojson/' + country + '/' + place + '_' + cksum + '.geojson'
         if os.path.isfile(geojsonFile):
+            os.remove(pipeFile)
             continue
         # Create geojson
         osmFile = getOsm(country, place, myUuid)
@@ -184,8 +187,8 @@ for country in os.listdir(pipeDir):
         print('geojsonFileTmp: ' + geojsonFileTmp)
         # mkdir basename geojsonFile
         os.makedirs(os.path.dirname(geojsonFile), exist_ok=True)
-
-        osmToGeojson(place, osmFile, geojsonFileTmp, '/tmp/geojsonPipe/' + country + '/' + boundsFile)
+        osmToGeojson(place, osmFile, geojsonFileTmp, pipeFile)
+        os.remove(pipeFile)
         os.rename(geojsonFileTmp, geojsonFile)
         print('geojsonFile: ' + geojsonFile)
         dst = '/tmp/geojson/' + country + '/' + place + '.geojson'
