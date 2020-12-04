@@ -126,7 +126,8 @@ def osmToGeojson(placeId, osmFile, geojsonFile, boundsFile = None):
                     if (num1 > num2):
                         level = regMulti.sub(r'\2;\1', level)
                 feature['properties']['level'] = level
-            feature['place'] = placeId
+            # feature['place'] = placeId
+            feature['openindoor:id'] = placeId
     with open(geojsonFile, 'w') as outfile:
         json.dump(myGeojson, outfile)
     if (boundsFile != None):

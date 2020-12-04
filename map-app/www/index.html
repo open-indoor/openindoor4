@@ -176,26 +176,31 @@
 
         seen[feature.id] = true;
         map.setFeatureState(feature, { hover: true });
+//        if (openIndoor) {
+//          level = focusLevel
+//          // console.log('set selected level:', level)
+//          openIndoor.setLevel(level)
+//        }
 
         // console.log("hover features:" + JSON.stringify(features))
         i++;
       }
     });
 
-    map.on('click', function (e) {
-      level = focusLevel
-      for (const feature of select) {
-        map.setFeatureState(feature, { select: false });
-      }
-      select = focus
-      if (openIndoor) {
-        console.log('set selected level:', level)
-        openIndoor.setLevel(level)
-      }
-      for (const feature of select) {
-        map.setFeatureState(feature, { select: true });
-      }
-    });
+    // map.on('click', function (e) {
+    //   level = focusLevel
+    //   for (const feature of select) {
+    //     map.setFeatureState(feature, { select: false });
+    //   }
+    //   select = focus
+    //   if (openIndoor) {
+    //     console.log('set selected level:', level)
+    //     openIndoor.setLevel(level)
+    //   }
+    //   for (const feature of select) {
+    //     map.setFeatureState(feature, { select: true });
+    //   }
+    // });
 
     map.on("moveend", function (event) {
       // console.log(event);

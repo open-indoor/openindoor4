@@ -85,12 +85,12 @@ myPlaces = {
 }
 # loop on file, country oriented
 pathlist = Path(directory_in_str).glob(fileSearch)
-print('pathlist: ' + directory_in_str)
-print('fileSearch: ' + fileSearch)
+# print('pathlist: ' + directory_in_str)
+# print('fileSearch: ' + fileSearch)
 for path in pathlist:
     # because path is object not string
     path_to_file = str(path)
-    print('path: ' + path_to_file)
+    # print('path: ' + path_to_file)
     with open(path_to_file) as f:
         gj = geojson.load(f)
     if gj['features'][0]['properties']['update'] != "-1":
@@ -206,11 +206,11 @@ elif (action == 'pins'):
                 # TileJSON
                 # https://api-gke.openindoor.io/tileserver/data/argentina.json
                 urlTileJson = 'http://tileserver-api/tileserver/data/' + country + '.json'
-                tileJson = getData(urlTileJson)
-                if tileJson == None:
+                countryTileJson = getData(urlTileJson)
+                if countryTileJson == None:
                     print('<td>None</td>')
                 else:
-                    inspect = json.loads(tileJson)
+                    inspect = json.loads(countryTileJson)
                     center = inspect['center']
                     lat = center[0]
                     lon = center[1]
@@ -315,7 +315,10 @@ elif (action == 'pins'):
             print('</td>')
 
             # MVT
-            print('<td><a href="/tileserver/data/' + country + '/#20/' + str(lon) + '/' + str(lat) + '">Inspect</a></td>')
+            if (countryTileJson == None) or (inspect['generator_options'].find(myId) == -1):
+                print('<td>None</td>')
+            else:
+                print('<td><a href="/tileserver/data/' + country + '/#20/' + str(lon) + '/' + str(lat) + '">Inspect</a></td>')
 
             # HTML
             print('<td></td>')
@@ -324,7 +327,7 @@ elif (action == 'pins'):
 
         htmlContent+='</tbody></table><!-- /wp:table -->'
         print('<tr style="background-color:#FF0000">')
-        print('<td colspan="6"; style="text-align: center; vertical-align: middle;">WORLD</td>')
+        print('<td colspan="7"; style="text-align: center; vertical-align: middle;">WORLD</td>')
         print('<td><button onclick="fetch(\'/mbtiles-country/trigger/world\')">trigger</button></td>')
         # print('<td><button onclick=\'navigator.clipboard.writeText("' + html.escape(htmlContent) + '")\'>copy</button></td>')
         # print('<td><button onclick=\'navigator.clipboard.writeText("&lt;!-- wp:table")\'>copy</button></td>')
@@ -333,8 +336,8 @@ elif (action == 'pins'):
         # print('<td><button onclick=\'navigator.clipboard.writeText("' + html.escape(html.escape(htmlContent)) + '")\'>copy</button></td>')
         # print('<td><button onclick=\'navigator.clipboard.writeText("<table><tr><td><a href=\\\"coucou\\\">coucou</a></td></tr></table>")\'>copy</button></td>')
 
+        print('<td><a href="https://api-gke.openindoor.io/tileserver/">tileserver</a></td>')
         print('<td><button onclick=\'navigator.clipboard.writeText("' + htmlContent.replace('"', '\\\"') + '")\'>copy</button></td>')
-
         # print('<td><button onclick=\'navigator.clipboard.writeText(\\\'&amp;lt;!-- wp:table --&amp;gt;&amp;lt;table class=&amp;\\\')\'>copy</button></td>')
         # print('<td><button onclick=\'navigator.clipboard.writeText(\\\'' + html.escape(html.escape(htmlContent)) + '\\\')\'>copy</button></td>')
         # print('<td><button onclick=\'navigator.clipboard.writeText("&lt;!-- wp:table --&gt;&lt;table class=&quot;")\'>copy</button></td>')
