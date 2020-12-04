@@ -77,7 +77,7 @@ case $action in
     # https://api.openindoor.io/mbtiles/country/status/france
   status)
     if [ -f "${mbtilesCountryFile}" ]; then
-      reply='{"country":"'${country}'", "status": "ready", "url": "'${API_URL}/data/${country}'"}'
+      reply='{"country":"'${country}'", "status": "ready", "url": "'${API_URL}/mbtiles-country/data/${country}'"}'
     elif [ -f "/tmp/mbtilesCountryPipe/${country}.json" ]; then
       reply='{"country":"'${country}'", "status": "in progress"}'
     else

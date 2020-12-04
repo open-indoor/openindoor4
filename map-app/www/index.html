@@ -114,16 +114,38 @@
       hovered = features;
 
       // select focusLevel
-      hoveredLevel = hovered.filter(feature => ('properties' in feature) && 'level' in feature.properties);
-      if (hovered.length > 0) {
-        console.log('hoveredLevel:' + JSON.stringify(hoveredLevel));
-      }
+      hoveredLevels = hovered.filter(function (feature) {
+        if (
+          ('properties' in feature)
+          && 'level' in feature.properties
+          && (!isNaN(feature.properties.level))
+        ) {
+          // console.log('feature.properties.level:', feature.properties.level);
+          // console.log('typeof feature.properties.level:', typeof feature.properties.level);
+          // console.log('isFinite:', isFinite(feature.properties.level));
 
-      focusLevel = Math.max.apply(Math, hoveredLevel.map(function (feature) { return Number(feature.properties.level); }))
-      console.log("focusLevel:", focusLevel)
+          //   && typeof feature.properties.level === 'number'
+          // && isFinite(feature.properties.level)
+
+          return true;
+        }
+        return false;
+      });
+      // if (hovered.length > 0) {
+      //   console.log('hoveredLevels:' + JSON.stringify(hoveredLevels));
+      // }
+
+      maxLevel = Math.max.apply(Math, hoveredLevels.map(function (feature) {
+        // console.log('level:', feature.properties.level)
+        return Number(feature.properties.level);
+      }))
+
+      focusLevel = isFinite(maxLevel) ? maxLevel : null
+
+      // console.log("focusLevel:", focusLevel)
       //
 
-      if (isFinite(focusLevel)) {
+      if (focusLevel !== undefined) {
         focus = allFeatures.filter(
           feature => (
             ('properties' in feature) && ('level' in feature.properties)
@@ -131,7 +153,7 @@
           )
         )
       }
-       else {
+      else {
         focus = []
       }
 
@@ -154,26 +176,31 @@
 
         seen[feature.id] = true;
         map.setFeatureState(feature, { hover: true });
+//        if (openIndoor) {
+//          level = focusLevel
+//          // console.log('set selected level:', level)
+//          openIndoor.setLevel(level)
+//        }
 
         // console.log("hover features:" + JSON.stringify(features))
         i++;
       }
     });
 
-    map.on('click', function (e) {
-      selectLevel = focusLevel
-      for (const feature of select) {
-        map.setFeatureState(feature, { select: false });
-      }
-      select = focus
-      if (openIndoor) {
-        console.log('set selectLevel:', selectLevel)
-        openIndoor.setLevel(focusLevel)
-      }
-      for (const feature of select) {
-        map.setFeatureState(feature, { select: true });
-      }
-    });
+    // map.on('click', function (e) {
+    //   level = focusLevel
+    //   for (const feature of select) {
+    //     map.setFeatureState(feature, { select: false });
+    //   }
+    //   select = focus
+    //   if (openIndoor) {
+    //     console.log('set selected level:', level)
+    //     openIndoor.setLevel(level)
+    //   }
+    //   for (const feature of select) {
+    //     map.setFeatureState(feature, { select: true });
+    //   }
+    // });
 
     map.on("moveend", function (event) {
       // console.log(event);
@@ -182,8 +209,11 @@
       let pitch = map.getPitch();
       let level = typeof openIndoor !== "undefined" ? openIndoor.level : "0";
       // console.log("level 02:", level);
-      window.location.hash =
-        "map=" +
+      window.location.hash.replace("#", "")
+
+      // window.location.hash =
+      newHash =
+        "#map=" +
         map.getZoom().toFixed(2) +
         "/" +
         center_.lng.toFixed(5) +
@@ -195,21 +225,24 @@
         Math.round(pitch) +
         "/" +
         level;
+      location.replace(newHash)
     });
 
     map.on("load", () => {
-      const allFeatures = map.queryRenderedFeatures()
-      const featureLevel = allFeatures.filter(feature => ('properties' in feature) && 'level' in feature.properties);
-      for (const feature of featureLevel) {
-        if (feature.id === null) {
-          console.log(
-            "Cannot manage feature without id field (02):",
-            JSON.stringify(feature)
-          )
-          continue;
-        }
-        map.setFeatureState(feature, { hover: false, select: false });
-      }
+      // const allFeatures = map.queryRenderedFeatures()
+      // // const allFeatures = this.map.querySourceFeatures('shape', { sourceLayer: 'osm-indoor' });
+      // // console.log('allFeatures', JSON.stringify(allFeatures))
+      // const featureLevel = allFeatures.filter(feature => ('properties' in feature) && 'level' in feature.properties);
+      // for (const feature of featureLevel) {
+      //   if (feature.id === null) {
+      //     console.log(
+      //       "Cannot manage feature without id field (02):",
+      //       JSON.stringify(feature)
+      //     )
+      //     continue;
+      //   }
+      //   map.setFeatureState(feature, { hover: false, select: false });
+      // }
 
       map.loadImage("${APP_URL}/custom_marker.png", function (error, image) {
         if (error) throw error;
