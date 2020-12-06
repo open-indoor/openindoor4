@@ -8,7 +8,7 @@ images:
   - name: openindoor/places-api
     newTag: 2.0.35
   - name: openindoor/geojson-api
-    newTag: 2.0.11
+    newTag: 2.0.15
   - name: openindoor/mbtiles-api
     newTag: 2.0.2
   - name: openindoor/mbtiles-country-api
