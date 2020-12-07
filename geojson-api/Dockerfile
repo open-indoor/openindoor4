@@ -45,7 +45,7 @@ RUN npm install -g osmtogeojson
 COPY ./requirements.txt /geojson/
 RUN pip3 install -v -r /geojson/requirements.txt
 
-COPY ./Caddyfile /tmp/Caddyfile
+COPY ./Caddyfile /etc/caddy/Caddyfile
 
 RUN mkdir -p /geojson
 

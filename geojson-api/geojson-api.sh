@@ -10,6 +10,7 @@ crontab -l | { cat; echo "* * * * * /usr/bin/tic >/dev/stdout 2>/dev/stderr"; } 
 echo "Start cron task" && crontab -l && /usr/sbin/cron -l 8
 cat /usr/bin/action
 
-cat /tmp/Caddyfile | envsubst | tee /etc/caddy/Caddyfile
+# cat /tmp/Caddyfile | envsubst | tee /etc/caddy/Caddyfile
+cat /etc/caddy/Caddyfile
 
 (caddy run --watch --config /etc/caddy/Caddyfile & fcgiwrap -f -s unix:/var/run/fcgiwrap.socket)

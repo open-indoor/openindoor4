@@ -80,10 +80,10 @@ def intersects_01(geojsonFile, boundsFile):
         "features":  []
     }
     for feature in placeJson['features']:
-        print('feature to add:' + json.dumps(feature))
+        # print('feature to add:' + json.dumps(feature))
         gj = geojson.Feature(feature)
         gj.errors()
-        print('feature validated')
+        # print('feature validated')
 
         featureShp = shape(feature['geometry'])
         try:
@@ -92,7 +92,7 @@ def intersects_01(geojsonFile, boundsFile):
         except Exception:
             pass  # or you could use 'continue'
     print('Going to write clean file')
-    with open(geojsonFile + '_clean', 'w') as outfile:
+    with open(geojsonFile, 'w') as outfile:
         json.dump(cleanPlace, outfile)
     
 
@@ -196,7 +196,11 @@ for country in os.listdir(pipeDir):
         print('geojsonFile: ' + geojsonFile)
         dst = '/tmp/geojson/' + country + '/' + place + '.geojson'
         dst2 = '/tmp/geojson/' + country + '/' + place
-        os.symlink(geojsonFile, dst)
+        if os.path.exists(dst):
+            os.remove(dst)
+        if os.path.exists(dst2):
+            os.remove(dst2)
+        os.symlink(geojsonFile, dst) 
         os.symlink(geojsonFile, dst2)
         print('dst: ' + dst)
         print('dst2: ' + dst2)

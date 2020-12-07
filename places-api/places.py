@@ -358,6 +358,7 @@ elif (action == 'pins'):
     exit(0)
 elif (action == 'data'):
     print('Content-type: application/json')
+    print('Content-Disposition: attachment; filename="' + arg3 + '_bounds.geojson"')
     print('')
     print(json.dumps(myPlaces))
     exit(0)
