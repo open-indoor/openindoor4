@@ -13,7 +13,7 @@
     }
 
     handle_path /geojson/data/* {
-        root * /tmp/geojsonhttps://api-gke.openindoor.io/geojson/trigger/france/FranceParisGareDeLEst
+        root * /tmp/geojson
         file_server browse
     }
 
