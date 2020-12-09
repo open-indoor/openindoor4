@@ -50,6 +50,8 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
         -s -w "%{http_code}" \
         "http://geojson-api/geojson/trigger/${country}/${id}"
   else
+        # --generate-ids \
+
     tippecanoe \
       --output="${mbtilesFileTmp}" \
       --layer="osm-indoor" \
@@ -59,7 +61,6 @@ for idFile in $(find /tmp/mbtilesPipe -name "*.cksum"); do
       --use-source-polygon-winding \
       --minimum-zoom=13 \
       --maximum-zoom 20 \
-      --generate-ids \
       "${geojsonFile}" \
     && mv "${mbtilesFileTmp}" "${mbtilesFile}" \
     && rm -rf "${geojsonFile}" \
