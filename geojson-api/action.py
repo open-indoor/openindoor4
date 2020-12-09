@@ -68,7 +68,9 @@ def osmToGeojson(osmFile, geojsonFile):
         regMulti = re.compile(r'^(-?\d+\.?\d*).*;(-?\d+\.?\d*)$')
         regMinus = re.compile(r'^(-?\d+\.?\d*)-(-?\d+\.?\d*)$')
         for feature in geojson['features']:
-            del feature['id']
+            # del feature['id']
+            if ((not 'id' in feature) or (not feature['id'])):
+                feature['id'] = str(uuid.uuid1())
             if (('properties' in feature) and ('level' in feature['properties'])):
                 level = feature['properties']['level']
                 level = regMulti.sub(r'\1;\2', level)
