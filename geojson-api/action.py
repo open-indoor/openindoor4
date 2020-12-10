@@ -11,7 +11,7 @@ import io
 from shapely.geometry import shape
 import geojson
 
-myUuid = str(uuid.uuid1())
+myUuid = str(uuid.uuid4())
 
 def getChecksum(country, place):
     buffer = io.BytesIO()
@@ -113,8 +113,7 @@ def osmToGeojson(placeId, osmFile, geojsonFile, boundsFile = None):
         regMinus = re.compile(r'^(-?\d+\.?\d*)-(-?\d+\.?\d*)$')
         for feature in myGeojson['features']:
             # del feature['id']
-            if ((not 'id' in feature) or (not feature['id'])):
-                feature['id'] = str(uuid.uuid1())
+#            if ((not 'id' in feature) or (not feature['id'])):
             if (('properties' in feature) and ('level' in feature['properties'])):
                 level = feature['properties']['level']
                 level = level.replace('--', '-')
@@ -128,9 +127,12 @@ def osmToGeojson(placeId, osmFile, geojsonFile, boundsFile = None):
                         level = regMulti.sub(r'\2;\1', level)
                 feature['properties']['level'] = level
             # feature['place'] = placeId
+            featureId = (uuid.uuid4().int % (2**32))
+            feature['id'] = featureId
             if (not 'properties' in feature):
                 feature['properties'] = {}
             feature['properties']['openindoor:id'] = placeId
+            feature['properties']['feature_id'] = featureId
     with open(geojsonFile, 'w') as outfile:
         json.dump(myGeojson, outfile)
     if (boundsFile != None):
