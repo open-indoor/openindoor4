@@ -111,16 +111,10 @@ def osmToGeojson(placeId, osmFile, geojsonFile, boundsFile = None):
 
         regMulti = re.compile(r'^(-?\d+\.?\d*).*;(-?\d+\.?\d*)$')
         regMinus = re.compile(r'^(-?\d+\.?\d*)-(-?\d+\.?\d*)$')
-<<<<<<< HEAD
-
         for feature in myGeojson['features']:
-            # del feature['id']
-=======
-        for feature in geojson['features']:
             # del feature['id']
             if ((not 'id' in feature) or (not feature['id'])):
                 feature['id'] = str(uuid.uuid1())
->>>>>>> master
             if (('properties' in feature) and ('level' in feature['properties'])):
                 level = feature['properties']['level']
                 level = level.replace('--', '-')
