@@ -6,28 +6,6 @@
         {
             "type": "Feature",
             "properties": {
-                "changeset": "38579747",
-                "feature_id": "1751448355",
-                "id": "node/3163720349",
-                "level": "-2",
-                "level:ref": "Espace de correspondance RER & Métro",
-                "openindoor:id": "FranceParisGareDeLyon",
-                "timestamp": "2016-04-15T07:37:48Z",
-                "uid": "1908665",
-                "user": "naomap",
-                "version": "7"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    2.37585680000,
-                    48.84292640000
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "SNCF:stop_name": "Paris-Gare-de-Lyon",
                 "STIF:zone": "1",
                 "alt_name": "Paris - Gare de Lyon",
