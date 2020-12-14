@@ -39,6 +39,12 @@ To deploy in OVH k8s env:
 
 Services are splitted as is:
 
+Available at:
+
+https://app-gke.openindoor.io (validation)
+
+https://app.openindoor.io (production)
+
 * **front-api** serves all back-end services
 * **places-api** manage bounds of building monitorized
 * **osm-api** load data from OSM, relying on bound defined on places-api service
@@ -48,6 +54,10 @@ Services are splitted as is:
 * **tileserver-api** serves data from mbtiles to Mapbox Vector Tiles
 
 ### Front-end
+
+Available at: https://app-gke.openindoor.io (validation)
+
+Available at: https://app.openindoor.io (production)
 
 * **front-app** serves all front-end services
 * **map-app** is the main web project
