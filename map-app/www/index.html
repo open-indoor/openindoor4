@@ -92,6 +92,7 @@
     let focus = [];
     let select = [];
     let focusLevel = 0;
+    let focusArea;
     map.on("mousemove", function (e) {
       const features = map.queryRenderedFeatures(e.point, {
         // layers: ["building-part-extrusion"],
@@ -118,8 +119,10 @@
         if (
           ('properties' in feature)
           && 'level' in feature.properties
+          && 'openindoor:id' in feature.properties
           && (!isNaN(feature.properties.level))
         ) {
+          focusArea = feature.properties['openindoor:io']
           // console.log('feature.properties.level:', feature.properties.level);
           // console.log('typeof feature.properties.level:', typeof feature.properties.level);
           // console.log('isFinite:', isFinite(feature.properties.level));
@@ -134,7 +137,6 @@
       // if (hovered.length > 0) {
       //   console.log('hoveredLevels:' + JSON.stringify(hoveredLevels));
       // }
-
       maxLevel = Math.max.apply(Math, hoveredLevels.map(function (feature) {
         // console.log('level:', feature.properties.level)
         return Number(feature.properties.level);
@@ -148,8 +150,11 @@
       if (focusLevel !== undefined) {
         focus = allFeatures.filter(
           feature => (
-            ('properties' in feature) && ('level' in feature.properties)
+            ('properties' in feature)
+            && ('level' in feature.properties)
             && (Number(feature.properties.level) === focusLevel)
+            && ('openindoor:id' in feature.properties)
+            && (feature.properties['openindoor:id'] === focusArea)
           )
         )
       }
