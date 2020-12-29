@@ -1,3 +1,39 @@
 [submodule "rastertiles-app"]
 	path = rastertiles-app
 	url = https://github.com/open-indoor/rastertiles-app.git
+[submodule "map-app"]
+	path = map-app
+	url = https://github.com/open-indoor/map-app.git
+[submodule "fonts-app"]
+	path = fonts-app
+	url = https://github.com/open-indoor/fonts-app.git
+[submodule "front-api"]
+	path = front-api
+	url = https://github.com/open-indoor/front-api.git
+[submodule "geojson-api"]
+	path = geojson-api
+	url = https://github.com/open-indoor/geojson-api.git
+[submodule "mapbox-gl-openindoor"]
+	path = mapbox-gl-openindoor
+	url = https://github.com/open-indoor/mapbox-gl-openindoor.git
+[submodule "mbtiles-api"]
+	path = mbtiles-api
+	url = https://github.com/open-indoor/mbtiles-api.git
+[submodule "mbtiles-country-api"]
+	path = mbtiles-country-api
+	url = https://github.com/open-indoor/mbtiles-country-api.git
+[submodule "osm-api"]
+	path = osm-api
+	url = https://github.com/open-indoor/osm-api.git
+[submodule "places-api"]
+	path = places-api
+	url = https://github.com/open-indoor/places-api.git
+[submodule "sprite-app"]
+	path = sprite-app
+	url = https://github.com/open-indoor/sprite-app.git
+[submodule "style-app"]
+	path = style-app
+	url = https://github.com/open-indoor/style-app.git
+[submodule "tileserver-api"]
+	path = tileserver-api
+	url = https://github.com/open-indoor/tileserver-api.git

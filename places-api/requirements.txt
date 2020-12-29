@@ -1,4 +1,0 @@
-pycurl
-geojson
-turfpy
-pycurl

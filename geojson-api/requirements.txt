@@ -1,7 +1,0 @@
-# pycurl
-# geojson
-# turfpy
-# osm2geojson
-# pyproj == 2.6.1
-# geopandas
-# pygeos
