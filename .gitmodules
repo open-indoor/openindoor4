@@ -1,0 +1,3 @@
+[submodule "rastertiles-app"]
+	path = rastertiles-app
+	url = https://github.com/open-indoor/rastertiles-app.git
