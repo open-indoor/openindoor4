@@ -37,3 +37,6 @@
 [submodule "tileserver-api"]
 	path = tileserver-api
 	url = https://github.com/open-indoor/tileserver-api.git
+[submodule "front-app"]
+	path = front-app
+	url = git@github.com:open-indoor/front-app.git

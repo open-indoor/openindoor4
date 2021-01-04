@@ -9,8 +9,8 @@ services:
     volumes:
     - ./map-app/Caddyfile:/tmp/Caddyfile
     - ./map-app/map-app.sh:/usr/bin/map-app.sh
-    # - ./map-app/www/:/map-app/www/
-    - ./map-app/www/local.html:/map-app/www/index.html
+    - ./map-app/www/:/map-app/www/
+    #- ./map-app/www/local.html:/map-app/www/index.html
     environment:
       API_DOMAIN_NAME: ${API_DOMAIN_NAME}
       APP_DOMAIN_NAME: ${APP_DOMAIN_NAME}
@@ -145,3 +145,14 @@ services:
       CADDY_TLS: " "
     ports:
     - 80:80
+
+  tileserver-api:
+    build:
+      context: tileserver-api
+    image: openindoor/tileserver-api
+    volumes:
+     - ./tileserver-api/Caddyfile:/tmp/Caddyfile
+     - ./tileserver-api/front-api.sh:/usr/bin/front-api.sh
+     - ./tileserver-api/index.html:/tmp/index_template.html
+    environment:
+      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
