@@ -52,5 +52,5 @@
 	branch = master
 [submodule "front-app"]
 	path = front-app
-	url = git@github.com:open-indoor/front-app.git
+	url = https://github.com/open-indoor/front-app.git
 	branch = master
