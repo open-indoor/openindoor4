@@ -14,10 +14,6 @@
 	path = front-api
 	url = https://github.com/open-indoor/front-api.git
 	branch = master
-[submodule "front-app"]
-	path = front-app
-	url = https://github.com/open-indoor/front-app.git
-	branch = master
 [submodule "geojson-api"]
 	path = geojson-api
 	url = https://github.com/open-indoor/geojson-api.git
@@ -53,4 +49,8 @@
 [submodule "tileserver-api"]
 	path = tileserver-api
 	url = https://github.com/open-indoor/tileserver-api.git
+	branch = master
+[submodule "front-app"]
+	path = front-app
+	url = git@github.com:open-indoor/front-app.git
 	branch = master
