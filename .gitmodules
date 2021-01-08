@@ -54,3 +54,7 @@
 	path = front-app
 	url = https://github.com/open-indoor/front-app.git
 	branch = master
+[submodule "openindoor-app"]
+	path = openindoor-app
+	url = https://github.com/open-indoor/openindoor-app.git
+	branch = dev
