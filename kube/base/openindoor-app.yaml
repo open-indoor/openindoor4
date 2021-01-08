@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: openindoor-app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: openindoor-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: openindoor-app
+  name: openindoor-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: openindoor-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: openindoor-app
+    spec:
+      containers:
+      - env:
+        - name: API_DOMAIN_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: apiDomainName
+        image: openindoor/openindoor-app:0.0.0
+        name: openindoor-app
+        ports:
+        - containerPort: 80
