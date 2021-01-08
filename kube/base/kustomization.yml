@@ -31,6 +31,8 @@ images:
     newTag: 1.0.22
   - name: openindoor/map-app
     newTag: 2.0.22
+  - name: openindoor/openindoor-app
+    newTag: 1.0.0
   - name: openindoor/front-app
     newTag: 1.0.19
 resources:
