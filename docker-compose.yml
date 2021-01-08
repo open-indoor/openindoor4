@@ -151,8 +151,21 @@ services:
       context: tileserver-api
     image: openindoor/tileserver-api
     volumes:
-     - ./tileserver-api/Caddyfile:/tmp/Caddyfile
-     - ./tileserver-api/front-api.sh:/usr/bin/front-api.sh
-     - ./tileserver-api/index.html:/tmp/index_template.html
+    - ./tileserver-api/Caddyfile:/tmp/Caddyfile
+    - ./tileserver-api/front-api.sh:/usr/bin/front-api.sh
+    - ./tileserver-api/index.html:/tmp/index_template.html
     environment:
       API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+
+  openindoor-app:
+    build:
+      context: openindoor-app
+    image: openindoor/openindoor-app
+    command: yarn serve --port 80
+    volumes:
+    - ./openindoor-app/src:/openindoor-app/src
+    environment:
+      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+      API_URL: http://${API_DOMAIN_NAME}
+    ports:
+    - 8080:80

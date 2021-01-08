@@ -57,4 +57,4 @@
 [submodule "openindoor-app"]
 	path = openindoor-app
 	url = https://github.com/open-indoor/openindoor-app.git
-	branch = dev
+	branch = main
