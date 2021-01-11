@@ -64,7 +64,7 @@ services:
       APP_DOMAIN_NAME: ${APP_DOMAIN_NAME}
       APP_SERVER: ":80"
       APP_URL: http://${APP_DOMAIN_NAME}:8000
-      CADDY_TLS: " "
+      CADDY_TLS: ""
     ports:
     - 8000:80
 
@@ -142,7 +142,7 @@ services:
       API_DOMAIN_NAME: ${API_DOMAIN_NAME}
       API_SERVER: ${API_DOMAIN_NAME}:80
       API_URL: http://${API_DOMAIN_NAME}
-      CADDY_TLS: " "
+      CADDY_TLS: ""
     ports:
     - 80:80
 
