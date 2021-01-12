@@ -15,35 +15,95 @@ All kube files are stored in kube folder
 
 ## Developer side
 
+### Local development
+
+To build a single service locally
+
+Example with openindoor-app:
+
+```$ docker-compose build openindoor-app```
+
 To make in run locally (work in progress...):
+
+```$ docker-compose up openindoor-app```
+
+To build altogether:
+
+```$ docker-compose build```
+
+To make run altogether:
 
 ```$ docker-compose up```
 
-To build a service locally and push it to docker.io:
+To run all after building:
 
-```$ ./push $SERVICE $ VERSION```
+```$ docker-compose up --build```
 
-e.g.:
+To clean, build and run altogether:
 
-```$ ./push places-api 1.0.0```
+```$ docker-compose up --build --no-cache```
 
-To deploy in Google Kubernetes Env:
+## Deployment
 
-```$ kubectl apply -k kube/gke```
+### To fix service version
 
-To deploy in OVH k8s env:
+Example with fonts-app:
 
-```$ kubectl apply -k kube/ovh5```
+```
+$ cd fonts-app
+# branch name may be any:
+$ git tag 2.0.5
+$ git push origin 2.0.5
+```
+fonts-app:2.0.5 docker image will be built and uploaded to the Docker Registry
+
+To remove test tags you can use the command:
+```
+git tag --delete test
+git push origin --delete test
+```
+Please note - it won't remote docker image from registry
+
+Deployment to sandbox environment of fonts-app component with version 2.0.5 will be performer automatically.
+
+### Deployment the whole stack to Validation environment
+
+```
+cd openindoor4/kube/base
+```
+```
+vim kustomization.yml
+```
+
+Define the required versions.
+
+All versions that we get in the previous section might be used here.
+
+```
+git commit -am "Update versions"
+git push origin master:master
+```
+
+If you don't need to change the version but just to start the deployment you have to:
+
+1. Go to "Actions" section by link:
+````
+https://github.com/open-indoor/openindoor4/actions
+````
+2. Open "Deploy to Validation environment" workflow
+3. Click on "Run workflow" button.
+
+## Services
 
 ### Back-end
 
-Services are splitted as is:
-
 Available at:
 
-https://app-gke.openindoor.io (validation)
+* https://app-sandbox.openindoor.io (sandbox)
+* https://app-gke.openindoor.io (validation)
+* https://app.openindoor.io (production)
 
-https://app.openindoor.io (production)
+Services are splitted as is:
 
 * **front-api** serves all back-end services
 * **places-api** manage bounds of building monitorized
@@ -55,9 +115,12 @@ https://app.openindoor.io (production)
 
 ### Front-end
 
-Available at: https://app-gke.openindoor.io (validation)
+Available at:
+* https://app-sandbox.openindoor.io (sandbox)
+* https://app-gke.openindoor.io (validation)
+* https://app.openindoor.io (production)
 
-Available at: https://app.openindoor.io (production)
+Services are splitted as is:
 
 * **front-app** serves all front-end services
 * **map-app** is the main web project
