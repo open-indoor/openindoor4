@@ -12,7 +12,7 @@ images:
   - name: openindoor/mbtiles-api
     newTag: 2.0.7
   - name: openindoor/mbtiles-country-api
-    newTag: 2.0.10
+    newTag: 2.0.11
   - name: openindoor/tileserver-api
     newTag: 1.0.36
   - name: openindoor/front-api
@@ -32,7 +32,7 @@ images:
   # - name: openindoor/map-app
   #   newTag: 2.0.22
   - name: openindoor/openindoor-app
-    newTag: 2.0.1
+    newTag: 2.0.2
   - name: openindoor/front-app
     newTag: 2.0.0
 resources:
