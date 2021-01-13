@@ -43,7 +43,7 @@ jobs:
       run: |-
         cd kube
         #./kustomize build . |
-        kubectl apply -k base
+        kubectl apply -k base/gke
 
         #kubectl get services -o wide
         kubectl get pods

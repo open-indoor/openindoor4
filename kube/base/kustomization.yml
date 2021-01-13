@@ -17,20 +17,12 @@ images:
     newTag: 1.0.36
   - name: openindoor/front-api
     newTag: 2.0.0
-  # - name: openindoor/rastertiles-app
-  #   newTag: 2.0.0
   - name: openindoor/fonts-app
     newTag: 2.0.0
   - name: openindoor/style-app
     newTag: 2.0.14
-  # - name: openindoor/mapbox-gl-openindoor
-  #   newTag: 2.0.8
-  # - name: openindoor/mapbox-gl-js
-  #   newTag: 0.0.3
   - name: openindoor/sprite-app
     newTag: 2.0.0
-  # - name: openindoor/map-app
-  #   newTag: 2.0.22
   - name: openindoor/openindoor-app
     newTag: 2.0.3
   - name: openindoor/front-app
