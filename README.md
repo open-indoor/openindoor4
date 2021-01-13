@@ -69,10 +69,10 @@ Deployment to sandbox environment of fonts-app component with version 2.0.5 will
 ### Deployment the whole stack to Validation environment
 
 ```
-cd openindoor4/kube/base
+cd openindoor4
 ```
 ```
-vim kustomization.yml
+vim kube/base/kustomization.yml
 ```
 
 Define the required versions.
