@@ -32,7 +32,7 @@ images:
   # - name: openindoor/map-app
   #   newTag: 2.0.22
   - name: openindoor/openindoor-app
-    newTag: 2.0.0
+    newTag: 2.0.1
   - name: openindoor/front-app
     newTag: 2.0.0
 resources:
