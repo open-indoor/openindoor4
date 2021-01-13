@@ -35,11 +35,8 @@ resources:
 - mbtiles-country-api.yaml
 - tileserver-api.yaml
 - front-api.yaml
-- rastertiles-app.yaml
 - fonts-app.yaml
 - style-app.yaml
-- mapbox-gl-openindoor.yaml
-- mapbox-gl-js.yaml
 - sprite-app.yaml
-- map-app.yaml
+- openindoor-app.yaml
 - front-app.yaml
