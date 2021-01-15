@@ -20,7 +20,7 @@ images:
   - name: openindoor/fonts-app
     newTag: 2.0.0
   - name: openindoor/style-app
-    newTag: 2.0.14
+    newTag: 2.0.15
   - name: openindoor/sprite-app
     newTag: 2.0.0
   - name: openindoor/openindoor-app
