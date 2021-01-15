@@ -1,0 +1,33 @@
+name: Deploy to Production environment (just list for now)
+
+on:
+  workflow_dispatch:
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Setup gcloud CLI
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@0.1.3
+
+    # Generate kubeconfig file with k8s cluster details
+    - run: |-
+        echo "${{ secrets.KUBE_PROD_CONFIG}}" | base64 --decode > kube/kubeconfig.yml
+
+    # Deploy the Docker image to the GKE cluster
+    - name: Deploy
+      run: |-
+        cd kube
+
+        #kubectl --kubeconfig kubeconfig.yml apply -k ovh5 
+
+        #List current pods
+        kubectl --kubeconfig kubeconfig.yml get pods

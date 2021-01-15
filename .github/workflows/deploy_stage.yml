@@ -2,14 +2,11 @@ name: Deploy to Validation environment
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-      - dev/v1.1
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  PROJECT_ID: ${{ secrets.GKE_VALIDATION_PROJECT }}
+  GKE_SA_KEY: ${{ secrets.GKE_VALIDATION_SA_KEY }}
   GKE_CLUSTER: cluster-openindoor-1
   GKE_ZONE: europe-north1-a
 
@@ -41,10 +38,8 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
+        echo "Deployment will be done for Cluster: $GKE_CLUSTER"
         cd kube
-        #./kustomize build . |
-        kubectl get   -k gke || echo 'mistake'
-        kubectl apply -k gke
+        kubectl apply -k sandbox
 
-        #kubectl get services -o wide
         kubectl get pods
