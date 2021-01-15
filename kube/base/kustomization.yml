@@ -6,7 +6,7 @@ images:
   - name: openindoor/osm-api
     newTag: 2.0.0
   - name: openindoor/places-api
-    newTag: 2.0.46
+    newTag: 2.0.47
   - name: openindoor/geojson-api
     newTag: 2.0.30
   - name: openindoor/mbtiles-api
