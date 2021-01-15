@@ -27,7 +27,7 @@ jobs:
       run: |-
         cd kube
 
-        #kubectl --kubeconfig kubeconfig.yml apply -k ovh5 
+        kubectl --kubeconfig kubeconfig.yml apply -k ovh5 
 
         #List current pods
         kubectl --kubeconfig kubeconfig.yml get pods
