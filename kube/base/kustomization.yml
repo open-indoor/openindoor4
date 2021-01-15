@@ -24,9 +24,9 @@ images:
   - name: openindoor/sprite-app
     newTag: 2.0.0
   - name: openindoor/openindoor-app
-    newTag: 2.0.3
+    newTag: 2.0.4
   - name: openindoor/front-app
-    newTag: 2.0.2
+    newTag: 2.0.6
 resources:
 - osm-api.yaml
 - places-api.yaml
