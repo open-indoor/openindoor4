@@ -40,6 +40,6 @@ jobs:
       run: |-
         echo "Deployment will be done for Cluster: $GKE_CLUSTER"
         cd kube
-        kubectl apply -k sandbox
+        kubectl apply -k gke
 
         kubectl get pods
