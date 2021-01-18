@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: openindoor-db
+spec:
+  type: NodePort
+  ports:
+   - port: 5432
+  selector:
+   app: openindoor-db
+---   
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openindoor-db-config
+data:
+  POSTGRES_DB: openindoor-db
+  POSTGRES_USER: openindoor-db-admin
+  POSTGRES_PASSWORD: admin123
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: popenindoor-db-pvc
+  labels:
+    app: openindoor-db
+spec:
+  # storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: openindoor-db
+  name: openindoor-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: openindoor-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: openindoor-db
+    spec:
+      containers:
+        - name: openindoor-db
+          image: postgres:10.4
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: openindoor-db-config
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: openindoor-db-storage
+      volumes:
+        - name: openindoor-db-storage
+          persistentVolumeClaim:
+            claimName: openindoor-db-pvc
