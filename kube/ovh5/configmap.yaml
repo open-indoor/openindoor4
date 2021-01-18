@@ -2,6 +2,15 @@ apiVersion: v1
 data:
   apiDomainName: api.openindoor.io
   appDomainName: app.openindoor.io
+  analytics: |-
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D2YH8YW0P1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-195CDRQ2YJ');
+    </script>  
   certificateAuthority: https://acme-v02.api.letsencrypt.org/directory
   certificateAuthorityStaging: https://acme-staging-v02.api.letsencrypt.org/directory
 kind: ConfigMap

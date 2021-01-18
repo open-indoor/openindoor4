@@ -1,11 +1,3 @@
-[submodule "rastertiles-app"]
-	path = rastertiles-app
-	url = https://github.com/open-indoor/rastertiles-app.git
-	branch = master
-[submodule "map-app"]
-	path = map-app
-	url = https://github.com/open-indoor/map-app.git
-	branch = master
 [submodule "fonts-app"]
 	path = fonts-app
 	url = https://github.com/open-indoor/fonts-app.git
@@ -18,10 +10,10 @@
 	path = geojson-api
 	url = https://github.com/open-indoor/geojson-api.git
 	branch = master
-[submodule "mapbox-gl-openindoor"]
-	path = mapbox-gl-openindoor
-	url = https://github.com/open-indoor/mapbox-gl-openindoor.git
-	branch = master
+[submodule "openindoor-db"]
+	path = openindoor-db
+	url = https://github.com/open-indoor/openindoor-db.git
+	branch = main
 [submodule "mbtiles-api"]
 	path = mbtiles-api
 	url = https://github.com/open-indoor/mbtiles-api.git
