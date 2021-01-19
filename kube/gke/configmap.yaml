@@ -2,6 +2,7 @@ apiVersion: v1
 data:
   apiDomainName: api-gke.openindoor.io
   appDomainName: app-gke.openindoor.io
+  googleAnalyticsId: G-109G4ZV9XC
   analytics: |-
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-D2YH8YW0P1"></script>

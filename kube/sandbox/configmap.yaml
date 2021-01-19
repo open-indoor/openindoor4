@@ -2,6 +2,7 @@ apiVersion: v1
 data:
   apiDomainName: api-sandbox.openindoor.io
   appDomainName: app-sandbox.openindoor.io
+  googleAnalyticsId: G-D2YH8YW0P1
   analytics: |-
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-D2YH8YW0P1"></script>
