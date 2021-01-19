@@ -21,7 +21,7 @@ data:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: popenindoor-db-pvc
+  name: openindoor-db-pvc
   labels:
     app: openindoor-db
 spec:
