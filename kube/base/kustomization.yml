@@ -24,7 +24,7 @@ images:
   - name: openindoor/sprite-app
     newTag: 2.0.0
   - name: openindoor/openindoor-app
-    newTag: 2.0.20
+    newTag: 2.0.21
   - name: openindoor/front-app
     newTag: 2.0.7
 resources:
