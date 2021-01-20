@@ -36,7 +36,29 @@ spec:
             configMapKeyRef:
               name: openindoor-cm
               key: apiDomainName
+        - name: APP_DOMAIN_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: appDomainName
+        - name: ANALYTICS
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: analytics
+        - name: GOOGLE_ANALYTICS_ID
+          valueFrom:
+            configMapKeyRef:
+              name: openindoor-cm
+              key: googleAnalyticsId
         image: openindoor/openindoor-app:0.0.0
         name: openindoor-app
         ports:
         - containerPort: 80
+        resources:
+          limits:
+            memory: "800Mi"
+            cpu: "0.5"
+          requests:
+            memory: "400Mi"
+            cpu: "0.25"
