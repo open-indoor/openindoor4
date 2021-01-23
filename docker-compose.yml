@@ -2,27 +2,19 @@ version: "3.6"
 services:
 
 
-  map-app:
-    build:
-      context: map-app
-    image: openindoor/map-app
-    volumes:
-    - ./map-app/Caddyfile:/tmp/Caddyfile
-    - ./map-app/map-app.sh:/usr/bin/map-app.sh
-    - ./map-app/www/:/map-app/www/
-    #- ./map-app/www/local.html:/map-app/www/index.html
-    environment:
-      API_DOMAIN_NAME: ${API_DOMAIN_NAME}
-      APP_DOMAIN_NAME: ${APP_DOMAIN_NAME}
-      APP_URL: "http://${APP_DOMAIN_NAME}:8000"
-
-  mapbox-gl-openindoor:
-    build:
-      context: mapbox-gl-openindoor
-    image: openindoor/mapbox-gl-openindoor
-    volumes:
-    - ./mapbox-gl-openindoor/Caddyfile:/etc/caddy/Caddyfile
-    - ./mapbox-gl-openindoor/mapbox-gl-openindoor.sh:/usr/bin/mapbox-gl-openindoor.sh
+  # map-app:
+  #   build:
+  #     context: map-app
+  #   image: openindoor/map-app
+  #   volumes:
+  #   - ./map-app/Caddyfile:/tmp/Caddyfile
+  #   - ./map-app/map-app.sh:/usr/bin/map-app.sh
+  #   - ./map-app/www/:/map-app/www/
+  #   #- ./map-app/www/local.html:/map-app/www/index.html
+  #   environment:
+  #     API_DOMAIN_NAME: ${API_DOMAIN_NAME}
+  #     APP_DOMAIN_NAME: ${APP_DOMAIN_NAME}
+  #     APP_URL: "http://${APP_DOMAIN_NAME}:8000"
 
   sprite-app:
     build:
@@ -48,10 +40,10 @@ services:
       INDOOR_GEOJSON: "http://${API_DOMAIN_NAME}/geojson/data/france/FranceParisGareDeLEst"
       SHAPE_GEOJSON: "http://${API_DOMAIN_NAME}/geojson/data/france/FranceParisGareDeLEst"
 
-  rastertiles-app:
-    build:
-      context: rastertiles-app
-    image: openindoor/rastertiles-app
+  # rastertiles-app:
+  #   build:
+  #     context: rastertiles-app
+  #   image: openindoor/rastertiles-app
 
   front-app:
     build:
@@ -169,3 +161,31 @@ services:
       API_URL: http://${API_DOMAIN_NAME}
     ports:
     - 8080:80
+
+  openindoor-db:
+    image: postgis/postgis:12-3.1
+    environment:
+      POSTGRES_DB: openindoor-db
+      POSTGRES_USER: openindoor-db-admin
+      POSTGRES_PASSWORD: admin123
+      API_URL: http://api-sandbox.openindoor.io
+      APP_URL: http://app-sandbox.openindoor.io      
+    volumes:
+    - ./test/data:/data
+    # - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+    - 5432:5432
+
+  openindoor-rex:
+    build:
+      context: openindoor-rex
+    image: openindoor/openindoor-rex
+    command: t_rex serve --config config.toml
+    volumes:
+    - ./openindoor-rex/test/data:/data
+    - ./openindoor-rex/config.toml:/openindoor-rex/config.toml
+    environment:      
+      API_URL: http://api-sandbox.openindoor.io
+      APP_URL: http://app-sandbox.openindoor.io
+    ports:
+    - 6767:6767

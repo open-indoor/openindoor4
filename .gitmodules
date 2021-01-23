@@ -50,3 +50,6 @@
 	path = openindoor-app
 	url = https://github.com/open-indoor/openindoor-app.git
 	branch = main
+[submodule "openindoor-rex"]
+	path = openindoor-rex
+	url = https://github.com/open-indoor/openindoor-rex.git

@@ -18,16 +18,13 @@ data:
   POSTGRES_USER: openindoor-db-admin
   POSTGRES_PASSWORD: admin123
 ---
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
   name: openindoor-db-pvc
-  labels:
-    app: openindoor-db
 spec:
-  # storageClassName: manual
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 5Gi
@@ -52,7 +49,7 @@ spec:
     spec:
       containers:
         - name: openindoor-db
-          image: postgres:10.4
+          image: postgis/postgis:12-3.1
           ports:
             - containerPort: 5432
           envFrom:
