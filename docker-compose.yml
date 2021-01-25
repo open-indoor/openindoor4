@@ -176,16 +176,41 @@ services:
     ports:
     - 5432:5432
 
+  openindoor-adminer:
+    image: adminer
+    ports:
+    - 8090:8080
+
+  openindoor-gdal:
+    image: osgeo/gdal:3.2.0
+    volumes:
+    - ./geojson-api/test/data:/data
+    command: >
+      ogr2ogr
+      -f "PostgreSQL"
+      PG:"dbname='openindoor-db' host='openindoor-db' port='5432' user='openindoor-db-admin' password='admin123'"
+      /data/france/FranceRoissyEnFranceAroportDeParisCharlesDeGaulle.geojson
+      -nln buildings
+
+  # openindoor-rex:
+  #   image: sourcepole/t-rex
+  #   command: serve --openbrowser=false --config=myconfig.toml
+  #   environment:
+  #   - RUST_BACKTRACE=1
+  #   volumes:
+  #   - ./openindoor-rex/test/in:/var/data/in:ro
+  #   - ./openindoor-rex/test/out:/var/data/out
+  #   ports:
+  #   - 6767:6767
+
   openindoor-rex:
     build:
       context: openindoor-rex
     image: openindoor/openindoor-rex
-    command: t_rex serve --config config.toml
-    volumes:
-    - ./openindoor-rex/test/data:/data
-    - ./openindoor-rex/config.toml:/openindoor-rex/config.toml
-    environment:      
-      API_URL: http://api-sandbox.openindoor.io
-      APP_URL: http://app-sandbox.openindoor.io
+    command: serve --openbrowser=false --config=myconfig.toml
+    # volumes:
+    # - ./openindoor-rex/myconfig.toml:/openindoor-rex/myconfig.toml
+    # - ./openindoor-rex/test/in:/var/data/in:ro
+    # - ./openindoor-rex/test/out:/var/data/out
     ports:
     - 6767:6767

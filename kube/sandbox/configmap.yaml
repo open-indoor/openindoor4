@@ -1,4 +1,7 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openindoor-cm
 data:
   apiDomainName: api-sandbox.openindoor.io
   appDomainName: app-sandbox.openindoor.io
@@ -15,6 +18,4 @@ data:
   certificateAuthority: https://acme-v02.api.letsencrypt.org/directory
   certificateAuthorityStaging: https://acme-staging-v02.api.letsencrypt.org/directory
   storageClassName: standard
-kind: ConfigMap
-metadata:
-  name: openindoor-cm
+
