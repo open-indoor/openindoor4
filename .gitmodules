@@ -53,3 +53,9 @@
 [submodule "openindoor-rex"]
 	path = openindoor-rex
 	url = https://github.com/open-indoor/openindoor-rex.git
+[submodule "osm-indoor-tracker"]
+	path = osm-indoor-tracker
+	url = https://github.com/open-indoor/osm-indoor-tracker.git
+[submodule "openindoor-tegola"]
+	path = openindoor-tegola
+	url = https://igone-openindoor:cba16f27258260fd4333d6676132215d633a608b@github.com/open-indoor/openindoor-tegola.git
